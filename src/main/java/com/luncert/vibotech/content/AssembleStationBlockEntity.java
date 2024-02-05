@@ -1,5 +1,7 @@
 package com.luncert.vibotech.content;
 
+import com.luncert.vibotech.compat.computercraft.AssembleStationPeripheral;
+import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
@@ -10,17 +12,21 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import java.util.List;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import org.slf4j.Logger;
 
 public class AssembleStationBlockEntity extends SmartBlockEntity {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
+  private AssembleStationPeripheral peripheral;
   private UUID transportMachineId;
   private TransportMachineEntity transportMachine;
 
@@ -31,6 +37,9 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   public AssembleStationBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
     ticksSinceLastUpdate = assemblyCooldown;
+
+    peripheral = Peripherals.createAssembleStationPeripheral(this);
+    setLazyTickRate(20);
   }
 
   @Override
@@ -138,6 +147,20 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
   @Override
   public void addBehaviours(List<BlockEntityBehaviour> list) {
+  }
+
+  @Override
+  public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    if(Peripherals.isPeripheral(cap)) {
+      return LazyOptional.of(() -> peripheral).cast();
+    }
+    return super.getCapability(cap, side);
+  }
+
+  @Override
+  public void remove() {
+    super.remove();
+    peripheral = null;
   }
 
   @Override
