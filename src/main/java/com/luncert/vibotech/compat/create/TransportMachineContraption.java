@@ -1,5 +1,6 @@
-package com.luncert.vibotech.content;
+package com.luncert.vibotech.compat.create;
 
+import com.luncert.vibotech.content.AssembleStationBlock;
 import com.luncert.vibotech.index.AllBlocks;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;

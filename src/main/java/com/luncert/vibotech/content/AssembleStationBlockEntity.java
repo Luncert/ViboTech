@@ -89,6 +89,10 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     return transportMachine != null;
   }
 
+  public void assemble() throws TransportMachineAssemblyException {
+
+  }
+
   public void assemble(Level world, BlockPos pos) throws TransportMachineAssemblyException {
     if (transportMachine != null) {
       throw new TransportMachineAssemblyException("transport_machine_assembled");

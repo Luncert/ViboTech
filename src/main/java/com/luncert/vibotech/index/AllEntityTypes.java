@@ -1,8 +1,8 @@
 package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
-import com.luncert.vibotech.content.TransportMachineContraptionEntity;
-import com.luncert.vibotech.content.TransportMachineContraptionEntityRenderer;
+import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
+import com.luncert.vibotech.compat.create.TransportMachineContraptionEntityRenderer;
 import com.luncert.vibotech.content.TransportMachineEntity;
 import com.luncert.vibotech.content.TransportMachineEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
