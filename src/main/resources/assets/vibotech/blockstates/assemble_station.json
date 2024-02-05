@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "create:block/assemble_station"
+      "model": "vibotech:block/assemble_station"
     }
   }
 }

@@ -1,12 +1,13 @@
 package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
+import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content.AssembleStationBlock;
+import com.luncert.vibotech.content.TransportMachineAnchorBlock;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MapColor;
 
 public class AllBlocks {
@@ -22,10 +23,17 @@ public class AllBlocks {
           .transform(pickaxeOnly())
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
-          .simpleItem()
+          .item()
+          .transform(customItemModel())
+          .register();
+
+  public static final BlockEntry<TransportMachineAnchorBlock> TRANSPORT_MACHINE_ANCHOR =
+      REGISTRATE.block("transport_machine_anchor", TransportMachineAnchorBlock::new)
+          .initialProperties(SharedProperties::stone)
+          .blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
+              .getExistingFile(p.modLoc("block/vibotech/" + c.getName()))))
           .register();
 
   public static void register() {
-
   }
 }
