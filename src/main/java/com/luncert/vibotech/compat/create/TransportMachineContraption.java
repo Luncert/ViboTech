@@ -1,19 +1,26 @@
 package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
+import com.luncert.vibotech.compat.vibotech.TickOrder;
+import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
 import com.luncert.vibotech.content.AssembleStationBlock;
+import com.luncert.vibotech.content.AssembleStationBlockEntity;
 import com.luncert.vibotech.content.TransportMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
+import com.luncert.vibotech.index.AllCapabilities;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -23,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
@@ -34,12 +42,13 @@ public class TransportMachineContraption extends Contraption {
   public static final ContraptionType TRANSPORT_MACHINE = ContraptionType.register(
       "transport_machine", TransportMachineContraption::new);
 
-  // TODO
+  private final TransportMachineEntity transportMachine;
+  // block name to vibo component
   private final Map<String, List<IViboComponent>> components = new HashMap<>();
+  // block name to block info
   private final Map<String, StructureBlockInfo> componentBlockInfoMap = new HashMap<>();
-
-  private TransportMachineEntity transportMachine;
-
+  private List<List<String>> componentTickOrders;
+  private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
 
   public TransportMachineContraption() {
@@ -51,8 +60,20 @@ public class TransportMachineContraption extends Contraption {
     this.transportMachine = transportMachine;
   }
 
+  // api
+
   public Map<String, List<IViboComponent>> getComponents() {
     return components;
+  }
+
+  public List<List<IViboComponent>> getOrderedComponents() {
+    return componentTickOrders.stream().map(componentTypes -> {
+      List<IViboComponent> c = new ArrayList<>();
+      for (String componentType : componentTypes) {
+        c.addAll(components.get(componentType));
+      }
+      return c;
+    }).collect(Collectors.toList());
   }
 
   public StructureBlockInfo getComponentBlockInfo(String name) {
@@ -62,6 +83,8 @@ public class TransportMachineContraption extends Contraption {
   public BlockPos getWorldPos(BlockPos pos) {
     return transportMachine.blockPosition().offset(pos.getX(), pos.getY(), pos.getZ());
   }
+
+  // impl
 
   @Override
   public ContraptionType getType() {
@@ -77,10 +100,51 @@ public class TransportMachineContraption extends Contraption {
         pos, AllBlocks.TRANSPORT_MACHINE_ANCHOR.getDefaultState(), null), null));
 
     if (blocks.size() != 1) {
-      // initComponents(world);
+      initComponents(level);
       return true;
     }
     return false;
+  }
+
+  public void initComponents(Level level) {
+    if (accessor == null) {
+      AssembleStationBlockEntity station = (AssembleStationBlockEntity) level.getBlockEntity(transportMachine.getStationPosition());
+      accessor = new ViboContraptionAccessor(level, station.getPeripheral(), station, transportMachine, this);
+
+      Map<Integer, List<String>> tickOrders = new HashMap<>();
+
+      for (Map.Entry<String, List<IViboComponent>> entry : components.entrySet()) {
+        List<IViboComponent> components = entry.getValue();
+        for (int i = 0; i < components.size(); i++) {
+          IViboComponent c = components.get(i);
+          String name = c.getComponentType().getName() + "-" + i;
+          c.init(accessor, name);
+        }
+
+        Class<? extends IViboComponent> type = components.get(0).getClass();
+        int order = 0;
+        if (type.isAnnotationPresent(TickOrder.class)) {
+          TickOrder tickOrder = type.getAnnotation(TickOrder.class);
+          order = tickOrder.value();
+        }
+
+        tickOrders.compute(order, (k, v) -> {
+          if (v == null) {
+            v = new LinkedList<>();
+          }
+          v.add(entry.getKey());
+          return v;
+        });
+      }
+
+      componentTickOrders = tickOrders.entrySet().stream()
+          .sorted(Map.Entry.comparingByKey())
+          .map(Map.Entry::getValue)
+          .collect(Collectors.toList());
+      LOGGER.info("components order {}", componentTickOrders);
+    }
+
+    accessor.resources.clear();
   }
 
   @Override
@@ -102,6 +166,30 @@ public class TransportMachineContraption extends Contraption {
     return Pair.of(
         new StructureBlockInfo(pos, AssembleStationBlock.createAnchor(capture.state()), null),
         pair.getValue());
+  }
+
+  @Override
+  protected void addBlock(BlockPos pos, Pair<StructureBlockInfo, BlockEntity> pair) {
+    super.addBlock(pos, pair);
+
+    if (pair.getValue() == null) {
+      return;
+    }
+
+    // records component blocks
+    BlockPos localPos = pos.subtract(anchor);
+    LazyOptional<IViboComponent> opt = pair.getValue().getCapability(AllCapabilities.CAPABILITY_VIBO_COMPONENT);
+    opt.ifPresent(c ->
+        components.compute(c.getComponentType().getName(), (k, v) -> {
+          if (v == null) {
+            v = new LinkedList<>();
+          }
+
+          componentBlockInfoMap.put(c.getComponentType().getName() + "-" + v.size(), blocks.get(localPos));
+
+          v.add(c);
+          return v;
+        }));
   }
 
   @Override

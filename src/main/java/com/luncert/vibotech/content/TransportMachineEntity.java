@@ -101,6 +101,10 @@ public class TransportMachineEntity extends Entity {
     this.station = station;
   }
 
+  public BlockPos getStationPosition() {
+    return station.getBlockPos();
+  }
+
   public boolean assemble(EContraptionMovementMode mode, BlockPos pos) throws TransportMachineAssemblyException {
     Level world = level();
     TransportMachineContraption contraption = new TransportMachineContraption(mode, this);
