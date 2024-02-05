@@ -96,7 +96,6 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
     TransportMachineEntity transportMachine = new TransportMachineEntity(world, pos, getBlockState());
     world.addFreshEntity(transportMachine);
-    LOGGER.info("xx assemble");
     if (!transportMachine.assemble(worldPosition)) {
       transportMachine.discard();
       throw new TransportMachineAssemblyException("structure_not_found");

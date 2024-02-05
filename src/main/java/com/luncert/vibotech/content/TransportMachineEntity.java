@@ -108,7 +108,7 @@ public class TransportMachineEntity extends Entity {
       throw new TransportMachineAssemblyException(e);
     }
 
-    contraption.removeBlocksFromWorld(world, BlockPos.ZERO.above());
+    contraption.removeBlocksFromWorld(world, BlockPos.ZERO);
     contraption.startMoving(world);
     contraption.expandBoundsAroundAxis(Direction.Axis.Y);
 

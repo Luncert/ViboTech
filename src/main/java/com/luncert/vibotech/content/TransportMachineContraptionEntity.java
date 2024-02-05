@@ -18,6 +18,7 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
   }
 
   public static TransportMachineContraptionEntity create(Level world, Contraption contraption, Direction initialOrientation) {
+    // LOGGER.info(contraption.getBlocks().toString());
     TransportMachineContraptionEntity entity = new TransportMachineContraptionEntity(AllEntityTypes.TRANSPORT_MACHINE.get(), world);
     entity.setContraption(contraption);
     entity.setInitialOrientation(initialOrientation);
@@ -27,23 +28,18 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
 
   @Override
   protected void tickContraption() {
-    if (nonDamageTicks > 0)
-      nonDamageTicks--;
-
     TransportMachineEntity vehicle = (TransportMachineEntity) getVehicle();
     if (vehicle == null)
       return;
 
-    boolean rotationLock = false;
     boolean pauseWhileRotating = false;
     boolean wasStalled = isStalled();
     if (contraption instanceof TransportMachineContraption contraption) {
-      // rotationLock = contraption.rotationMode == EContraptionMovementMode.ROTATION_LOCKED;
       // pauseWhileRotating = contraption.rotationMode == EContraptionMovementMode.ROTATE_PAUSED;
     }
 
-    boolean rotating = updateOrientation(rotationLock, wasStalled, vehicle, false);
-    if (!rotating || !pauseWhileRotating)
+    boolean rotating = updateOrientation(false, wasStalled, vehicle, false);
+    if (!pauseWhileRotating)
       tickActors();
   }
 }

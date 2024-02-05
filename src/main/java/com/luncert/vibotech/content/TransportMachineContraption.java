@@ -63,7 +63,9 @@ public class TransportMachineContraption extends Contraption {
     }
 
     // replace assemble station with anchor block
-    return Pair.of(new StructureBlockInfo(pos, AssembleStationBlock.createAnchor(capture.state()), null), pair.getValue());
+    return Pair.of(
+        new StructureBlockInfo(pos, AssembleStationBlock.createAnchor(capture.state()), null),
+        pair.getValue());
   }
 
   @Override
