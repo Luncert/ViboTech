@@ -36,6 +36,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   private AssembleStationPeripheral peripheral;
   private UUID transportMachineId;
   private TransportMachineEntity transportMachine;
+  private boolean controlledByStation;
 
   private static final int assemblyCooldown = 8;
   private int ticksSinceLastUpdate;
@@ -113,12 +114,14 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     AssembleStationBlock block = (AssembleStationBlock) state.getBlock();
     AssembleStationBlock.AssembleStationAction action = AssembleStationBlock.getAction(state);
     if (isAssembled()) {
-      if (action.shouldDisassemble()) {
-        dissemble(level, worldPosition);
+      if (controlledByStation && action.shouldDisassemble()) {
+        dissemble();
+        controlledByStation = false;
       }
     } else {
       if (action.shouldAssemble()) {
-        assemble(EContraptionMovementMode.ROTATE, level, worldPosition);
+        assemble(EContraptionMovementMode.ROTATE);
+        controlledByStation = true;
       }
     }
   }
@@ -128,16 +131,12 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   public void assemble(EContraptionMovementMode mode) throws TransportMachineAssemblyException {
-    assemble(mode, level, worldPosition);
-  }
-
-  public void assemble(EContraptionMovementMode mode, Level world, BlockPos pos) throws TransportMachineAssemblyException {
     if (transportMachine != null) {
       throw new TransportMachineAssemblyException("transport_machine_assembled");
     }
 
-    TransportMachineEntity transportMachine = new TransportMachineEntity(world, pos, getBlockState());
-    world.addFreshEntity(transportMachine);
+    TransportMachineEntity transportMachine = new TransportMachineEntity(level, worldPosition, getBlockState());
+    level.addFreshEntity(transportMachine);
     if (!transportMachine.assemble(mode, worldPosition)) {
       transportMachine.discard();
       throw new TransportMachineAssemblyException("structure_not_found");
@@ -147,10 +146,6 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   public void dissemble() throws TransportMachineAssemblyException {
-    dissemble(level, worldPosition);
-  }
-
-  public void dissemble(Level world, BlockPos pos) throws TransportMachineAssemblyException {
     checkContraptionStatus();
 
     // Vec3 blockPos = Vec3.atCenterOf(getBlockPos()).add(0, -0.5, 0);
@@ -199,6 +194,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
       if (transportMachineId != null) {
         compound.putString("transport_machine", transportMachineId.toString());
       }
+      compound.putBoolean("controlled_by_station", controlledByStation);
     }
   }
 
@@ -208,6 +204,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
     if (!clientPacket) {
       transportMachineId = UUID.fromString(compound.getString("transport_machine"));
+      controlledByStation = compound.getBoolean("controlled_by_station");
     }
   }
 }

@@ -1,21 +1,35 @@
 package com.luncert.vibotech.compat.computercraft;
 
+import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
+import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
+import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.content.AssembleStationBlockEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
+import com.mojang.logging.LogUtils;
 import dan200.computercraft.api.lua.IArguments;
+import dan200.computercraft.api.lua.ILuaFunction;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
+import dan200.computercraft.api.lua.MethodResult;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 public class AssembleStationPeripheral implements IPeripheral {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     protected String type;
     protected AssembleStationBlockEntity blockEntity;
@@ -86,70 +100,70 @@ public class AssembleStationPeripheral implements IPeripheral {
         }
     }
 
-    // @LuaFunction
-    // public final List<String> getComponents() {
-    //     Map<String, List<IAircraftComponent>> components = blockEntity.getComponents();
-    //     List<String> result = new ArrayList<>(components.size());
-    //     for (List<IAircraftComponent> value : components.values()) {
-    //         for (int i = 0; i < value.size(); i++) {
-    //             IAircraftComponent c = value.get(i);
-    //             result.add(c.getComponentType().getName() + "-" + i);
-    //         }
-    //     }
-    //     return result;
-    // }
+    @LuaFunction
+    public final List<String> getComponents() {
+        Map<String, List<IViboComponent>> components = blockEntity.getComponents();
+        List<String> result = new ArrayList<>(components.size());
+        for (List<IViboComponent> value : components.values()) {
+            for (int i = 0; i < value.size(); i++) {
+                IViboComponent c = value.get(i);
+                result.add(c.getComponentType().getName() + "-" + i);
+            }
+        }
+        return result;
+    }
 
-    // @LuaFunction
-    // public final Map<String, ILuaFunction> getComponent(String componentName) throws LuaException {
-    //     Pair<String, Integer> name = BaseAircraftComponent.parseName(componentName);
-    //
-    //     List<IAircraftComponent> components = blockEntity.getComponents().get(name.getKey());
-    //     if (components != null && components.size() > name.getValue()) {
-    //         return getLuaFunctions(components.get(name.getValue()));
-    //     }
-    //
-    //     return Collections.emptyMap();
-    // }
+    @LuaFunction
+    public final Map<String, ILuaFunction> getComponent(String componentName) throws LuaException {
+        Pair<String, Integer> name = BaseViboComponent.parseName(componentName);
 
-    // private Map<String, ILuaFunction> getLuaFunctions(IAircraftComponent c) {
-    //     Map<String, ILuaFunction> functions = new HashMap<>();
-    //     for (Method method : c.getClass().getDeclaredMethods()) {
-    //         if (method.isAnnotationPresent(LuaFunction.class)) {
-    //             String name = method.getDeclaringClass().getName() + "." + method.getName();
-    //             int modifiers = method.getModifiers();
-    //
-    //             if(!Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
-    //                 RobotContraption.LOGGER.warn("Lua Method {} should be final.", name);
-    //             }
-    //
-    //             if(!Modifier.isPublic(modifiers)) {
-    //                 RobotContraption.LOGGER.error( "Lua Method {} should be a public method.", name );
-    //                 return Collections.emptyMap();
-    //             }
-    //
-    //             functions.put(method.getName(), generate(c, method));
-    //         }
-    //     }
-    //
-    //     return functions;
-    // }
+        List<IViboComponent> components = blockEntity.getComponents().get(name.getKey());
+        if (components != null && components.size() > name.getValue()) {
+            return getLuaFunctions(components.get(name.getValue()));
+        }
 
-    // private ILuaFunction generate(IAircraftComponent c, Method method) {
-    //     Class<?>[] parameterTypes = method.getParameterTypes();
-    //     return arguments -> {
-    //         Object[] args = parseArguments(arguments, parameterTypes);
-    //         try {
-    //             Object result = method.invoke(c, args);
-    //             if (result instanceof MethodResult r) {
-    //                 return r;
-    //             }
-    //             return MethodResult.of(result);
-    //         } catch (Exception e) {
-    //             RobotContraption.LOGGER.error("failed to call component api", e);
-    //             throw new LuaException(Common.findCauseUsingPlainJava(e).getMessage());
-    //         }
-    //     };
-    // }
+        return Collections.emptyMap();
+    }
+
+    private Map<String, ILuaFunction> getLuaFunctions(IViboComponent c) {
+        Map<String, ILuaFunction> functions = new HashMap<>();
+        for (Method method : c.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(LuaFunction.class)) {
+                String name = method.getDeclaringClass().getName() + "." + method.getName();
+                int modifiers = method.getModifiers();
+
+                if(!Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
+                    LOGGER.warn("Lua Method {} should be final.", name);
+                }
+
+                if(!Modifier.isPublic(modifiers)) {
+                    LOGGER.error( "Lua Method {} should be a public method.", name );
+                    return Collections.emptyMap();
+                }
+
+                functions.put(method.getName(), generate(c, method));
+            }
+        }
+
+        return functions;
+    }
+
+    private ILuaFunction generate(IViboComponent c, Method method) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        return arguments -> {
+            Object[] args = parseArguments(arguments, parameterTypes);
+            try {
+                Object result = method.invoke(c, args);
+                if (result instanceof MethodResult r) {
+                    return r;
+                }
+                return MethodResult.of(result);
+            } catch (Exception e) {
+                LOGGER.error("failed to call component api", e);
+                throw new LuaException(Utils.findCauseUsingPlainJava(e).getMessage());
+            }
+        };
+    }
 
     @SuppressWarnings("unchecked")
     private Object[] parseArguments(IArguments arguments, Class<?>[] parameterTypes) throws LuaException {

@@ -12,6 +12,6 @@ public class Peripherals {
     }
 
     public static AssembleStationPeripheral createAssembleStationPeripheral(AssembleStationBlockEntity te) {
-        return new AssembleStationPeripheral("aircraft_station", te);
+        return new AssembleStationPeripheral("assemble_station", te);
     }
 }
