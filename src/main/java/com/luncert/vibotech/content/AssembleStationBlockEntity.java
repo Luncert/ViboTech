@@ -36,6 +36,10 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   public void tick() {
     super.tick();
 
+    if (level.isClientSide) {
+      return;
+    }
+
     if (ticksSinceLastUpdate < assemblyCooldown) {
       ticksSinceLastUpdate++;
     }
