@@ -9,6 +9,7 @@ import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
+import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.luncert.vibotech.index.AllBlocks;
@@ -359,14 +360,14 @@ public class TransportMachineEntity extends Entity {
       return;
     }
 
-    // getContraption().ifPresent(contraption -> {
-    //   contraption.initComponents(level(), this);
-    //   for (List<IAircraftComponent> value : contraption.getOrderedComponents()) {
-    //     for (IAircraftComponent component : value) {
-    //       component.tickComponent();
-    //     }
-    //   }
-    // });
+    getContraption().ifPresent(contraption -> {
+      contraption.initComponents(level());
+      for (List<IViboComponent> value : contraption.getOrderedComponents()) {
+        for (IViboComponent component : value) {
+          component.tickComponent();
+        }
+      }
+    });
   }
 
   private Optional<Vec3> updateMotion() {

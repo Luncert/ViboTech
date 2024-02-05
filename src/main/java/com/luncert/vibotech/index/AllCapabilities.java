@@ -11,7 +11,7 @@ public class AllCapabilities {
     public static final Capability<IViboComponent> CAPABILITY_VIBO_COMPONENT = CapabilityManager.get(new CapabilityToken<>() {
     });
 
-    public static boolean isAircraftComponent(@NotNull Capability<?> cap) {
+    public static boolean isViboComponent(@NotNull Capability<?> cap) {
         return cap == CAPABILITY_VIBO_COMPONENT;
     }
 

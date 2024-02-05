@@ -2,9 +2,11 @@ package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
+import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
 import com.luncert.vibotech.content.AssembleStationBlock;
 import com.luncert.vibotech.content.AssembleStationBlockEntity;
+import com.luncert.vibotech.content.TransportMachineComponent;
 import com.luncert.vibotech.content.TransportMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCapabilities;
@@ -108,10 +110,14 @@ public class TransportMachineContraption extends Contraption {
 
   public void initComponents(Level level) {
     if (accessor == null) {
+      components.put(ViboComponentType.TRANSPORT_MACHINE.getName(), List.of(new TransportMachineComponent()));
+
       AssembleStationBlockEntity station = (AssembleStationBlockEntity) level.getBlockEntity(transportMachine.getStationPosition());
       accessor = new ViboContraptionAccessor(level, station.getPeripheral(), station, transportMachine, this);
 
       Map<Integer, List<String>> tickOrders = new HashMap<>();
+
+      // resolve tick orders
 
       for (Map.Entry<String, List<IViboComponent>> entry : components.entrySet()) {
         List<IViboComponent> components = entry.getValue();
@@ -141,6 +147,7 @@ public class TransportMachineContraption extends Contraption {
           .sorted(Map.Entry.comparingByKey())
           .map(Map.Entry::getValue)
           .collect(Collectors.toList());
+      LOGGER.info("components {}", components);
       LOGGER.info("components order {}", componentTickOrders);
     }
 

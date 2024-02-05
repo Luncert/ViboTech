@@ -140,7 +140,7 @@ public class TransportMachineComponent extends BaseViboComponent {
     @LuaFunction
     public final void setSpeed(int speed) throws LuaException {
         if (speed > maxSpeed) {
-            throw new LuaException("max speed is " + maxSpeed);
+            throw new LuaException(maxSpeed != 256 ? "no power" : "max speed is " + maxSpeed);
         }
 
         this.speed = speed;
