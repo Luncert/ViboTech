@@ -74,7 +74,6 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     }
     AssembleStationBlock block = (AssembleStationBlock) state.getBlock();
     AssembleStationBlock.AssembleStationAction action = AssembleStationBlock.getAction(state);
-    LOGGER.info("??? " + action.name());
     if (isAssembled()) {
       if (action.shouldDisassemble()) {
         dissemble(level, worldPosition);
@@ -97,6 +96,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
     TransportMachineEntity transportMachine = new TransportMachineEntity(world, pos, getBlockState());
     world.addFreshEntity(transportMachine);
+    LOGGER.info("xx assemble");
     if (!transportMachine.assemble(worldPosition)) {
       transportMachine.discard();
       throw new TransportMachineAssemblyException("structure_not_found");

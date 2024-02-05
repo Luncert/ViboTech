@@ -10,6 +10,7 @@ import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllEntityTypes;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import java.util.ArrayDeque;
 import java.util.List;
@@ -34,11 +35,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.slf4j.Logger;
 
 /**
  * Carry {@link TransportMachineContraptionEntity} which is controlled by player or cc.
  */
 public class TransportMachineEntity extends Entity {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   private static final double MIN_MOVE_LENGTH = 0.001;
 
@@ -71,7 +75,7 @@ public class TransportMachineEntity extends Entity {
   }
 
   public TransportMachineEntity(Level world, BlockPos stationPos, BlockState stationBlockState) {
-    super(AllEntityTypes.TRANSPORT_MACHINE.get(), world);
+    super(AllEntityTypes.TRANSPORT_MACHINE_VEHICLE.get(), world);
     this.station = (AssembleStationBlockEntity) world.getBlockEntity(stationPos);
     this.stationBlockState = stationBlockState;
     // following data will be synced automatically
@@ -82,6 +86,12 @@ public class TransportMachineEntity extends Entity {
     setTargetYRot(getYRot());
 
     setDeltaMovement(Vec3.ZERO);
+  }
+
+  public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {
+    @SuppressWarnings("unchecked")
+    EntityType.Builder<TransportMachineEntity> entityBuilder = (EntityType.Builder<TransportMachineEntity>) builder;
+    return entityBuilder.sized(0.1f, 0.1f);
   }
 
   public void bindStation(AssembleStationBlockEntity station) {
@@ -98,7 +108,7 @@ public class TransportMachineEntity extends Entity {
       throw new TransportMachineAssemblyException(e);
     }
 
-    contraption.removeBlocksFromWorld(world, BlockPos.ZERO);
+    contraption.removeBlocksFromWorld(world, BlockPos.ZERO.above());
     contraption.startMoving(world);
     contraption.expandBoundsAroundAxis(Direction.Axis.Y);
 

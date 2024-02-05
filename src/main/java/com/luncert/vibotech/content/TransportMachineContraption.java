@@ -1,6 +1,7 @@
 package com.luncert.vibotech.content;
 
 import com.luncert.vibotech.index.AllBlocks;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
@@ -11,8 +12,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
 
 public class TransportMachineContraption extends Contraption {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   public static final ContraptionType TRANSPORT_MACHINE = ContraptionType.register(
       "transport_machine", TransportMachineContraption::new);
@@ -57,7 +61,7 @@ public class TransportMachineContraption extends Contraption {
       return pair;
     }
 
-    // replace aircraft station with anchor block
+    // replace assemble station with anchor block
     return Pair.of(new StructureBlockInfo(pos, AssembleStationBlock.createAnchor(capture.state()), null), pair.getValue());
   }
 }

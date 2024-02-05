@@ -1,13 +1,17 @@
 package com.luncert.vibotech.content;
 
 import com.luncert.vibotech.index.AllEntityTypes;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import org.slf4j.Logger;
 
 public class TransportMachineContraptionEntity extends OrientedContraptionEntity {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   public TransportMachineContraptionEntity(EntityType<?> type, Level world) {
     super(type, world);
