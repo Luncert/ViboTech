@@ -41,6 +41,8 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
       throw new RuntimeException(e);
     }
 
+    // bind & unbind vehicle entity to station
+
     if (level instanceof ServerLevel world && transportMachine == null && transportMachineId != null) {
       if (world.getEntity(transportMachineId) instanceof TransportMachineEntity transportMachine) {
         this.transportMachine = transportMachine;

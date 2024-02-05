@@ -6,8 +6,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import org.checkerframework.checker.units.qual.A;
 
+/**
+ * AssembleStationBlockEntity assemble in tick() if block is powered.
+ * - AssembleStationBlockEntity#assemble: create TransportMachineEntity and call assemble
+ * - TransportMachineEntity#assemble: create contraption, call assemble and start riding
+ */
 public class AssembleStationBlock extends Block {
 
   public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
