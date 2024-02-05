@@ -147,10 +147,10 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   public void dissemble() throws TransportMachineAssemblyException {
     checkContraptionStatus();
 
-    // Vec3 blockPos = Vec3.atCenterOf(getBlockPos()).add(0, -0.5, 0);
-    // if (!blockPos.equals(entity.position())) {
-    //     throw new AircraftAssemblyException("not_dissemble_at_station");
-    // }
+    Vec3 blockPos = Vec3.atCenterOf(getBlockPos()).add(0, -0.5, 0);
+    if (!blockPos.equals(transportMachine.position())) {
+        throw new TransportMachineAssemblyException("not_dissemble_at_station");
+    }
 
     transportMachine.dissemble();
     transportMachine = null;
@@ -158,7 +158,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
   private void checkContraptionStatus() throws TransportMachineAssemblyException {
     if (transportMachine == null) {
-      throw new TransportMachineAssemblyException("aircraft_dissembled");
+      throw new TransportMachineAssemblyException("contraption_dissembled");
     }
   }
 

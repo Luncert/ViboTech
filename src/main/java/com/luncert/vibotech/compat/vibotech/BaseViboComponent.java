@@ -10,8 +10,8 @@ public abstract class BaseViboComponent implements IViboComponent {
     protected String name;
 
     @Override
-    public void init(ViboContraptionAccessor aircraftAccessor, String name) {
-        this.accessor = aircraftAccessor;
+    public void init(ViboContraptionAccessor accessor, String name) {
+        this.accessor = accessor;
         this.name = name;
     }
 

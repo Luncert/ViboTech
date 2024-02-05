@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 
 public interface IViboComponent {
 
-    default void init(ViboContraptionAccessor aircraftAccessor, String name) {
+    default void init(ViboContraptionAccessor accessor, String name) {
     }
 
     default void tickComponent() {

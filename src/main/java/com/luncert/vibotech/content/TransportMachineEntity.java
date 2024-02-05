@@ -215,19 +215,19 @@ public class TransportMachineEntity extends Entity {
 
   private void checkMotion() throws TransportMachineMovementException {
     if (isMoving) {
-      throw new TransportMachineMovementException("cannot_update_moving_aircraft");
+      throw new TransportMachineMovementException("cannot_update_moving_contraption");
     }
   }
 
   // info api
 
-  public Vec3 getAircraftPosition() {
+  public Vec3 getContraptionPosition() {
     BlockPos blockPos = blockPosition();
-    // aircraft entity is invisible, so aircraft's position should be above the entity position
+    // transport machine entity is invisible, so contraption's position should be above the entity position
     return new Vec3(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ());
   }
 
-  public Direction getAircraftFacing() {
+  public Direction getContraptionFacing() {
     return Direction.fromYRot(getTargetYRot());
   }
 
