@@ -1,19 +1,9 @@
 package com.luncert.vibotech.content;
 
-import static com.luncert.robotcontraption.compat.aircraft.AircraftComponentType.AIRCRAFT_CONTROLLER;
-import static com.luncert.robotcontraption.compat.computercraft.AircraftActionEvent.EVENT_CONTRAPTION_MOVEMENT_DONE;
 import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAPTION_MOVEMENT_DONE;
 
 import com.google.common.collect.ImmutableMap;
-import com.luncert.robotcontraption.compat.aircraft.AircraftComponentType;
-import com.luncert.robotcontraption.compat.aircraft.BaseAircraftComponent;
-import com.luncert.robotcontraption.compat.aircraft.IViboComponent;
-import com.luncert.robotcontraption.compat.computercraft.AircraftApiCallback;
-import com.luncert.robotcontraption.content.aircraft.TickOrder;
-import com.luncert.robotcontraption.content.fuelengine.FuelEngineComponent;
-import com.luncert.robotcontraption.exception.AircraftMovementException;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
