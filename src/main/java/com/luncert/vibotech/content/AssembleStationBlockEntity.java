@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content;
 
+import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
 import com.mojang.logging.LogUtils;
@@ -80,7 +81,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
       }
     } else {
       if (action.shouldAssemble()) {
-        assemble(level, worldPosition);
+        assemble(EContraptionMovementMode.ROTATE, level, worldPosition);
       }
     }
   }
@@ -89,23 +90,27 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     return transportMachine != null;
   }
 
-  public void assemble() throws TransportMachineAssemblyException {
-
+  public void assemble(EContraptionMovementMode mode) throws TransportMachineAssemblyException {
+    assemble(mode, level, worldPosition);
   }
 
-  public void assemble(Level world, BlockPos pos) throws TransportMachineAssemblyException {
+  public void assemble(EContraptionMovementMode mode, Level world, BlockPos pos) throws TransportMachineAssemblyException {
     if (transportMachine != null) {
       throw new TransportMachineAssemblyException("transport_machine_assembled");
     }
 
     TransportMachineEntity transportMachine = new TransportMachineEntity(world, pos, getBlockState());
     world.addFreshEntity(transportMachine);
-    if (!transportMachine.assemble(worldPosition)) {
+    if (!transportMachine.assemble(mode, worldPosition)) {
       transportMachine.discard();
       throw new TransportMachineAssemblyException("structure_not_found");
     }
     this.transportMachine = transportMachine;
     this.transportMachineId = transportMachine.getUUID();
+  }
+
+  public void dissemble() throws TransportMachineAssemblyException {
+    dissemble(level, worldPosition);
   }
 
   public void dissemble(Level world, BlockPos pos) throws TransportMachineAssemblyException {

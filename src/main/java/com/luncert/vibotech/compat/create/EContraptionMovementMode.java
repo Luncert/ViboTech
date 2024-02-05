@@ -1,26 +1,23 @@
-// package com.luncert.vibotech.compat.create;
-//
-// import com.luncert.vibotech.content.AssembleStationBlockEntity;
-//
-// public enum EContraptionMovementMode {
-//
-//     // Always face toward motion
-//     ROTATE(AssembleStationBlockEntity.CartMovementMode.ROTATE),
-//
-//     // Pause actors while rotating
-//     ROTATE_PAUSED(AssembleStationBlockEntity.CartMovementMode.ROTATE_PAUSED),
-//
-//     // Lock rotation
-//     ROTATION_LOCKED(AssembleStationBlockEntity.CartMovementMode.ROTATION_LOCKED),
-//     ;
-//
-//     private final AssembleStationBlockEntity.CartMovementMode mode;
-//
-//     EContraptionMovementMode(CartAssemblerTileEntity.CartMovementMode mode) {
-//         this.mode = mode;
-//     }
-//
-//     public CartAssemblerTileEntity.CartMovementMode toCartMovementMode() {
-//         return mode;
-//     }
-// }
+package com.luncert.vibotech.compat.create;
+
+import com.simibubi.create.content.contraptions.mounted.CartAssemblerBlockEntity;
+
+public enum EContraptionMovementMode {
+
+    // Always face toward motion
+    ROTATE(CartAssemblerBlockEntity.CartMovementMode.ROTATE),
+
+    // Pause actors while rotating
+    ROTATE_PAUSED(CartAssemblerBlockEntity.CartMovementMode.ROTATE_PAUSED),
+    ;
+
+    private final CartAssemblerBlockEntity.CartMovementMode mode;
+
+    EContraptionMovementMode(CartAssemblerBlockEntity.CartMovementMode mode) {
+        this.mode = mode;
+    }
+
+    public CartAssemblerBlockEntity.CartMovementMode toCartMovementMode() {
+        return mode;
+    }
+}

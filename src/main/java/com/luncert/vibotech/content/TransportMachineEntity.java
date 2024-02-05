@@ -6,6 +6,7 @@ import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.H
 import com.luncert.vibotech.common.ActionCallback;
 import com.luncert.vibotech.common.Signal;
 import com.luncert.vibotech.common.Utils;
+import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
@@ -100,9 +101,9 @@ public class TransportMachineEntity extends Entity {
     this.station = station;
   }
 
-  public boolean assemble(BlockPos pos) throws TransportMachineAssemblyException {
+  public boolean assemble(EContraptionMovementMode mode, BlockPos pos) throws TransportMachineAssemblyException {
     Level world = level();
-    TransportMachineContraption contraption = new TransportMachineContraption();
+    TransportMachineContraption contraption = new TransportMachineContraption(mode, this);
     try {
       if (!contraption.assemble(world, pos))
         return false;

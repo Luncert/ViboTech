@@ -1,6 +1,7 @@
 package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.content.AssembleStationBlock;
+import com.luncert.vibotech.content.TransportMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
@@ -27,6 +28,19 @@ public class TransportMachineContraption extends Contraption {
 
   public static final ContraptionType TRANSPORT_MACHINE = ContraptionType.register(
       "transport_machine", TransportMachineContraption::new);
+
+  private TransportMachineEntity transportMachine;
+
+  public EContraptionMovementMode rotationMode;
+
+  public TransportMachineContraption() {
+    this(EContraptionMovementMode.ROTATE, null);
+  }
+
+  public TransportMachineContraption(EContraptionMovementMode mode, TransportMachineEntity transportMachine) {
+    this.rotationMode = mode;
+    this.transportMachine = transportMachine;
+  }
 
   @Override
   public ContraptionType getType() {
