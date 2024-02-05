@@ -36,10 +36,8 @@ public class ViboTechMod
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
     static {
-        REGISTRATE.setTooltipModifierFactory(item -> {
-            return new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
-                .andThen(TooltipModifier.mapNull(KineticStats.create(item)));
-        });
+        REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
+            .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
     }
 
     public ViboTechMod() {
@@ -48,11 +46,12 @@ public class ViboTechMod
 
     public static void onCtor() {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
-        IEventBus modEventBus = FMLJavaModLoadingContext.get()
+        IEventBus eventBus = FMLJavaModLoadingContext.get()
             .getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        AllCreativeModeTabs.register(modEventBus);
+        AllCreativeModeTabs.register(eventBus);
+        REGISTRATE.registerEventListeners(eventBus);
         AllBlocks.register();
 
         // // Register the commonSetup method for modloading

@@ -16,7 +16,7 @@ public class AllBlocks {
   }
 
   public static final BlockEntry<AssembleStationBlock> ASSEMBLE_STATION =
-      REGISTRATE.block("assemblestation", AssembleStationBlock::new)
+      REGISTRATE.block("assemble_station", AssembleStationBlock::new)
           .initialProperties(SharedProperties::softMetal)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY))
           .transform(pickaxeOnly())
