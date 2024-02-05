@@ -2,6 +2,7 @@ package com.luncert.vibotech.content;
 
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -13,8 +14,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.slf4j.Logger;
 
 public class AssembleStationBlockEntity extends SmartBlockEntity {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   private UUID transportMachineId;
   private TransportMachineEntity transportMachine;
@@ -31,6 +35,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   @Override
   public void tick() {
     super.tick();
+
     if (ticksSinceLastUpdate < assemblyCooldown) {
       ticksSinceLastUpdate++;
     }
@@ -65,6 +70,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     }
     AssembleStationBlock block = (AssembleStationBlock) state.getBlock();
     AssembleStationBlock.AssembleStationAction action = AssembleStationBlock.getAction(state);
+    LOGGER.info("??? " + action.name());
     if (action.shouldAssemble()) {
       assemble(level, worldPosition);
     }

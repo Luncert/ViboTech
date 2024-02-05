@@ -1,7 +1,12 @@
 package com.luncert.vibotech.content;
 
+import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+
+import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllBlocks;
+import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -12,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
  * - AssembleStationBlockEntity#assemble: create TransportMachineEntity and call assemble
  * - TransportMachineEntity#assemble: create contraption, call assemble and start riding
  */
-public class AssembleStationBlock extends Block {
+public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity> {
 
   public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
@@ -22,8 +27,18 @@ public class AssembleStationBlock extends Block {
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    builder.add(POWERED);
+    builder.add(POWERED, HORIZONTAL_FACING);
     super.createBlockStateDefinition(builder);
+  }
+
+  @Override
+  public Class<AssembleStationBlockEntity> getBlockEntityClass() {
+    return AssembleStationBlockEntity.class;
+  }
+
+  @Override
+  public BlockEntityType<? extends AssembleStationBlockEntity> getBlockEntityType() {
+    return AllBlockEntityTypes.ASSEMBLE_STATION.get();
   }
 
   public enum AssembleStationAction {

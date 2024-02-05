@@ -1,6 +1,7 @@
 package com.luncert.vibotech;
 
 import com.luncert.vibotech.foundation.item.ItemDescription;
+import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCreativeModeTabs;
 import com.luncert.vibotech.index.AllEntityTypes;
@@ -55,6 +56,7 @@ public class ViboTechMod
         REGISTRATE.registerEventListeners(eventBus);
         AllBlocks.register();
         AllEntityTypes.register();
+        AllBlockEntityTypes.register();
 
         // // Register the commonSetup method for modloading
         // modEventBus.addListener(this::commonSetup);

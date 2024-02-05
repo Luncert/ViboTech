@@ -24,7 +24,7 @@ public class TransportMachineContraption extends Contraption {
 
   @Override
   public boolean assemble(Level level, BlockPos pos) throws AssemblyException {
-    if (!searchMovedStructure(world, pos, null))
+    if (!searchMovedStructure(level, pos, null))
       return false;
 
     addBlock(pos, Pair.of(new StructureBlockInfo(
