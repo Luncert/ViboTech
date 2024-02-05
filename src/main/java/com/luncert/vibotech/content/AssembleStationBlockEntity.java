@@ -75,12 +75,19 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     AssembleStationBlock block = (AssembleStationBlock) state.getBlock();
     AssembleStationBlock.AssembleStationAction action = AssembleStationBlock.getAction(state);
     LOGGER.info("??? " + action.name());
-    if (action.shouldAssemble()) {
-      assemble(level, worldPosition);
+    if (isAssembled()) {
+      if (action.shouldDisassemble()) {
+        dissemble(level, worldPosition);
+      }
+    } else {
+      if (action.shouldAssemble()) {
+        assemble(level, worldPosition);
+      }
     }
-    if (action.shouldDisassemble()) {
-      dissemble(level, worldPosition);
-    }
+  }
+
+  public boolean isAssembled() {
+    return transportMachine != null;
   }
 
   public void assemble(Level world, BlockPos pos) throws TransportMachineAssemblyException {
@@ -130,7 +137,9 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     super.write(compound, clientPacket);
 
     if (!clientPacket) {
-      compound.putString("transport_machine", transportMachineId.toString());
+      if (transportMachineId != null) {
+        compound.putString("transport_machine", transportMachineId.toString());
+      }
     }
   }
 

@@ -4,13 +4,18 @@ import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.H
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllBlocks;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.block.IBE;
+import javax.annotation.Nonnull;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import org.slf4j.Logger;
 
 /**
  * AssembleStationBlockEntity assemble in tick() if block is powered.
@@ -19,10 +24,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
  */
 public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity> {
 
+  private static final Logger LOGGER = LogUtils.getLogger();
+
   public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
   public AssembleStationBlock(Properties properties) {
     super(properties);
+    registerDefaultState(defaultBlockState().setValue(POWERED, false));
   }
 
   @Override
@@ -39,6 +47,17 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
   @Override
   public BlockEntityType<? extends AssembleStationBlockEntity> getBlockEntityType() {
     return AllBlockEntityTypes.ASSEMBLE_STATION.get();
+  }
+
+  @Override
+  public void neighborChanged(@Nonnull BlockState state, @Nonnull Level worldIn, @Nonnull BlockPos pos,
+                              @Nonnull Block blockIn, @Nonnull BlockPos fromPos, boolean isMoving) {
+    if (worldIn.isClientSide)
+      return;
+    boolean previouslyPowered = state.getValue(POWERED);
+    if (previouslyPowered != worldIn.hasNeighborSignal(pos))
+      worldIn.setBlock(pos, state.cycle(POWERED), 2);
+    super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
   }
 
   public enum AssembleStationAction {
