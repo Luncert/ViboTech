@@ -1,15 +1,21 @@
 package com.luncert.vibotech.content;
 
+import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+
 import com.luncert.vibotech.compat.computercraft.AssembleStationPeripheral;
 import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
+import com.luncert.vibotech.compat.create.TransportMachineContraption;
+import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,6 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.slf4j.Logger;
@@ -73,6 +80,27 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
       transportMachineId = null;
       transportMachine = null;
     }
+  }
+
+  // api
+
+  public AssembleStationPeripheral getPeripheral() {
+    return peripheral;
+  }
+
+  public Map<String, List<IViboComponent>> getComponents() {
+    if (transportMachine == null) {
+      return Collections.emptyMap();
+    }
+    return transportMachine.getContraption().map(TransportMachineContraption::getComponents).orElse(Collections.emptyMap());
+  }
+
+  public Vec3 getStationPosition() {
+    return new Vec3(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ());
+  }
+
+  public Direction getStationFacing() {
+    return getBlockState().getValue(HORIZONTAL_FACING);
   }
 
   public void tryAssemble() throws TransportMachineAssemblyException {

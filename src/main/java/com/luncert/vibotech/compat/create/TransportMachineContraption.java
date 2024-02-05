@@ -1,5 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
+import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.content.AssembleStationBlock;
 import com.luncert.vibotech.content.TransportMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
@@ -9,6 +10,9 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,12 +26,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
+// FIXME: Caused by: java.lang.RuntimeException: com.luncert.vibotech.exception.TransportMachineAssemblyException: Unmovable Block (Piston) at [-10,-59,3]
 public class TransportMachineContraption extends Contraption {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
   public static final ContraptionType TRANSPORT_MACHINE = ContraptionType.register(
       "transport_machine", TransportMachineContraption::new);
+
+  // TODO
+  private final Map<String, List<IViboComponent>> components = new HashMap<>();
+  private final Map<String, StructureBlockInfo> componentBlockInfoMap = new HashMap<>();
 
   private TransportMachineEntity transportMachine;
 
@@ -40,6 +49,18 @@ public class TransportMachineContraption extends Contraption {
   public TransportMachineContraption(EContraptionMovementMode mode, TransportMachineEntity transportMachine) {
     this.rotationMode = mode;
     this.transportMachine = transportMachine;
+  }
+
+  public Map<String, List<IViboComponent>> getComponents() {
+    return components;
+  }
+
+  public StructureBlockInfo getComponentBlockInfo(String name) {
+    return componentBlockInfoMap.get(name);
+  }
+
+  public BlockPos getWorldPos(BlockPos pos) {
+    return transportMachine.blockPosition().offset(pos.getX(), pos.getY(), pos.getZ());
   }
 
   @Override
