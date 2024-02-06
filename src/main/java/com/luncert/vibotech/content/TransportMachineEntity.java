@@ -54,6 +54,8 @@ public class TransportMachineEntity extends Entity {
       SynchedEntityData.defineId(TransportMachineEntity.class, EntityDataSerializers.INT);
   private static final EntityDataAccessor<Float> TARGET_Y_ROT =
       SynchedEntityData.defineId(TransportMachineEntity.class, EntityDataSerializers.FLOAT);
+  private static final EntityDataAccessor<Direction> INITIAL_DIRECTION =
+      SynchedEntityData.defineId(TransportMachineEntity.class, EntityDataSerializers.DIRECTION);
   private static final EntityDataAccessor<Optional<TransportMachineMovement>> TARGET_MOVEMENT =
       SynchedEntityData.defineId(TransportMachineEntity.class, MOVEMENT_SERIALIZER);
 
@@ -86,6 +88,7 @@ public class TransportMachineEntity extends Entity {
     this.noPhysics = true;
 
     Direction blockDirection = stationBlockState.getValue(HORIZONTAL_FACING);
+    setInitialDirection(blockDirection);
     setYRot(blockDirection.toYRot());
     setTargetYRot(getYRot());
 
@@ -444,6 +447,14 @@ public class TransportMachineEntity extends Entity {
     return entityData.get(TARGET_Y_ROT);
   }
 
+  private void setInitialDirection(Direction direction) {
+    entityData.set(INITIAL_DIRECTION, direction);
+  }
+
+  private Direction getInitialDirection() {
+    return entityData.get(INITIAL_DIRECTION);
+  }
+
   public void setTargetMovement(@Nullable TransportMachineMovement movement) {
     entityData.set(TARGET_MOVEMENT, Optional.ofNullable(movement));
   }
@@ -460,6 +471,7 @@ public class TransportMachineEntity extends Entity {
     entityData.packDirty();
     entityData.define(SPEED, 16);
     entityData.define(TARGET_Y_ROT, 0f);
+    entityData.define(INITIAL_DIRECTION, Direction.NORTH);
     entityData.define(TARGET_MOVEMENT, Optional.empty());
   }
 
@@ -470,6 +482,7 @@ public class TransportMachineEntity extends Entity {
 
     entityData.set(SPEED, root.getInt("speed"));
     entityData.set(TARGET_Y_ROT, root.getFloat("targetYRot"));
+    entityData.set(INITIAL_DIRECTION, Direction.valueOf(root.getString("initialDirection")));
 
     if (root.getBoolean("hasTargetMovement")) {
       CompoundTag targetMovement = root.getCompound("targetMovement");
@@ -484,6 +497,7 @@ public class TransportMachineEntity extends Entity {
   protected void addAdditionalSaveData(CompoundTag root) {
     root.putInt("speed", getKineticSpeed());
     root.putFloat("targetYRot", getTargetYRot());
+    root.putString("initialDirection", getInitialDirection().getName());
 
     Optional<TransportMachineMovement> opt = getTargetMovement();
     root.putBoolean("hasTargetMovement", opt.isPresent());
@@ -494,6 +508,13 @@ public class TransportMachineEntity extends Entity {
       targetMovement.putFloat("expectedPos", movement.expectedPos);
       root.put("targetMovement", targetMovement);
     });
+  }
+
+  @Override
+  public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+    if (key.equals(INITIAL_DIRECTION)) {
+      setYRot(getInitialDirection().toYRot());
+    }
   }
 
   @Override
