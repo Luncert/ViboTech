@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"3": "create:block/brass_casing",
-		"5": "create:creative_casing",
-		"6": "create:creative_motor",
-		"7": "create:gearbox",
+		"5": "create:block/creative_casing",
+		"6": "create:block/creative_motor",
+		"7": "create:block/gearbox",
 		"8": "create:block/copper/copper_shingles",
 		"particle": "create:creative_casing"
 	},
