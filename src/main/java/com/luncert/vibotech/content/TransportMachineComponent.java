@@ -22,11 +22,8 @@ import net.minecraft.world.phys.Vec3;
 @TickOrder(2)
 public class TransportMachineComponent extends BaseViboComponent {
 
-  public static final int MAX_ROTATION_SPEED = 32;
-
+  private static final int MAX_SPEED = 256;
   private int speed = 0;
-  private int rotationSpeed = 16;
-  private int maxSpeed = 256;
   private int executionId;
 
   @Override
@@ -142,8 +139,8 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @LuaFunction
   public final void setSpeed(int speed) throws LuaException {
-    if (speed > maxSpeed) {
-      throw new LuaException(maxSpeed != 256 ? "no power" : "max speed is " + maxSpeed);
+    if (speed > MAX_SPEED) {
+      throw new LuaException(MAX_SPEED != 256 ? "no power" : "max speed is " + MAX_SPEED);
     }
 
     this.speed = speed;
@@ -153,20 +150,6 @@ public class TransportMachineComponent extends BaseViboComponent {
   @LuaFunction
   public final int getSpeed() {
     return speed;
-  }
-
-  @LuaFunction
-  public final void setRotationSpeed(int speed) throws LuaException {
-    if (speed > MAX_ROTATION_SPEED) {
-      throw new LuaException("max speed is " + MAX_ROTATION_SPEED);
-    }
-    this.rotationSpeed = speed;
-    accessor.transportMachine.setRotationSpeed(speed);
-  }
-
-  @LuaFunction
-  public final int getRotationSpeed() {
-    return rotationSpeed;
   }
 
   @LuaFunction
