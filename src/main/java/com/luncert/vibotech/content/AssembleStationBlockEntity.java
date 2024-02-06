@@ -35,6 +35,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   private AssembleStationPeripheral peripheral;
   private UUID transportMachineId;
   private TransportMachineEntity transportMachine;
+  private boolean assembled;
   private boolean controlledByStation;
 
   private static final int assemblyCooldown = 8;
@@ -61,24 +62,24 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
       ticksSinceLastUpdate++;
     }
 
-    try {
-      tryAssemble();
-    } catch (TransportMachineAssemblyException e) {
-      throw new RuntimeException(e);
-    }
-
     // bind & unbind vehicle entity to station
 
     if (level instanceof ServerLevel world && transportMachine == null && transportMachineId != null) {
-      if (world.getEntity(transportMachineId) instanceof TransportMachineEntity transportMachine) {
-        this.transportMachine = transportMachine;
-        transportMachine.bindStation(this);
+      if (world.getEntity(transportMachineId) instanceof TransportMachineEntity transportMachineEntity) {
+        this.transportMachine = transportMachineEntity;
+        transportMachineEntity.bindStation(this);
       }
     }
 
     if (transportMachine != null && transportMachine.isRemoved()) {
       transportMachineId = null;
       transportMachine = null;
+    }
+
+    try {
+      tryAssemble();
+    } catch (TransportMachineAssemblyException e) {
+      LOGGER.error("exception", e);
     }
   }
 
@@ -112,7 +113,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     }
     AssembleStationBlock block = (AssembleStationBlock) state.getBlock();
     AssembleStationBlock.AssembleStationAction action = AssembleStationBlock.getAction(state);
-    if (isAssembled()) {
+    if (assembled) {
       if (controlledByStation && action.shouldDisassemble()) {
         dissemble();
         controlledByStation = false;
@@ -123,10 +124,6 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
         controlledByStation = true;
       }
     }
-  }
-
-  public boolean isAssembled() {
-    return transportMachine != null;
   }
 
   public void assemble(EContraptionMovementMode mode) throws TransportMachineAssemblyException {
@@ -142,6 +139,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     }
     this.transportMachine = transportMachine;
     this.transportMachineId = transportMachine.getUUID();
+    assembled = true;
   }
 
   public void dissemble() throws TransportMachineAssemblyException {
@@ -154,6 +152,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
     transportMachine.dissemble();
     transportMachine = null;
+    assembled = false;
   }
 
   private void checkContraptionStatus() throws TransportMachineAssemblyException {
@@ -194,6 +193,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
         compound.putString("transport_machine", transportMachineId.toString());
       }
       compound.putBoolean("controlled_by_station", controlledByStation);
+      compound.putBoolean("assembled", assembled);
     }
   }
 
@@ -204,6 +204,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     if (!clientPacket) {
       transportMachineId = UUID.fromString(compound.getString("transport_machine"));
       controlledByStation = compound.getBoolean("controlled_by_station");
+      assembled = compound.getBoolean("assembled");
     }
   }
 }

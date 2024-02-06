@@ -46,10 +46,10 @@ public class TransportMachineContraption extends Contraption {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
-  public static final ContraptionType TRANSPORT_MACHINE = ContraptionType.register(
-      "transport_machine", TransportMachineContraption::new);
+  public static final ContraptionType TRANSPORT_MACHINE_CONTRAPTION = ContraptionType.register(
+      "transport_machine_contraption", TransportMachineContraption::new);
 
-  private final TransportMachineEntity transportMachine;
+  private TransportMachineEntity transportMachine;
   // block name to vibo component
   private final Map<String, List<IViboComponent>> components = new HashMap<>();
   // block name to block info
@@ -95,7 +95,7 @@ public class TransportMachineContraption extends Contraption {
 
   @Override
   public ContraptionType getType() {
-    return TRANSPORT_MACHINE;
+    return TRANSPORT_MACHINE_CONTRAPTION;
   }
 
   @Override
@@ -107,14 +107,15 @@ public class TransportMachineContraption extends Contraption {
         pos, AllBlocks.TRANSPORT_MACHINE_ANCHOR.getDefaultState(), null), null));
 
     if (blocks.size() != 1) {
-      initComponents(level);
+      initComponents(level, transportMachine);
       return true;
     }
     return false;
   }
 
-  public void initComponents(Level level) {
+  public void initComponents(Level level, TransportMachineEntity transportMachine) {
     if (accessor == null) {
+      this.transportMachine = transportMachine;
       components.put(ViboComponentType.TRANSPORT_MACHINE.getName(), List.of(new TransportMachineComponent()));
 
       AssembleStationBlockEntity station = (AssembleStationBlockEntity) level.getBlockEntity(transportMachine.getStationPosition());

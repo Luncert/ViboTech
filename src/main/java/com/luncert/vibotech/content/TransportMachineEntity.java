@@ -361,7 +361,7 @@ public class TransportMachineEntity extends Entity {
     }
 
     getContraption().ifPresent(contraption -> {
-      contraption.initComponents(level());
+      contraption.initComponents(level(), this);
       for (List<IViboComponent> value : contraption.getOrderedComponents()) {
         for (IViboComponent component : value) {
           component.tickComponent();
