@@ -399,7 +399,12 @@ public class TransportMachineEntity extends Entity {
       return null;
     }
 
-    float speed = getMovementSpeed();
+    float speed;
+    if (getYRot() != getTargetYRot()) {
+      speed = getMovementSpeed(getRotationSpeed());
+    } else {
+      speed = getMovementSpeed();
+    }
     double linearMotion = Math.min(speed, absDistance);
     if (!movement.positive) {
       linearMotion = -linearMotion;
@@ -466,7 +471,7 @@ public class TransportMachineEntity extends Entity {
     // entityData.clearDirty();
     entityData.packDirty();
     entityData.define(SPEED, 16);
-    entityData.define(ROTATION_SPEED, 16);
+    entityData.define(ROTATION_SPEED, 8);
     entityData.define(TARGET_Y_ROT, 0f);
     entityData.define(TARGET_MOVEMENT, Optional.empty());
   }
