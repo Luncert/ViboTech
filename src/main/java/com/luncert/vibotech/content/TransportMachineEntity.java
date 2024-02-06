@@ -354,6 +354,7 @@ public class TransportMachineEntity extends Entity {
 
     updateMotion().ifPresent(motion -> {
       setDeltaMovement(motion);
+      setOldPosAndRot();
       setPos(getX() + motion.x, getY() + motion.y, getZ() + motion.z);
     });
   }
