@@ -66,10 +66,11 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
 
   @Override
   protected boolean updateOrientation(boolean rotationLock, boolean wasStalled, Entity riding, boolean isOnCoupling) {
+    this.prevYaw = this.yaw;
     if (wasStalled) {
       return false;
     }
-    this.prevYaw = this.yaw;
+
     boolean rotating = false;
 
     Vec3 movementVector = riding.getDeltaMovement();
