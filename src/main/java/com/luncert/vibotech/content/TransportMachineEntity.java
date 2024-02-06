@@ -344,11 +344,6 @@ public class TransportMachineEntity extends Entity {
       return;
     }
 
-    boolean isStalled = getContraptionEntity().map(TransportMachineContraptionEntity::isStalled).orElse(false);
-    if (isStalled) {
-      return;
-    }
-
     updateMotion().ifPresent(motion -> {
       setDeltaMovement(motion);
       // used by TransportMachineContraptionEntity#updateOrientation
