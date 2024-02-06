@@ -6,8 +6,11 @@ import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllBlocks;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.utility.Iterate;
 import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -47,6 +50,11 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
   @Override
   public BlockEntityType<? extends AssembleStationBlockEntity> getBlockEntityType() {
     return AllBlockEntityTypes.ASSEMBLE_STATION.get();
+  }
+
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
   }
 
   @Override

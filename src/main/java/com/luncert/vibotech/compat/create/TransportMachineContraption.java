@@ -297,7 +297,6 @@ public class TransportMachineContraption extends Contraption {
 
     this.componentBlockInfoMap.clear();
     ListTag componentInfoList = nbt.getList("componentInfoMappings", CompoundTag.TAG_COMPOUND);
-    // LOGGER.info("{}", blocks);
     for (Tag tag : componentInfoList) {
       CompoundTag componentNbt = (CompoundTag) tag;
       String name = componentNbt.getString("name");

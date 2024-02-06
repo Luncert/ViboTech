@@ -19,7 +19,6 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
   }
 
   public static TransportMachineContraptionEntity create(Level world, Contraption contraption, Direction initialOrientation) {
-    // LOGGER.info(contraption.getBlocks().toString());
     TransportMachineContraptionEntity entity = new TransportMachineContraptionEntity(AllEntityTypes.TRANSPORT_MACHINE.get(), world);
     entity.setContraption(contraption);
     entity.setInitialOrientation(initialOrientation);
