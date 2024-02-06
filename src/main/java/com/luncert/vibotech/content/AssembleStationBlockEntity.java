@@ -215,7 +215,9 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   void read(CompoundTag compound) {
-    transportMachineId = UUID.fromString(compound.getString("transport_machine"));
+    if (compound.contains("transport_machine")) {
+      transportMachineId = UUID.fromString(compound.getString("transport_machine"));
+    }
     controlledByStation = compound.getBoolean("controlled_by_station");
     assembled = compound.getBoolean("assembled");
   }

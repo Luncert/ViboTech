@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [" W ",
+    "WSW",
+    " W "],
+  "key": {
+    "W": {
+      "tag": "forge:plates/iron"
+    },
+    "S": {
+      "item": "create:andesite_funnel"
+    }
+  },
+  "result":{
+    "item": "vibotech:assemble_station",
+    "count": 1
+  }
+}
