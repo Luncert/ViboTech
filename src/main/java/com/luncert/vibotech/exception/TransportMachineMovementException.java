@@ -1,6 +1,6 @@
 package com.luncert.vibotech.exception;
 
-import com.simibubi.create.foundation.utility.Lang;
+import com.luncert.vibotech.common.Lang;
 
 public class TransportMachineMovementException extends Exception {
 

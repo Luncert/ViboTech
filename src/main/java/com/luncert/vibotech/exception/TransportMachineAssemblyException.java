@@ -1,7 +1,7 @@
 package com.luncert.vibotech.exception;
 
+import com.luncert.vibotech.common.Lang;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.foundation.utility.Lang;
 
 public class TransportMachineAssemblyException extends AssemblyException {
 

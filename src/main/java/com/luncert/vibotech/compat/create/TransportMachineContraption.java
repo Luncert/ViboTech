@@ -1,5 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
+import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
@@ -16,6 +17,7 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
+import com.simibubi.create.foundation.utility.NBTHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,6 +27,9 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -218,5 +223,84 @@ public class TransportMachineContraption extends Contraption {
   @OnlyIn(Dist.CLIENT)
   public ContraptionLighter<?> makeLighter() {
     return new NonStationaryLighter<>(this);
+  }
+
+  @Override
+  public CompoundTag writeNBT(boolean spawnPacket) {
+    CompoundTag tag = super.writeNBT(spawnPacket);
+
+    NBTHelper.writeEnum(tag, "RotationMode", rotationMode);
+
+    // write components
+    ListTag componentList = new ListTag();
+    for (Map.Entry<String, List<IViboComponent>> entry : components.entrySet()) {
+      List<IViboComponent> components = entry.getValue();
+      for (int i = 0; i < components.size(); i++) {
+        CompoundTag item = new CompoundTag();
+        item.putString("name", entry.getKey() + "-" + i);
+
+        IViboComponent component = components.get(i);
+        Tag c = component.writeNBT();
+        if (c != null) {
+          item.put("component", c);
+        }
+
+        componentList.add(item);
+      }
+    }
+
+    ListTag componentInfoList = new ListTag();
+    for (Map.Entry<String, StructureBlockInfo> entry : componentBlockInfoMap.entrySet()) {
+      CompoundTag item = new CompoundTag();
+      item.putString("name", entry.getKey());
+      item.putLong("pos", entry.getValue().pos().asLong());
+      componentInfoList.add(item);
+    }
+
+    tag.put("components", componentList);
+    tag.put("componentInfoMappings", componentInfoList);
+
+    // System.out.println("write -" + tag);
+    return tag;
+  }
+
+  @Override
+  public void readNBT(Level world, CompoundTag nbt, boolean spawnData) {
+    super.readNBT(world, nbt, spawnData);
+    // System.out.println("read - " + nbt);
+
+    rotationMode = NBTHelper.readEnum(nbt, "RotationMode", EContraptionMovementMode.class);
+
+    // read components
+    this.components.clear();
+    ListTag componentList = nbt.getList("components", 10);
+    for (Tag tag : componentList) {
+      CompoundTag componentNbt = (CompoundTag) tag;
+      Pair<String, Integer> name = BaseViboComponent.parseName(componentNbt.getString("name"));
+      String componentType = name.getKey();
+      int componentId = name.getValue();
+      this.components.compute(componentType, (k, v) -> {
+        if (v == null) {
+          v = new ArrayList<>();
+        }
+        for (int n = v.size(); n <= componentId; n++) {
+          v.add(null);
+        }
+        IViboComponent component = ViboComponentType.createComponent(componentType);
+        component.readNBT(world, componentNbt.get("component"));
+
+        v.set(componentId, component);
+        return v;
+      });
+    }
+
+    this.componentBlockInfoMap.clear();
+    ListTag componentInfoList = nbt.getList("componentInfoMappings", CompoundTag.TAG_COMPOUND);
+    // LOGGER.info("{}", blocks);
+    for (Tag tag : componentInfoList) {
+      CompoundTag componentNbt = (CompoundTag) tag;
+      String name = componentNbt.getString("name");
+      this.componentBlockInfoMap.put(name, blocks.get(BlockPos.of(componentNbt.getLong("pos"))));
+    }
   }
 }

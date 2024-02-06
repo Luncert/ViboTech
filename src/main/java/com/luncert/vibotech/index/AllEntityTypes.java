@@ -1,13 +1,13 @@
 package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
+import com.luncert.vibotech.common.Lang;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntityRenderer;
 import com.luncert.vibotech.content.TransportMachineEntity;
 import com.luncert.vibotech.content.TransportMachineEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
-import com.simibubi.create.foundation.utility.Lang;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
