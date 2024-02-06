@@ -85,6 +85,10 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
   // api
 
+  public boolean isAssembled() {
+    return assembled;
+  }
+
   public AssembleStationPeripheral getPeripheral() {
     return peripheral;
   }
@@ -189,12 +193,16 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     super.write(compound, clientPacket);
 
     if (!clientPacket) {
-      if (transportMachineId != null) {
-        compound.putString("transport_machine", transportMachineId.toString());
-      }
-      compound.putBoolean("controlled_by_station", controlledByStation);
-      compound.putBoolean("assembled", assembled);
+      write(compound);
     }
+  }
+
+  void write(CompoundTag compound) {
+    if (transportMachineId != null) {
+      compound.putString("transport_machine", transportMachineId.toString());
+    }
+    compound.putBoolean("controlled_by_station", controlledByStation);
+    compound.putBoolean("assembled", assembled);
   }
 
   @Override
@@ -202,9 +210,13 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     super.read(compound, clientPacket);
 
     if (!clientPacket) {
-      transportMachineId = UUID.fromString(compound.getString("transport_machine"));
-      controlledByStation = compound.getBoolean("controlled_by_station");
-      assembled = compound.getBoolean("assembled");
+      read(compound);
     }
+  }
+
+  void read(CompoundTag compound) {
+    transportMachineId = UUID.fromString(compound.getString("transport_machine"));
+    controlledByStation = compound.getBoolean("controlled_by_station");
+    assembled = compound.getBoolean("assembled");
   }
 }

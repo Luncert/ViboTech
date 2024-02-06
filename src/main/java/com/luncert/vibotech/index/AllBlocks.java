@@ -5,6 +5,7 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content.AssembleStationBlock;
+import com.luncert.vibotech.content.AssembleStationItem;
 import com.luncert.vibotech.content.TransportMachineAnchorBlock;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -23,8 +24,8 @@ public class AllBlocks {
           .transform(pickaxeOnly())
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
-          .item()
-          .transform(customItemModel())
+          .item(AssembleStationItem::new)
+          .build()
           .register();
 
   public static final BlockEntry<TransportMachineAnchorBlock> TRANSPORT_MACHINE_ANCHOR =
