@@ -400,6 +400,7 @@ public class TransportMachineEntity extends Entity {
 
     float speed;
     if (getYRot() != getTargetYRot()) {
+      // speed while rotating
       speed = getMovementSpeed(16);
     } else {
       speed = getMovementSpeed();
