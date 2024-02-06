@@ -73,9 +73,8 @@ public class TransportMachineEntity extends Entity {
   private double lerpYRot;
   private double lerpXRot;
 
-
-  public TransportMachineEntity(EntityType<?> pEntityType, Level pLevel) {
-    super(pEntityType, pLevel);
+  public TransportMachineEntity(EntityType<?> entityType, Level pLevel) {
+    super(entityType, pLevel);
   }
 
   public TransportMachineEntity(Level world, BlockPos stationPos, BlockState stationBlockState) {
@@ -85,6 +84,7 @@ public class TransportMachineEntity extends Entity {
     // following data will be synced automatically
     setPos(stationPos.getX() + .5f, stationPos.getY(), stationPos.getZ() + .5f);
     this.noPhysics = true;
+
     Direction blockDirection = stationBlockState.getValue(HORIZONTAL_FACING);
     setYRot(blockDirection.toYRot());
     setTargetYRot(getYRot());
@@ -413,6 +413,7 @@ public class TransportMachineEntity extends Entity {
     setTargetMovement(null);
     setDeltaMovement(Vec3.ZERO);
     if (isMoving && !level().isClientSide) {
+      // TODO: return movement instead of boolean
       asyncCallbacks.remove().accept(true);
     }
     actionCoolDown = 11;
@@ -457,7 +458,7 @@ public class TransportMachineEntity extends Entity {
   protected void defineSynchedData() {
     // entityData.clearDirty();
     entityData.packDirty();
-    entityData.define(SPEED, 0);
+    entityData.define(SPEED, 16);
     entityData.define(TARGET_Y_ROT, 0f);
     entityData.define(TARGET_MOVEMENT, Optional.empty());
   }
