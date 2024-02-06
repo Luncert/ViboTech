@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content;
 
+import static com.luncert.vibotech.content.TransportMachineComponent.MAX_ROTATION_SPEED;
 import static com.luncert.vibotech.content.TransportMachineMovement.MOVEMENT_SERIALIZER;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
@@ -52,6 +53,8 @@ public class TransportMachineEntity extends Entity {
   private static final double MIN_MOVE_LENGTH = 0.001;
 
   private static final EntityDataAccessor<Integer> SPEED =
+      SynchedEntityData.defineId(TransportMachineEntity.class, EntityDataSerializers.INT);
+  private static final EntityDataAccessor<Integer> ROTATION_SPEED =
       SynchedEntityData.defineId(TransportMachineEntity.class, EntityDataSerializers.INT);
   private static final EntityDataAccessor<Float> TARGET_Y_ROT =
       SynchedEntityData.defineId(TransportMachineEntity.class, EntityDataSerializers.FLOAT);
@@ -379,6 +382,9 @@ public class TransportMachineEntity extends Entity {
       if (absDist > 0) {
         return Optional.ofNullable(updateMotion(absDist, movement));
       }
+      // When linear movement done, update yrot.
+      // The rotation animation is controlled by contraption entity itself,
+      // Which may be out of sync with this vehicle entity.
       setYRot(getTargetYRot());
       setTargetMovement(null);
     }
@@ -393,14 +399,7 @@ public class TransportMachineEntity extends Entity {
       return null;
     }
 
-    float speed;
-    if (getYRot() != getTargetYRot() || movement.axis.equals(Direction.Axis.Y)) {
-      // if entity is rotating, set speed to 32
-      speed = getMovementSpeed(32);
-    } else {
-      speed = getMovementSpeed();
-    }
-
+    float speed = getMovementSpeed();
     double linearMotion = Math.min(speed, absDistance);
     if (!movement.positive) {
       linearMotion = -linearMotion;
@@ -436,6 +435,14 @@ public class TransportMachineEntity extends Entity {
     return entityData.get(SPEED);
   }
 
+  public void setRotationSpeed(int speed) {
+    entityData.set(ROTATION_SPEED, Mth.clamp(Math.abs(speed), 1, MAX_ROTATION_SPEED));
+  }
+
+  public int getRotationSpeed() {
+    return entityData.get(ROTATION_SPEED);
+  }
+
   public void setTargetYRot(float yRot) {
     entityData.set(TARGET_Y_ROT, yRot % 360);
   }
@@ -459,6 +466,7 @@ public class TransportMachineEntity extends Entity {
     // entityData.clearDirty();
     entityData.packDirty();
     entityData.define(SPEED, 16);
+    entityData.define(ROTATION_SPEED, 16);
     entityData.define(TARGET_Y_ROT, 0f);
     entityData.define(TARGET_MOVEMENT, Optional.empty());
   }
@@ -469,6 +477,7 @@ public class TransportMachineEntity extends Entity {
       return;
 
     entityData.set(SPEED, root.getInt("speed"));
+    entityData.set(ROTATION_SPEED, root.getInt("rotationSpeed"));
     entityData.set(TARGET_Y_ROT, root.getFloat("targetYRot"));
 
     if (root.getBoolean("hasTargetMovement")) {
@@ -483,6 +492,7 @@ public class TransportMachineEntity extends Entity {
   @Override
   protected void addAdditionalSaveData(CompoundTag root) {
     root.putInt("speed", getKineticSpeed());
+    root.putInt("rotationSpeed", getRotationSpeed());
     root.putFloat("targetYRot", getTargetYRot());
 
     Optional<TransportMachineMovement> opt = getTargetMovement();
