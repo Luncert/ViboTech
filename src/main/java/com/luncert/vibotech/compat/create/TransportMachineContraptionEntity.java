@@ -34,12 +34,12 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
 
     boolean pauseWhileRotating = false;
     boolean wasStalled = isStalled();
-    if (contraption instanceof TransportMachineContraption contraption) {
-      pauseWhileRotating = contraption.rotationMode == EContraptionMovementMode.ROTATE_PAUSED;
+    if (contraption instanceof TransportMachineContraption c) {
+      pauseWhileRotating = c.rotationMode == EContraptionMovementMode.ROTATE_PAUSED;
     }
 
     boolean rotating = updateOrientation(false, wasStalled, vehicle, false);
-    if (!pauseWhileRotating)
+    if (!rotating || !pauseWhileRotating)
       tickActors();
   }
 }
