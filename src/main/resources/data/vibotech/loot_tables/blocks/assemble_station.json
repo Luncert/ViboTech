@@ -1,15 +1,13 @@
 {
   "type": "minecraft:block",
+  "random_sequence": "vibotech:assemble_station",
   "pools": [
     {
-      "name": "vibotech:assemble_station",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "vibotech:assemble_station",
-          "functions": [
-          ]
+          "name": "vibotech:assemble_station"
         }
       ],
       "conditions": [

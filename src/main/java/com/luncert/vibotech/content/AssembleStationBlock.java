@@ -12,9 +12,11 @@ import dan200.computercraft.shared.computer.blocks.ComputerBlockEntity;
 import dan200.computercraft.shared.computer.items.ComputerItem;
 import java.util.Iterator;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -80,6 +82,13 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
     if (previouslyPowered != worldIn.hasNeighborSignal(pos))
       worldIn.setBlock(pos, state.cycle(POWERED), 2);
     super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+  }
+
+  @Override
+  public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state,
+                            @Nullable BlockEntity tile, ItemStack tool) {
+    player.awardStat(Stats.BLOCK_MINED.get(this));
+    player.causeFoodExhaustion(0.005F);
   }
 
   @Override
