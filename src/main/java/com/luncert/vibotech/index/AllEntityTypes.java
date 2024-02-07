@@ -20,13 +20,12 @@ import net.minecraft.world.entity.MobCategory;
 
 public class AllEntityTypes {
 
-  public static final EntityEntry<TransportMachineEntity> TRANSPORT_MACHINE_VEHICLE =
-      register("transport_machine_vehicle", TransportMachineEntity::new, () -> TransportMachineEntityRenderer::new, MobCategory.MISC,
-          1, Integer.MAX_VALUE, false, true, TransportMachineEntity::build).register();
-
-  public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE = contraption("transport_machine",
-      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
-
+  // public static final EntityEntry<TransportMachineEntity> TRANSPORT_MACHINE_VEHICLE =
+  //     register("transport_machine_vehicle", TransportMachineEntity::new, () -> TransportMachineEntityRenderer::new, MobCategory.MISC,
+  //         1, Integer.MAX_VALUE, false, true, TransportMachineEntity::build).register();
+  //
+  // public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE = contraption("transport_machine",
+  //     TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
 
   private static <T extends Entity> CreateEntityBuilder<T, ?> contraption(String name, EntityType.EntityFactory<T> factory,
                                                                           NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer, int range,
