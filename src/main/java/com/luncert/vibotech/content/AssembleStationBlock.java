@@ -2,6 +2,7 @@ package com.luncert.vibotech.content;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
+import com.google.common.collect.ImmutableList;
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllBlocks;
@@ -10,7 +11,9 @@ import com.simibubi.create.foundation.block.IBE;
 import dan200.computercraft.shared.computer.blocks.AbstractComputerBlockEntity;
 import dan200.computercraft.shared.computer.blocks.ComputerBlockEntity;
 import dan200.computercraft.shared.computer.items.ComputerItem;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
@@ -29,7 +32,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
@@ -41,7 +47,7 @@ import org.slf4j.Logger;
  */
 public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity> {
 
-  private static final ResourceLocation DROP = new ResourceLocation(ViboTechMod.ID, "assemble_station");
+  private static final ResourceLocation DROP = ViboTechMod.asResource("assemble_station");
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -85,38 +91,18 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
   }
 
   @Override
-  public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state,
-                            @Nullable BlockEntity tile, ItemStack tool) {
-    player.awardStat(Stats.BLOCK_MINED.get(this));
-    player.causeFoodExhaustion(0.005F);
-  }
-
-  @Override
-  public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-    super.playerWillDestroy(world, pos, state, player);
-    if (world instanceof ServerLevel serverWorld) {
-      BlockEntity blockEntity = world.getBlockEntity(pos);
-      if (blockEntity instanceof AssembleStationBlockEntity assembleStation) {
-        LootParams.Builder context = (new LootParams.Builder(serverWorld))
-            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-            .withParameter(LootContextParams.TOOL, player.getMainHandItem())
-            .withParameter(LootContextParams.THIS_ENTITY, player)
-            .withParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
-            .withDynamicDrop(DROP, (out) -> {
-              out.accept(this.getItem(assembleStation));
-            });
-
-        for (ItemStack item : state.getDrops(context)) {
-          popResource(world, pos, item);
-        }
-
-        state.spawnAfterBreak(serverWorld, pos, player.getMainHandItem(), true);
-      }
-    }
+  public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation))
+      return super.getDrops(state, builder);
+    builder.withDynamicDrop(DROP, (out) -> {
+      out.accept(getItem(assembleStation));
+    });
+    return ImmutableList.of(getItem(assembleStation));
   }
 
   private ItemStack getItem(AssembleStationBlockEntity blockEntity) {
     AssembleStationItem item = (AssembleStationItem) this.asItem();
+
     if (blockEntity.isAssembled()) {
       return item.create(blockEntity);
     } else {

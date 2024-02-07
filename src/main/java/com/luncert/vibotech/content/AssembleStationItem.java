@@ -1,6 +1,7 @@
 package com.luncert.vibotech.content;
 
 import com.luncert.vibotech.index.AllBlocks;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -13,8 +14,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 public class AssembleStationItem extends BlockItem {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   public AssembleStationItem(AssembleStationBlock block, Properties properties) {
     super(block, properties);
