@@ -102,6 +102,7 @@ public class TransportMachineEntity extends Entity {
     this.station = station;
   }
 
+  // FIXME: NPE
   public BlockPos getStationPosition() {
     return station.getBlockPos();
   }
