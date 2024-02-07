@@ -92,8 +92,10 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
 
   @Override
   public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation))
+    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation)
+      || !assembleStation.isAssembled())
       return super.getDrops(state, builder);
+
     builder.withDynamicDrop(DROP, (out) -> {
       out.accept(getItem(assembleStation));
     });
@@ -102,12 +104,7 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
 
   private ItemStack getItem(AssembleStationBlockEntity blockEntity) {
     AssembleStationItem item = (AssembleStationItem) this.asItem();
-
-    if (blockEntity.isAssembled()) {
-      return item.create(blockEntity);
-    } else {
-      return ItemStack.EMPTY;
-    }
+    return item.create(blockEntity);
   }
 
   public enum AssembleStationAction {
