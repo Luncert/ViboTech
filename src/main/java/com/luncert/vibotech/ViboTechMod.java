@@ -53,8 +53,9 @@ public class ViboTechMod
             .getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        AllCreativeModeTabs.register(eventBus);
         REGISTRATE.registerEventListeners(eventBus);
+
+        AllCreativeModeTabs.register(eventBus);
         AllBlocks.register();
         AllEntityTypes.register();
         AllBlockEntityTypes.register();
