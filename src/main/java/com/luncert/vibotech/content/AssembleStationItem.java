@@ -26,7 +26,9 @@ public class AssembleStationItem extends BlockItem {
 
   public ItemStack create(AssembleStationBlockEntity assembleStation) {
     ItemStack result = new ItemStack(this);
-    assembleStation.write(result.getOrCreateTag());
+    if (assembleStation.isAssembled()) {
+      assembleStation.write(result.getOrCreateTag());
+    }
     return result;
   }
 
