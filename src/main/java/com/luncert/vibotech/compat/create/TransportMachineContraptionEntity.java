@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 
 public class TransportMachineContraptionEntity extends OrientedContraptionEntity {
 
-  private static final Logger LOGGER = LogUtils.getLogger();
+  // private static final Logger LOGGER = LogUtils.getLogger();
 
   public TransportMachineContraptionEntity(EntityType<?> type, Level world) {
     super(type, world);

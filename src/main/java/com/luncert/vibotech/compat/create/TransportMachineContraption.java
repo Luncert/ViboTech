@@ -1,5 +1,7 @@
 package com.luncert.vibotech.compat.create;
 
+import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_CONTRAPTION;
+
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
@@ -41,9 +43,6 @@ import org.slf4j.Logger;
 public class TransportMachineContraption extends Contraption {
 
   private static final Logger LOGGER = LogUtils.getLogger();
-
-  public static final ContraptionType TRANSPORT_MACHINE_CONTRAPTION = ContraptionType.register(
-      "transport_machine_contraption", TransportMachineContraption::new);
 
   private TransportMachineCoreEntity transportMachine;
   // block name to vibo component
