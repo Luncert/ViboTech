@@ -1,6 +1,6 @@
 package com.luncert.vibotech.compat.vibotech;
 
-import com.luncert.vibotech.content2.TransportMachineComponent;
+import com.luncert.vibotech.content2.transportmachinecore.TransportMachineComponent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;

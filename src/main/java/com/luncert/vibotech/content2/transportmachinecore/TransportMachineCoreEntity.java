@@ -1,6 +1,6 @@
-package com.luncert.vibotech.content2;
+package com.luncert.vibotech.content2.transportmachinecore;
 
-import static com.luncert.vibotech.content2.TransportMachineMovement.MOVEMENT_SERIALIZER;
+import static com.luncert.vibotech.content2.transportmachinecore.TransportMachineMovement.MOVEMENT_SERIALIZER;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.common.ActionCallback;
@@ -10,6 +10,7 @@ import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
+import com.luncert.vibotech.content2.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.luncert.vibotech.index.AllEntityTypes;

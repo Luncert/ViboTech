@@ -3,8 +3,9 @@ package com.luncert.vibotech.index;
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
-import com.luncert.vibotech.content2.AssembleStationBlock;
-import com.luncert.vibotech.content2.TransportMachineCoreBlock;
+import com.luncert.vibotech.content2.assemblestation.AssembleStationBlock;
+import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
+import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -27,9 +28,8 @@ public class AllBlocks {
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
-          // .item(AssembleStationItem::new)
-          // .build()
-          .simpleItem()
+          .item(AssembleStationItem::new)
+          .build()
           .register();
 
   public static final BlockEntry<TransportMachineCoreBlock> TRANSPORT_MACHINE_CORE =

@@ -1,14 +1,16 @@
-package com.luncert.vibotech.content2;
+package com.luncert.vibotech.content2.assemblestation;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
+import com.google.common.collect.ImmutableList;
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
-import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.block.IBE;
+import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -17,7 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import org.slf4j.Logger;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 /**
  * AssembleStationBlockEntity assemble in tick() if block is powered.
@@ -27,8 +30,6 @@ import org.slf4j.Logger;
 public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity> {
 
   private static final ResourceLocation DROP = ViboTechMod.asResource("assemble_station");
-
-  private static final Logger LOGGER = LogUtils.getLogger();
 
   public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
@@ -67,5 +68,22 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
     if (previouslyPowered != worldIn.hasNeighborSignal(pos))
       worldIn.setBlock(pos, state.cycle(POWERED), 2);
     super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+  }
+
+  @Override
+  public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation)
+      || !assembleStation.isAssembled())
+      return super.getDrops(state, builder);
+
+    builder.withDynamicDrop(DROP, (out) -> {
+      out.accept(getItem(assembleStation));
+    });
+    return ImmutableList.of(getItem(assembleStation));
+  }
+
+  private ItemStack getItem(AssembleStationBlockEntity blockEntity) {
+    AssembleStationItem item = (AssembleStationItem) this.asItem();
+    return item.create(blockEntity);
   }
 }

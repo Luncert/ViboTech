@@ -1,6 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
-import com.luncert.vibotech.content2.TransportMachineCoreEntity;
+import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.Contraption;

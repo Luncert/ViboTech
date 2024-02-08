@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2;
+package com.luncert.vibotech.content2.transportmachinecore;
 
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;

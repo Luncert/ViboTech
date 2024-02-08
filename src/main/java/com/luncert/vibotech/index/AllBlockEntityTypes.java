@@ -2,8 +2,8 @@ package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
-import com.luncert.vibotech.content2.AssembleStationBlockEntity;
-import com.luncert.vibotech.content2.TransportMachineCoreBlockEntity;
+import com.luncert.vibotech.content2.assemblestation.AssembleStationBlockEntity;
+import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 public class AllBlockEntityTypes {

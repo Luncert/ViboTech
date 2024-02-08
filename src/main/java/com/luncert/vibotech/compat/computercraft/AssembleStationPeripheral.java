@@ -4,7 +4,7 @@ import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
-import com.luncert.vibotech.content2.AssembleStationBlockEntity;
+import com.luncert.vibotech.content2.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.mojang.logging.LogUtils;
 import dan200.computercraft.api.lua.IArguments;

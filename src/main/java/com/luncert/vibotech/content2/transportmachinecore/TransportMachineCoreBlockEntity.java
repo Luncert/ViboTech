@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2;
+package com.luncert.vibotech.content2.transportmachinecore;
 
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
