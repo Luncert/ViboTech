@@ -4,7 +4,7 @@ import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
-import com.luncert.vibotech.content.AssembleStationBlockEntity;
+import com.luncert.vibotech.content2.AssembleStationBlockEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.mojang.logging.LogUtils;
 import dan200.computercraft.api.lua.IArguments;
@@ -32,13 +32,13 @@ public class AssembleStationPeripheral implements IPeripheral {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     protected String type;
-    protected AssembleStationBlockEntity blockEntity;
+    protected AssembleStationBlockEntity assembleStationBlockEntity;
 
     protected final List<IComputerAccess> connected = new ArrayList<>();
 
     public AssembleStationPeripheral(String type, AssembleStationBlockEntity blockEntity) {
         this.type = type;
-        this.blockEntity = blockEntity;
+        this.assembleStationBlockEntity = blockEntity;
     }
 
     public List<IComputerAccess> getConnectedComputers() {
@@ -47,7 +47,7 @@ public class AssembleStationPeripheral implements IPeripheral {
 
     @Override
     public Object getTarget() {
-        return blockEntity;
+        return assembleStationBlockEntity;
     }
 
     @NotNull
@@ -83,9 +83,8 @@ public class AssembleStationPeripheral implements IPeripheral {
         }
 
         try {
-            blockEntity.assemble(mode);
+            assembleStationBlockEntity.assemble(mode);
         } catch (TransportMachineAssemblyException e) {
-            e.printStackTrace();
             throw new LuaException("failed to assemble structure: " + e.getMessage());
         }
     }
@@ -93,16 +92,15 @@ public class AssembleStationPeripheral implements IPeripheral {
     @LuaFunction(mainThread = true)
     public final void dissemble() throws LuaException {
         try {
-            blockEntity.dissemble();
+            assembleStationBlockEntity.dissemble();
         } catch (TransportMachineAssemblyException e) {
-            e.printStackTrace();
             throw new LuaException("failed to dissemble structure: " + e.getMessage());
         }
     }
 
     @LuaFunction
     public final List<String> getComponents() {
-        Map<String, List<IViboComponent>> components = blockEntity.getComponents();
+        Map<String, List<IViboComponent>> components = assembleStationBlockEntity.getComponents();
         List<String> result = new ArrayList<>(components.size());
         for (List<IViboComponent> value : components.values()) {
             for (int i = 0; i < value.size(); i++) {
@@ -117,7 +115,7 @@ public class AssembleStationPeripheral implements IPeripheral {
     public final Map<String, ILuaFunction> getComponent(String componentName) throws LuaException {
         Pair<String, Integer> name = BaseViboComponent.parseName(componentName);
 
-        List<IViboComponent> components = blockEntity.getComponents().get(name.getKey());
+        List<IViboComponent> components = assembleStationBlockEntity.getComponents().get(name.getKey());
         if (components != null && components.size() > name.getValue()) {
             return getLuaFunctions(components.get(name.getValue()));
         }

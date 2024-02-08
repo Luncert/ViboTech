@@ -2,7 +2,8 @@ package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
-import com.luncert.vibotech.content.AssembleStationBlockEntity;
+import com.luncert.vibotech.content2.AssembleStationBlockEntity;
+import com.luncert.vibotech.content2.TransportMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 public class AllBlockEntityTypes {
@@ -12,6 +13,11 @@ public class AllBlockEntityTypes {
       // .instance(() -> SchematicannonInstance::new)
       .validBlocks(AllBlocks.ASSEMBLE_STATION)
       // .renderer(() -> SchematicannonRenderer::new)
+      .register();
+
+  public static final BlockEntityEntry<TransportMachineCoreBlockEntity> TRANSPORT_MACHINE_CORE = REGISTRATE
+      .blockEntity("transport_machine_core", TransportMachineCoreBlockEntity::new)
+      .validBlocks(AllBlocks.ASSEMBLE_STATION)
       .register();
 
   public static void register() {}

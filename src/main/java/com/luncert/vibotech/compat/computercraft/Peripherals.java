@@ -2,7 +2,7 @@ package com.luncert.vibotech.compat.computercraft;
 
 import static dan200.computercraft.shared.Capabilities.CAPABILITY_PERIPHERAL;
 
-import com.luncert.vibotech.content.AssembleStationBlockEntity;
+import com.luncert.vibotech.content2.AssembleStationBlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class Peripherals {

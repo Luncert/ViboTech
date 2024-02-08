@@ -5,10 +5,8 @@ import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
-import com.luncert.vibotech.content.AssembleStationBlock;
-import com.luncert.vibotech.content.AssembleStationBlockEntity;
-import com.luncert.vibotech.content.TransportMachineComponent;
-import com.luncert.vibotech.content.TransportMachineEntity;
+import com.luncert.vibotech.content2.TransportMachineComponent;
+import com.luncert.vibotech.content2.TransportMachineCoreEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.mojang.logging.LogUtils;
@@ -31,9 +29,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,7 +45,7 @@ public class TransportMachineContraption extends Contraption {
   public static final ContraptionType TRANSPORT_MACHINE_CONTRAPTION = ContraptionType.register(
       "transport_machine_contraption", TransportMachineContraption::new);
 
-  private TransportMachineEntity transportMachine;
+  private TransportMachineCoreEntity transportMachine;
   // block name to vibo component
   private final Map<String, List<IViboComponent>> components = new HashMap<>();
   // block name to block info
@@ -62,7 +58,7 @@ public class TransportMachineContraption extends Contraption {
     this(EContraptionMovementMode.ROTATE, null);
   }
 
-  public TransportMachineContraption(EContraptionMovementMode mode, TransportMachineEntity transportMachine) {
+  public TransportMachineContraption(EContraptionMovementMode mode, TransportMachineCoreEntity transportMachine) {
     this.rotationMode = mode;
     this.transportMachine = transportMachine;
   }
@@ -104,22 +100,18 @@ public class TransportMachineContraption extends Contraption {
       return false;
 
     addBlock(pos, Pair.of(new StructureBlockInfo(
-        pos, AllBlocks.TRANSPORT_MACHINE_ANCHOR.getDefaultState(), null), null));
+        pos, AllBlocks.TRANSPORT_MACHINE_CORE.getDefaultState(), null), null));
 
-    if (blocks.size() != 1) {
-      initComponents(level, transportMachine);
-      return true;
-    }
-    return false;
+    initComponents(level, transportMachine);
+    return true;
   }
 
-  public void initComponents(Level level, TransportMachineEntity transportMachine) {
+  public void initComponents(Level level, TransportMachineCoreEntity transportMachineCoreEntity) {
     if (accessor == null) {
-      this.transportMachine = transportMachine;
+      this.transportMachine = transportMachineCoreEntity;
       components.put(ViboComponentType.TRANSPORT_MACHINE.getName(), List.of(new TransportMachineComponent()));
 
-      AssembleStationBlockEntity station = (AssembleStationBlockEntity) level.getBlockEntity(transportMachine.getStationPosition());
-      accessor = new ViboContraptionAccessor(level, station.getPeripheral(), station, transportMachine, this);
+      accessor = new ViboContraptionAccessor(level, transportMachineCoreEntity, this);
 
       Map<Integer, List<String>> tickOrders = new HashMap<>();
 
@@ -167,19 +159,19 @@ public class TransportMachineContraption extends Contraption {
     return true;
   }
 
-  @Override
-  protected Pair<StructureBlockInfo, BlockEntity> capture(Level world, BlockPos pos) {
-    Pair<StructureBlockInfo, BlockEntity> pair = super.capture(world, pos);
-    StructureBlockInfo capture = pair.getKey();
-    if (!AllBlocks.ASSEMBLE_STATION.has(capture.state())) {
-      return pair;
-    }
-
-    // replace assemble station with anchor block
-    return Pair.of(
-        new StructureBlockInfo(pos, AssembleStationBlock.createAnchor(capture.state()), null),
-        pair.getValue());
-  }
+  // @Override
+  // protected Pair<StructureBlockInfo, BlockEntity> capture(Level world, BlockPos pos) {
+  //   Pair<StructureBlockInfo, BlockEntity> pair = super.capture(world, pos);
+  //   StructureBlockInfo capture = pair.getKey();
+  //   if (!AllBlocks.ASSEMBLE_STATION.has(capture.state())) {
+  //     return pair;
+  //   }
+  //
+  //   // replace assemble station with anchor block
+  //   return Pair.of(
+  //       new StructureBlockInfo(pos, AssembleStationBlock.createAnchor(capture.state()), null),
+  //       pair.getValue());
+  // }
 
   @Override
   protected void addBlock(BlockPos pos, Pair<StructureBlockInfo, BlockEntity> pair) {
@@ -203,16 +195,6 @@ public class TransportMachineContraption extends Contraption {
           v.add(c);
           return v;
         }));
-  }
-
-  @Override
-  protected boolean customBlockPlacement(LevelAccessor world, BlockPos pos, BlockState state) {
-    return AllBlocks.TRANSPORT_MACHINE_ANCHOR.has(state);
-  }
-
-  @Override
-  protected boolean customBlockRemoval(LevelAccessor world, BlockPos pos, BlockState state) {
-    return AllBlocks.TRANSPORT_MACHINE_ANCHOR.has(state);
   }
 
   @Override

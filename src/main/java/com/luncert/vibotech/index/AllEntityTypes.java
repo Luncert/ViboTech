@@ -4,8 +4,8 @@ import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.common.Lang;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntityRenderer;
-import com.luncert.vibotech.content.TransportMachineEntity;
-import com.luncert.vibotech.content.TransportMachineEntityRenderer;
+import com.luncert.vibotech.content2.TransportMachineCoreEntity;
+import com.luncert.vibotech.content2.TransportMachineCoreEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
 import com.tterrag.registrate.util.entry.EntityEntry;
@@ -20,12 +20,12 @@ import net.minecraft.world.entity.MobCategory;
 
 public class AllEntityTypes {
 
-  // public static final EntityEntry<TransportMachineEntity> TRANSPORT_MACHINE_VEHICLE =
-  //     register("transport_machine_vehicle", TransportMachineEntity::new, () -> TransportMachineEntityRenderer::new, MobCategory.MISC,
-  //         1, Integer.MAX_VALUE, false, true, TransportMachineEntity::build).register();
+  public static final EntityEntry<TransportMachineCoreEntity> TRANSPORT_MACHINE_CORE =
+      register("transport_machine_vehicle", TransportMachineCoreEntity::new, () -> TransportMachineCoreEntityRenderer::new, MobCategory.MISC,
+          1, Integer.MAX_VALUE, false, true, TransportMachineCoreEntity::build).register();
   //
-  // public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE = contraption("transport_machine",
-  //     TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
+  public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE_CONTRAPTION = contraption("transport_machine",
+      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
 
   private static <T extends Entity> CreateEntityBuilder<T, ?> contraption(String name, EntityType.EntityFactory<T> factory,
                                                                           NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer, int range,

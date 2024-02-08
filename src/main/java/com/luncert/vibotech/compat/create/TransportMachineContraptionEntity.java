@@ -1,6 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
-import com.luncert.vibotech.content.TransportMachineEntity;
+import com.luncert.vibotech.content2.TransportMachineCoreEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.Contraption;
@@ -23,7 +23,7 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
   }
 
   public static TransportMachineContraptionEntity create(Level world, Contraption contraption, Direction initialOrientation) {
-    TransportMachineContraptionEntity entity = new TransportMachineContraptionEntity(AllEntityTypes.TRANSPORT_MACHINE.get(), world);
+    TransportMachineContraptionEntity entity = new TransportMachineContraptionEntity(AllEntityTypes.TRANSPORT_MACHINE_CONTRAPTION.get(), world);
     entity.setContraption(contraption);
     entity.setInitialOrientation(initialOrientation);
     entity.startAtInitialYaw();
@@ -32,7 +32,7 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
 
   @Override
   protected void tickContraption() {
-    TransportMachineEntity vehicle = (TransportMachineEntity) getVehicle();
+    TransportMachineCoreEntity vehicle = (TransportMachineCoreEntity) getVehicle();
     if (vehicle == null)
       return;
 
