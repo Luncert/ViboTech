@@ -10,10 +10,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -21,6 +25,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * AssembleStationBlockEntity assemble in tick() if block is powered.
@@ -68,6 +74,36 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
     if (previouslyPowered != worldIn.hasNeighborSignal(pos))
       worldIn.setBlock(pos, state.cycle(POWERED), 2);
     super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
+  }
+
+  @Override
+  public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity tile, ItemStack tool) {
+    // Don't drop blocks here - see playerWillDestroy.
+    player.awardStat(Stats.BLOCK_MINED.get(this));
+    player.causeFoodExhaustion(0.005F);
+  }
+
+  @Override
+  public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+    super.playerWillDestroy(world, pos, state, player);
+    if (!(world instanceof ServerLevel serverWorld)) return;
+
+    // We drop the item here instead of doing it in the harvest method, as we should
+    // drop computers for creative players too.
+
+    var tile = world.getBlockEntity(pos);
+    if (tile instanceof AssembleStationBlockEntity) {
+      var context = new LootParams.Builder(serverWorld)
+          .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+          .withParameter(LootContextParams.TOOL, player.getMainHandItem())
+          .withParameter(LootContextParams.THIS_ENTITY, player)
+          .withParameter(LootContextParams.BLOCK_ENTITY, tile);
+      for (var item : state.getDrops(context)) {
+        popResource(world, pos, item);
+      }
+
+      state.spawnAfterBreak(serverWorld, pos, player.getMainHandItem(), true);
+    }
   }
 
   @Override
