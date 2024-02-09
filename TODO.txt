@@ -1,10 +1,10 @@
 
-- break assemble station block in creative mode should drop tagged item
 - click contraption entity to rebind station to entity
 - create new fluid steam
 - consume steam from contraption storage
 - create stream effect under core block
 - simulate contraption shaking
+- change name of tagged assemble station block item
 
 New Blocks:
 - camera block

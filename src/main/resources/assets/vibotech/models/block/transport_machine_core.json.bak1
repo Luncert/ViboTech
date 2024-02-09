@@ -5,7 +5,7 @@
 		"6": "create:block/creative_motor",
 		"axis": "create:block/axis",
 		"axis_top": "create:block/axis_top",
-		"particle": "create:block/creative_casing",
+		"particle": "create:block/brass_casing",
 		"fan_blades": "create:block/fan_blades"
 	},
 	"elements": [
