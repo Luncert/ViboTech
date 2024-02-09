@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "vibotech:block/gas_tank"
+    }
+  }
+}

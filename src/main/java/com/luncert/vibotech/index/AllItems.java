@@ -2,6 +2,7 @@ package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
+import com.luncert.vibotech.content2.steam.SteamTankItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.Item;
@@ -16,6 +17,11 @@ public class AllItems {
   //     .item("assemble_station", AssembleStationItem::new)
   //     .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
   //     .register();
+
+   public static final ItemEntry<SteamTankItem> ASSEMBLE_STATION = REGISTRATE
+       .item("steam_tank", (b) -> new SteamTankItem(AllFluids.STEAM, b))
+       .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
+       .register();
 
   private static ItemEntry<Item> ingredient(String name) {
     return REGISTRATE.item(name, Item::new)

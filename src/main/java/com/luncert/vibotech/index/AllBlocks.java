@@ -1,13 +1,16 @@
 package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
+import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content2.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
+import com.luncert.vibotech.content2.gastank.GasTankBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.SharedProperties;
+import com.simibubi.create.foundation.data.TagGen;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -39,6 +42,19 @@ public class AllBlocks {
               .requiresCorrectToolForDrops())
           .properties(BlockBehaviour.Properties::noOcclusion)
           .transform(pickaxeOnly())
+          .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
+          .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
+              .getExistingFile(ctx.getId()), 0))
+          .simpleItem()
+          .register();
+
+  public static final BlockEntry<GasTankBlock> GAS_TANK =
+      REGISTRATE.block("gas_tank", GasTankBlock::new)
+          .initialProperties(SharedProperties::softMetal)
+          .properties(p -> p.mapColor(MapColor.COLOR_BLUE)
+              .requiresCorrectToolForDrops())
+          .properties(BlockBehaviour.Properties::noOcclusion)
+          .transform(axeOrPickaxe())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))

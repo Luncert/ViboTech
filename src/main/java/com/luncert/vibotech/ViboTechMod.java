@@ -6,6 +6,7 @@ import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllContraptionTypes;
 import com.luncert.vibotech.index.AllCreativeModeTabs;
 import com.luncert.vibotech.index.AllEntityTypes;
+import com.luncert.vibotech.index.AllFluids;
 import com.luncert.vibotech.index.AllItems;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -63,6 +64,7 @@ public class ViboTechMod
         AllBlockEntityTypes.register();
         AllItems.register();
         AllContraptionTypes.register();
+        AllFluids.register();
 
         // // Register the commonSetup method for modloading
         // modEventBus.addListener(this::commonSetup);
