@@ -1,12 +1,11 @@
 package com.luncert.vibotech.content2.steam;
 
-import java.util.function.Supplier;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.level.material.Fluid;
+import com.luncert.vibotech.index.AllBlocks;
+import net.minecraft.world.item.BlockItem;
 
-public class SteamTankItem extends BucketItem {
+public class SteamTankItem extends BlockItem {
 
-  public SteamTankItem(Supplier<? extends Fluid> supplier, Properties builder) {
-    super(supplier, builder);
+  public SteamTankItem(Properties properties) {
+    super(AllBlocks.GAS_TANK.get(), properties);
   }
 }

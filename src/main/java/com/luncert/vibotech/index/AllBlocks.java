@@ -10,7 +10,6 @@ import com.luncert.vibotech.content2.gastank.GasTankBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.SharedProperties;
-import com.simibubi.create.foundation.data.TagGen;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;

@@ -18,9 +18,9 @@ public class AllItems {
   //     .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
   //     .register();
 
-   public static final ItemEntry<SteamTankItem> ASSEMBLE_STATION = REGISTRATE
-       .item("steam_tank", (b) -> new SteamTankItem(AllFluids.STEAM, b))
-       .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
+   public static final ItemEntry<SteamTankItem> STEAM_TANK = REGISTRATE
+       .item("steam_gas_tank", SteamTankItem::new)
+       .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/gas_tank")))
        .register();
 
   private static ItemEntry<Item> ingredient(String name) {
