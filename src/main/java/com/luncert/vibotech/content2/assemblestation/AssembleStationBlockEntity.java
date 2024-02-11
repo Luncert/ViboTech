@@ -9,7 +9,6 @@ import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBl
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
-import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.Collections;
@@ -24,11 +23,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import org.slf4j.Logger;
 
 public class AssembleStationBlockEntity extends SmartBlockEntity {
 
-  private static final Logger LOGGER = LogUtils.getLogger();
+  //private static final Logger LOGGER = LogUtils.getLogger();
 
   private AssembleStationPeripheral peripheral;
   private TransportMachineCoreEntity transportMachineCoreEntity;

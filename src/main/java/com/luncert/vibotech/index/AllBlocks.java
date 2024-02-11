@@ -9,8 +9,10 @@ import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.content2.gastank.GasTankBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
@@ -52,7 +54,9 @@ public class AllBlocks {
           .initialProperties(SharedProperties::softMetal)
           .properties(p -> p.mapColor(MapColor.COLOR_BLUE)
               .requiresCorrectToolForDrops())
+          .addLayer(() -> RenderType::translucent)
           .properties(BlockBehaviour.Properties::noOcclusion)
+          .transform(BlockStressDefaults.setCapacity(64d))
           .transform(axeOrPickaxe())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
