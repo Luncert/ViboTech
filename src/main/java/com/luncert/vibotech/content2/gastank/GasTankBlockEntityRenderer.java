@@ -5,11 +5,15 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class GasTankBlockEntityRenderer extends SafeBlockEntityRenderer<GasTankBlockEntity> {
+
+  public GasTankBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+  }
 
   @Override
   protected void renderSafe(GasTankBlockEntity be, float partialTicks,
@@ -17,24 +21,21 @@ public class GasTankBlockEntityRenderer extends SafeBlockEntityRenderer<GasTankB
                             int light, int overlay) {
     LerpedFloat fluidLevel = be.getFluidLevel();
     if (fluidLevel != null) {
-      float capHeight = 0.25F;
+      float minCapHeight = 0.25F;
+      float maxCapHeight = 0.15F;
       float tankHullWidth = 0.0703125F;
-      float minPuddleHeight = 0.0625F;
-      float totalHeight = (float) be.getHeight() - 2.0F * capHeight - minPuddleHeight;
+      float totalHeight = 1 - minCapHeight - maxCapHeight;
       float level = fluidLevel.getValue(partialTicks);
+
       if (!(level < 1.0F / (512.0F * totalHeight))) {
         float clampedLevel = Mth.clamp(level * totalHeight, 0.0F, totalHeight);
         FluidTank tank = (FluidTank) be.getTankInventory();
         FluidStack fluidStack = tank.getFluid();
         if (!fluidStack.isEmpty()) {
-          boolean top = fluidStack.getFluid().getFluidType().isLighterThanAir();
           float xMax = tankHullWidth + (float) be.getWidth() - 2.0F * tankHullWidth;
-          float yMin = totalHeight + capHeight + minPuddleHeight - clampedLevel;
+          float yMin = minCapHeight;
           float yMax = yMin + clampedLevel;
-          if (top) {
-            yMin += totalHeight - clampedLevel;
-            yMax += totalHeight - clampedLevel;
-          }
+
 
           float zMax = tankHullWidth + (float) be.getWidth() - 2.0F * tankHullWidth;
           ms.pushPose();
