@@ -2,9 +2,9 @@ package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
-import com.luncert.vibotech.content2.steam.SteamTankItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 
 public class AllItems {
@@ -18,9 +18,8 @@ public class AllItems {
   //     .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
   //     .register();
 
-   public static final ItemEntry<SteamTankItem> STEAM_TANK = REGISTRATE
-       .item("steam_gas_tank", SteamTankItem::new)
-       .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/gas_tank")))
+   public static final ItemEntry<BucketItem> STEAM_BUCKET = REGISTRATE
+       .item("steam_bucket", (p) -> new BucketItem(AllFluids.STEAM, p))
        .register();
 
   private static ItemEntry<Item> ingredient(String name) {

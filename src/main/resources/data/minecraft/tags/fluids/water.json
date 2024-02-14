@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "vibotech:flowing_steam",
     "vibotech:steam"
   ]
 }
