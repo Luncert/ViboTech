@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content2.transportmachinecore;
 
-import static com.luncert.vibotech.content2.transportmachinecore.TransportMachineMovement.MOVEMENT_SERIALIZER;
+import static com.luncert.vibotech.content2.transportmachinecore.EntityMovementData.MOVEMENT_SERIALIZER;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.common.ActionCallback;
@@ -9,7 +9,6 @@ import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
-import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.content2.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
@@ -20,7 +19,6 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -52,12 +50,11 @@ public class TransportMachineCoreEntity extends Entity {
       SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.INT);
   private static final EntityDataAccessor<Float> TARGET_Y_ROT =
       SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.FLOAT);
-  private static final EntityDataAccessor<Optional<TransportMachineMovement>> TARGET_MOVEMENT =
+  private static final EntityDataAccessor<Optional<EntityMovementData>> TARGET_MOVEMENT =
       SynchedEntityData.defineId(TransportMachineCoreEntity.class, MOVEMENT_SERIALIZER);
 
   private Direction initialOrientation;
   private AssembleStationBlockEntity assembleStationBlockEntity;
-  private UUID assembleStationBlockEntityId;
 
   private final Queue<ActionCallback> asyncCallbacks = new ArrayDeque<>();
   private final Signal signal = new Signal();
@@ -105,7 +102,7 @@ public class TransportMachineCoreEntity extends Entity {
     checkSpeed();
     checkMotion();
     checkSignal();
-    setTargetMovement(new TransportMachineMovement(Direction.Axis.Y, true,
+    setTargetMovement(new EntityMovementData(Direction.Axis.Y, true,
         (float) position().get(Direction.Axis.Y) + n));
     isMoving = true;
     asyncCallbacks.add(callback);
@@ -115,7 +112,7 @@ public class TransportMachineCoreEntity extends Entity {
     checkSpeed();
     checkMotion();
     checkSignal();
-    setTargetMovement(new TransportMachineMovement(Direction.Axis.Y, false,
+    setTargetMovement(new EntityMovementData(Direction.Axis.Y, false,
         (float) position().get(Direction.Axis.Y) - n));
     isMoving = true;
     asyncCallbacks.add(callback);
@@ -165,7 +162,7 @@ public class TransportMachineCoreEntity extends Entity {
     Direction.AxisDirection axisDirection = direction.getAxisDirection();
     int posDelta = axisDirection.getStep() * n;
 
-    setTargetMovement(new TransportMachineMovement(axis, axisDirection.equals(Direction.AxisDirection.POSITIVE),
+    setTargetMovement(new EntityMovementData(axis, axisDirection.equals(Direction.AxisDirection.POSITIVE),
         (float) position().get(axis) + posDelta));
     isMoving = true;
     asyncCallbacks.add(callback);
@@ -266,7 +263,6 @@ public class TransportMachineCoreEntity extends Entity {
     super.tick();
     tickLerp();
     tickCollide();
-    tickComponents();
     tickMotion();
   }
 
@@ -336,25 +332,10 @@ public class TransportMachineCoreEntity extends Entity {
     });
   }
 
-  private void tickComponents() {
-    if (level().isClientSide) {
-      return;
-    }
-
-    getContraption().ifPresent(contraption -> {
-      contraption.initComponents(level(), this);
-      for (List<IViboComponent> value : contraption.getOrderedComponents()) {
-        for (IViboComponent component : value) {
-          component.tickComponent();
-        }
-      }
-    });
-  }
-
   private Optional<Vec3> updateMotion() {
-    Optional<TransportMachineMovement> opt = getTargetMovement();
+    Optional<EntityMovementData> opt = getTargetMovement();
     if (opt.isPresent()) {
-      TransportMachineMovement movement = opt.get();
+      EntityMovementData movement = opt.get();
       double v = position().get(movement.axis);
       double absDist = Math.abs(movement.expectedPos - v);
       if (absDist > 0) {
@@ -371,7 +352,7 @@ public class TransportMachineCoreEntity extends Entity {
     return Optional.empty();
   }
 
-  private Vec3 updateMotion(double absDistance, TransportMachineMovement movement) {
+  private Vec3 updateMotion(double absDistance, EntityMovementData movement) {
     if (absDistance < MIN_MOVE_LENGTH) {
       setPos(Utils.set(position(), movement.axis, movement.expectedPos));
       return null;
@@ -427,11 +408,11 @@ public class TransportMachineCoreEntity extends Entity {
     return entityData.get(TARGET_Y_ROT);
   }
 
-  public void setTargetMovement(@Nullable TransportMachineMovement movement) {
+  public void setTargetMovement(@Nullable EntityMovementData movement) {
     entityData.set(TARGET_MOVEMENT, Optional.ofNullable(movement));
   }
 
-  private Optional<TransportMachineMovement> getTargetMovement() {
+  private Optional<EntityMovementData> getTargetMovement() {
     return entityData.get(TARGET_MOVEMENT);
   }
 
@@ -456,7 +437,7 @@ public class TransportMachineCoreEntity extends Entity {
 
     if (root.getBoolean("hasTargetMovement")) {
       CompoundTag targetMovement = root.getCompound("targetMovement");
-      setTargetMovement(new TransportMachineMovement(
+      setTargetMovement(new EntityMovementData(
           Direction.Axis.values()[targetMovement.getInt("axis")],
           targetMovement.getBoolean("positive"),
           targetMovement.getFloat("expectedPos")));
@@ -468,7 +449,7 @@ public class TransportMachineCoreEntity extends Entity {
     root.putInt("speed", getKineticSpeed());
     root.putFloat("targetYRot", getTargetYRot());
 
-    Optional<TransportMachineMovement> opt = getTargetMovement();
+    Optional<EntityMovementData> opt = getTargetMovement();
     root.putBoolean("hasTargetMovement", opt.isPresent());
     opt.ifPresent(movement -> {
       CompoundTag targetMovement = new CompoundTag();

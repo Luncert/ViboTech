@@ -7,29 +7,29 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 
-public class TransportMachineMovement {
+public class EntityMovementData {
 
     Direction.Axis axis;
     boolean positive;
     float expectedPos;
 
-    public TransportMachineMovement(Direction.Axis axis, boolean positive, float expectedPos) {
+    public EntityMovementData(Direction.Axis axis, boolean positive, float expectedPos) {
         this.axis = axis;
         this.positive = positive;
         this.expectedPos = expectedPos;
     }
 
-    public static final EntityDataSerializer<Optional<TransportMachineMovement>> MOVEMENT_SERIALIZER = new MovementSerializer();
+    public static final EntityDataSerializer<Optional<EntityMovementData>> MOVEMENT_SERIALIZER = new MovementSerializer();
 
     static {
         EntityDataSerializers.registerSerializer(MOVEMENT_SERIALIZER);
     }
 
     @MethodsReturnNonnullByDefault
-    private static class MovementSerializer implements EntityDataSerializer<Optional<TransportMachineMovement>> {
+    private static class MovementSerializer implements EntityDataSerializer<Optional<EntityMovementData>> {
 
         @Override
-        public void write(FriendlyByteBuf buffer, Optional<TransportMachineMovement> opt) {
+        public void write(FriendlyByteBuf buffer, Optional<EntityMovementData> opt) {
             buffer.writeBoolean(opt.isPresent());
             opt.ifPresent(movement -> {
                 buffer.writeInt(movement.axis.ordinal());
@@ -39,15 +39,15 @@ public class TransportMachineMovement {
         }
 
         @Override
-        public Optional<TransportMachineMovement> read(FriendlyByteBuf buffer) {
+        public Optional<EntityMovementData> read(FriendlyByteBuf buffer) {
             boolean isPresent = buffer.readBoolean();
-            return isPresent ? Optional.of(new TransportMachineMovement(Direction.Axis.values()[buffer.readInt()], buffer.readBoolean(), buffer.readFloat()))
+            return isPresent ? Optional.of(new EntityMovementData(Direction.Axis.values()[buffer.readInt()], buffer.readBoolean(), buffer.readFloat()))
                     : Optional.empty();
         }
 
         @Override
-        public Optional<TransportMachineMovement> copy(Optional<TransportMachineMovement> opt) {
-            return opt.map(movement -> new TransportMachineMovement(movement.axis, movement.positive, movement.expectedPos));
+        public Optional<EntityMovementData> copy(Optional<EntityMovementData> opt) {
+            return opt.map(movement -> new EntityMovementData(movement.axis, movement.positive, movement.expectedPos));
         }
     }
 }

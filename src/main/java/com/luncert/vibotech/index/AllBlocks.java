@@ -6,6 +6,8 @@ import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 import com.luncert.vibotech.content2.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
+import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreMovementBehaviour;
+import com.simibubi.create.AllMovementBehaviours;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -35,6 +37,7 @@ public class AllBlocks {
   public static final BlockEntry<TransportMachineCoreBlock> TRANSPORT_MACHINE_CORE =
       REGISTRATE.block("transport_machine_core", TransportMachineCoreBlock::new)
           .initialProperties(SharedProperties::stone)
+          .onRegister(AllMovementBehaviours.movementBehaviour(new TransportMachineCoreMovementBehaviour()))
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
           .properties(BlockBehaviour.Properties::noOcclusion)
