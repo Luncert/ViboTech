@@ -14,6 +14,7 @@ import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import java.util.ArrayDeque;
 import java.util.List;
@@ -325,6 +326,10 @@ public class TransportMachineCoreEntity extends Entity {
     }
 
     updateMotion().ifPresent(motion -> {
+      // TODO:
+      // if (Create.RANDOM.nextBoolean()) {
+      //   motion = motion.relative(Direction.UP, Create.RANDOM.nextDouble() / 2 - 0.5);
+      // }
       setDeltaMovement(motion);
       // used by TransportMachineContraptionEntity#updateOrientation
       setOldPosAndRot();
