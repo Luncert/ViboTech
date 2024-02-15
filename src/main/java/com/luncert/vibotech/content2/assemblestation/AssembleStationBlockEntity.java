@@ -66,7 +66,11 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   public void dissemble() throws TransportMachineAssemblyException {
-    transportMachineCoreEntity.dissemble();
+    if (transportMachineCoreEntity != null) {
+      transportMachineCoreEntity.dissemble();
+      transportMachineCoreEntity = null;
+      transportMachineCoreEntityId = null;
+    }
     assembled = false;
   }
 
