@@ -10,7 +10,6 @@ import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
-import com.simibubi.create.content.kinetics.fan.AirFlowParticleData;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -37,7 +36,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   private boolean power = false;
   private int speed = 0;
   private int executionId;
-  private final AirCurrentSource airCurrentSource = new AirCurrentSource();
+  private final PlasmaCurrentSource plasmaCurrentSource = new PlasmaCurrentSource();
 
   @Override
   public void tickComponent() {
@@ -49,7 +48,7 @@ public class TransportMachineComponent extends BaseViboComponent {
     });
 
     if (accessor.world.isClientSide) {
-      airCurrentSource.plasmaCurrent.tick();
+      plasmaCurrentSource.plasmaCurrent.tick();
     }
   }
 
@@ -241,11 +240,11 @@ public class TransportMachineComponent extends BaseViboComponent {
     return rotateStep;
   }
 
-  private class AirCurrentSource implements IAirCurrentSource {
+  private class PlasmaCurrentSource implements IAirCurrentSource {
 
     private final PlasmaCurrent plasmaCurrent;
 
-    public AirCurrentSource() {
+    public PlasmaCurrentSource() {
       plasmaCurrent = new PlasmaCurrent(this);
     }
 
@@ -268,7 +267,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
     @Override
     public float getSpeed() {
-      return 16;
+      return 1;
     }
 
     @Override
@@ -290,7 +289,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
     @Override
     public float getMaxDistance() {
-      return 3;
+      return 30;
     }
   }
 }

@@ -25,11 +25,11 @@ public class AllEntityTypes {
           1, Integer.MAX_VALUE, false, true, TransportMachineCoreEntity::build).register();
 
   public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE_CONTRAPTION = contraption("transport_machine",
-      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, Integer.MAX_VALUE, true).register();
+      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
 
   private static <T extends Entity> CreateEntityBuilder<T, ?> contraption(String name, EntityType.EntityFactory<T> factory,
-                                                                          NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer, int range,
-                                                                          int updateFrequency, boolean sendVelocity) {
+                                                                          NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer,
+                                                                          int range, int updateFrequency, boolean sendVelocity) {
     return register(name, factory, renderer, MobCategory.MISC, range, updateFrequency, sendVelocity, true,
         AbstractContraptionEntity::build);
   }
