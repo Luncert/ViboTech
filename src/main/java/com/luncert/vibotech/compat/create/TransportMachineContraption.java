@@ -36,7 +36,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
@@ -110,6 +109,7 @@ public class TransportMachineContraption extends Contraption {
     if (accessor == null) {
       this.transportMachine = transportMachineCoreEntity;
       components.put(ViboComponentType.TRANSPORT_MACHINE.getName(), List.of(new TransportMachineComponent()));
+      components.put(ViboComponentType.ENERGY_STORAGE.getName(), List.of(new EnergyStorageComponent()));
 
       accessor = new ViboContraptionAccessor(level, transportMachineCoreEntity, this);
 
@@ -195,20 +195,6 @@ public class TransportMachineContraption extends Contraption {
           v.add(c);
           return v;
         }));
-
-    pair.getValue().getCapability(ForgeCapabilities.ENERGY).ifPresent(c -> {
-      String componentType = ViboComponentType.ENERGY_STORAGE.getName();
-      components.compute(componentType, (k, v) -> {
-        if (v == null) {
-          v = new LinkedList<>();
-        }
-
-        componentBlockInfoMap.put(componentType + "-" + v.size(), blocks.get(localPos));
-
-        v.add(new EnergyStorageComponent());
-        return v;
-      });
-    });
   }
 
   @Override

@@ -1,7 +1,10 @@
 package com.luncert.vibotech.compat.vibotech;
 
+import com.mrh0.createaddition.blocks.portable_energy_interface.PortableEnergyManager;
+import java.util.Optional;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.energy.IEnergyStorage;
 import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class BaseViboComponent implements IViboComponent {
@@ -33,5 +36,9 @@ public abstract class BaseViboComponent implements IViboComponent {
         } catch (Exception e) {
             throw new IllegalArgumentException("invalid component name");
         }
+    }
+
+    public Optional<IEnergyStorage> getEnergyStorage() {
+        return Optional.ofNullable(PortableEnergyManager.get(accessor.contraption));
     }
 }

@@ -4,7 +4,6 @@ import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAP
 
 import com.google.common.collect.ImmutableMap;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
@@ -15,14 +14,12 @@ import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.lua.MethodResult;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.slf4j.Logger;
 
 @TickOrder(2)
@@ -36,15 +33,12 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @Override
   public void tickComponent() {
-    // TODO
-    // double thrust = accessor.resources.getResource("thrust", 0d);
-    // maxSpeed = (int) (Mth.clamp(thrust / accessor.contraption.getBlocks().size(), 0, 1) * 256);
-    // if (speed > maxSpeed) {
-    //     speed = maxSpeed;
-    //     accessor.transportMachine.setKineticSpeed(speed);
-    // }
-    // List<IViboComponent> energyStorage = accessor.findAll(ViboComponentType.ENERGY_STORAGE.getName());
-    // LOGGER.info("{} {}", energyStorage.size(), energyStorage.isEmpty() ? 0 : energyStorage.get(0).getCapability(ForgeCapabilities.ENERGY));
+    int cost = accessor.contraption.getBlocks().size();
+    getEnergyStorage().ifPresent(energyStorage -> {
+      if (energyStorage.extractEnergy(cost, true) == cost) {
+        energyStorage.extractEnergy(cost, false);
+      }
+    });
   }
 
   @Override
