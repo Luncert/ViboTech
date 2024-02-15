@@ -221,6 +221,7 @@ dependencies {
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     implementation fg.deobf("curse.maven:cc-tweaked-282001:5072630")
+    implementation fg.deobf("curse.maven:createaddition-439890:5070244")
 
     /* other minecraft dependencies are here */
 

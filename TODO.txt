@@ -1,8 +1,10 @@
 
 - click contraption entity to rebind station to entity
-- create new fluid steam
-- consume steam from contraption storage
-- create stream effect under core block
+- consume fe from contraption storage
+- create plasma effect under thruster block
+-// create new fluid steam
+-// consume steam from contraption storage
+-// create stream effect under core block
 - simulate contraption shaking
 - change name of tagged assemble station block item
 
