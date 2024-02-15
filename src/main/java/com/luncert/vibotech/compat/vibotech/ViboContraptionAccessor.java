@@ -24,7 +24,7 @@ public final class ViboContraptionAccessor {
     public final Level world;
     public final TransportMachineCoreEntity transportMachineCoreEntity;
     public final TransportMachineContraption contraption;
-    public final ViboContextResources resources = new ViboContextResources();
+    // public final ViboContextResources resources = new ViboContextResources();
 
     public ViboContraptionAccessor(Level world,
                                    TransportMachineCoreEntity transportMachineCoreEntity,

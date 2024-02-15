@@ -3,6 +3,7 @@ package com.luncert.vibotech.compat.create;
 import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_CONTRAPTION;
 
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
+import com.luncert.vibotech.compat.vibotech.EnergyStorageComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
@@ -35,7 +36,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
@@ -148,7 +149,7 @@ public class TransportMachineContraption extends Contraption {
       LOGGER.info("components order {}", componentTickOrders);
     }
 
-    accessor.resources.clear();
+    // accessor.resources.clear();
   }
 
   @Override
@@ -182,8 +183,8 @@ public class TransportMachineContraption extends Contraption {
 
     // records component blocks
     BlockPos localPos = pos.subtract(anchor);
-    LazyOptional<IViboComponent> opt = pair.getValue().getCapability(AllCapabilities.CAPABILITY_VIBO_COMPONENT);
-    opt.ifPresent(c ->
+
+    pair.getValue().getCapability(AllCapabilities.CAPABILITY_VIBO_COMPONENT).ifPresent(c ->
         components.compute(c.getComponentType().getName(), (k, v) -> {
           if (v == null) {
             v = new LinkedList<>();
@@ -194,6 +195,20 @@ public class TransportMachineContraption extends Contraption {
           v.add(c);
           return v;
         }));
+
+    pair.getValue().getCapability(ForgeCapabilities.ENERGY).ifPresent(c -> {
+      String componentType = ViboComponentType.ENERGY_STORAGE.getName();
+      components.compute(componentType, (k, v) -> {
+        if (v == null) {
+          v = new LinkedList<>();
+        }
+
+        componentBlockInfoMap.put(componentType + "-" + v.size(), blocks.get(localPos));
+
+        v.add(new EnergyStorageComponent());
+        return v;
+      });
+    });
   }
 
   @Override

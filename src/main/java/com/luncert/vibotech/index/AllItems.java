@@ -4,7 +4,6 @@ import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
-import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 
 public class AllItems {
@@ -18,9 +17,9 @@ public class AllItems {
   //     .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
   //     .register();
 
-   public static final ItemEntry<BucketItem> STEAM_BUCKET = REGISTRATE
-       .item("steam_bucket", (p) -> new BucketItem(AllFluids.STEAM, p))
-       .register();
+   // public static final ItemEntry<BucketItem> STEAM_BUCKET = REGISTRATE
+   //     .item("steam_bucket", (p) -> new BucketItem(AllFluids.STEAM, p))
+   //     .register();
 
   private static ItemEntry<Item> ingredient(String name) {
     return REGISTRATE.item(name, Item::new)
