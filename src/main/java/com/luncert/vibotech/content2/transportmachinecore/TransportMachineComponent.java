@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
@@ -44,9 +45,9 @@ public class TransportMachineComponent extends BaseViboComponent {
       getEnergyStorage().ifPresent(energyStorage -> {
         if (energyStorage.extractEnergy(cost, true) == cost) {
           energyStorage.extractEnergy(cost, false);
-          accessor.transportMachineCoreEntity.powerOn();
+          accessor.transportMachineCoreEntity.setPower(true);
         } else {
-          accessor.transportMachineCoreEntity.powerOff();
+          accessor.transportMachineCoreEntity.setPower(false);
         }
       });
 
@@ -55,18 +56,23 @@ public class TransportMachineComponent extends BaseViboComponent {
         plasmaCurrentSource.plasmaCurrent.tick();
       }
     } else {
-      accessor.transportMachineCoreEntity.powerOff();
+      accessor.transportMachineCoreEntity.setPower(false);
     }
   }
 
   @Override
   public Tag writeNBT() {
-    return IntTag.valueOf(speed);
+    CompoundTag tag = new CompoundTag();
+    tag.putBoolean("power", power);
+    tag.putInt("speed", speed);
+    return tag;
   }
 
   @Override
   public void readNBT(Level world, Tag tag) {
-    speed = ((IntTag) tag).getAsInt();
+    CompoundTag compoundTag = (CompoundTag) tag;
+    power = compoundTag.getBoolean("power");
+    speed = compoundTag.getInt("speed");
   }
 
   @Override
@@ -75,13 +81,13 @@ public class TransportMachineComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public final void powerOn() {
-    power = true;
+  public final void power(boolean on) {
+    power = on;
   }
 
   @LuaFunction
-  public final void powerOff() {
-    power = false;
+  public final boolean hasPower() {
+    return accessor.transportMachineCoreEntity.getPower();
   }
 
   @LuaFunction

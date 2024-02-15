@@ -14,7 +14,6 @@ import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import java.util.ArrayDeque;
 import java.util.List;
@@ -75,13 +74,13 @@ public class TransportMachineCoreEntity extends Entity {
     super(pEntityType, pLevel);
   }
 
-  public TransportMachineCoreEntity(Level world, BlockPos stationPos, BlockState stationBlockState) {
+  public TransportMachineCoreEntity(Level world, BlockPos stationPos, BlockState transportMachineCoreState) {
     super(AllEntityTypes.TRANSPORT_MACHINE_CORE.get(), world);
     // following data will be synced automatically
     setPos(stationPos.getX() + .5f, stationPos.getY(), stationPos.getZ() + .5f);
     this.noPhysics = true;
-
-    Direction blockDirection = stationBlockState.getValue(HORIZONTAL_FACING).getOpposite();
+    Direction blockDirection = transportMachineCoreState.getValue(HORIZONTAL_FACING).getOpposite();
+LOGGER.info("{}", blockDirection);
     this.initialOrientation = blockDirection;
     setYRot(blockDirection.toYRot());
     setTargetYRot(getYRot());
@@ -249,14 +248,6 @@ public class TransportMachineCoreEntity extends Entity {
   public void dissemble() {
     ejectPassengers();
     discard();
-  }
-
-  public void powerOn() {
-    setPower(true);
-  }
-
-  public void powerOff() {
-    setPower(false);
   }
 
   // impl
