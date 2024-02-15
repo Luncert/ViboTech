@@ -23,9 +23,9 @@ public class AllEntityTypes {
   public static final EntityEntry<TransportMachineCoreEntity> TRANSPORT_MACHINE_CORE =
       register("transport_machine_vehicle", TransportMachineCoreEntity::new, () -> TransportMachineCoreEntityRenderer::new, MobCategory.MISC,
           1, Integer.MAX_VALUE, false, true, TransportMachineCoreEntity::build).register();
-  //
+
   public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE_CONTRAPTION = contraption("transport_machine",
-      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
+      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, Integer.MAX_VALUE, true).register();
 
   private static <T extends Entity> CreateEntityBuilder<T, ?> contraption(String name, EntityType.EntityFactory<T> factory,
                                                                           NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer, int range,

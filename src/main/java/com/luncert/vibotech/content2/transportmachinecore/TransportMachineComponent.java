@@ -9,17 +9,22 @@ import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.mojang.logging.LogUtils;
+import com.simibubi.create.content.kinetics.fan.AirCurrent;
+import com.simibubi.create.content.kinetics.fan.AirFlowParticleData;
+import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.lua.MethodResult;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 @TickOrder(2)
@@ -28,8 +33,11 @@ public class TransportMachineComponent extends BaseViboComponent {
   private static final Logger LOGGER = LogUtils.getLogger();
 
   private static final int MAX_SPEED = 256;
+  // TODO
+  private boolean power = false;
   private int speed = 0;
   private int executionId;
+  private final AirCurrentSource airCurrentSource = new AirCurrentSource();
 
   @Override
   public void tickComponent() {
@@ -39,6 +47,10 @@ public class TransportMachineComponent extends BaseViboComponent {
         energyStorage.extractEnergy(cost, false);
       }
     });
+
+    if (accessor.world.isClientSide) {
+      airCurrentSource.plasmaCurrent.tick();
+    }
   }
 
   @Override
@@ -56,19 +68,15 @@ public class TransportMachineComponent extends BaseViboComponent {
     return ViboComponentType.TRANSPORT_MACHINE;
   }
 
-  // @LuaFunction
-  // public final void turnOnGenerators() {
-  //     for (IViboComponent component : accessor.findAll("fuel-engine")) {
-  //         ((FuelEngineComponent) component).turnOn();
-  //     }
-  // }
+  @LuaFunction
+  public final void powerOn() {
+    power = true;
+  }
 
-  // @LuaFunction
-  // public final void turnOffGenerators() {
-  //     for (IViboComponent component : accessor.findAll("fuel-engine")) {
-  //         ((FuelEngineComponent) component).turnOff();
-  //     }
-  // }
+  @LuaFunction
+  public final void powerOff() {
+    power = false;
+  }
 
   @LuaFunction
   public final MethodResult up(int n) throws LuaException {
@@ -142,7 +150,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public final void setSpeed(int speed) throws LuaException {
+  public final void setKineticSpeed(int speed) throws LuaException {
     if (speed > MAX_SPEED) {
       throw new LuaException("max speed is " + MAX_SPEED);
     }
@@ -152,7 +160,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public final int getSpeed() {
+  public final int getKineticSpeed() {
     return speed;
   }
 
@@ -231,5 +239,58 @@ public class TransportMachineComponent extends BaseViboComponent {
       rotateStep -= 4;
     }
     return rotateStep;
+  }
+
+  private class AirCurrentSource implements IAirCurrentSource {
+
+    private final PlasmaCurrent plasmaCurrent;
+
+    public AirCurrentSource() {
+      plasmaCurrent = new PlasmaCurrent(this);
+    }
+
+    @Nullable
+    @Override
+    public AirCurrent getAirCurrent() {
+      return plasmaCurrent;
+    }
+
+    @Nullable
+    @Override
+    public Level getAirCurrentWorld() {
+      return accessor.world;
+    }
+
+    @Override
+    public BlockPos getAirCurrentPos() {
+      return accessor.transportMachineCoreEntity.blockPosition();
+    }
+
+    @Override
+    public float getSpeed() {
+      return 16;
+    }
+
+    @Override
+    public Direction getAirflowOriginSide() {
+      return Direction.DOWN;
+    }
+
+    @Nullable
+    @Override
+    public Direction getAirFlowDirection() {
+      return Direction.DOWN;
+    }
+
+    // TODO
+    @Override
+    public boolean isSourceRemoved() {
+      return false;
+    }
+
+    @Override
+    public float getMaxDistance() {
+      return 3;
+    }
   }
 }
