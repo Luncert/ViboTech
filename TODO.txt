@@ -1,12 +1,12 @@
 
 - click contraption entity to rebind station to entity
-- consume fe from contraption storage
 - create plasma particle under thruster block, lifetime -> max distance, bounds
 -// create new fluid steam
 -// consume steam from contraption storage
 -// create stream effect under core block
 - simulate contraption shaking
 - change name of tagged assemble station block item
+- player controller
 
 New Blocks:
 - camera block

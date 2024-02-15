@@ -32,7 +32,6 @@ public class TransportMachineComponent extends BaseViboComponent {
   private static final Logger LOGGER = LogUtils.getLogger();
 
   private static final int MAX_SPEED = 256;
-  // TODO
   private boolean power = false;
   private int speed = 0;
   private int executionId;
@@ -40,15 +39,23 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @Override
   public void tickComponent() {
-    int cost = accessor.contraption.getBlocks().size();
-    getEnergyStorage().ifPresent(energyStorage -> {
-      if (energyStorage.extractEnergy(cost, true) == cost) {
-        energyStorage.extractEnergy(cost, false);
-      }
-    });
+    if (power) {
+      int cost = accessor.contraption.getBlocks().size();
+      getEnergyStorage().ifPresent(energyStorage -> {
+        if (energyStorage.extractEnergy(cost, true) == cost) {
+          energyStorage.extractEnergy(cost, false);
+          accessor.transportMachineCoreEntity.powerOn();
+        } else {
+          accessor.transportMachineCoreEntity.powerOff();
+        }
+      });
 
-    if (accessor.world.isClientSide) {
-      plasmaCurrentSource.plasmaCurrent.tick();
+      // TODO: create particle only if power on
+      if (accessor.world.isClientSide) {
+        plasmaCurrentSource.plasmaCurrent.tick();
+      }
+    } else {
+      accessor.transportMachineCoreEntity.powerOff();
     }
   }
 

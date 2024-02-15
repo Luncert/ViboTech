@@ -47,6 +47,8 @@ public class TransportMachineCoreEntity extends Entity {
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LogUtils.getLogger();
   private static final double MIN_MOVE_LENGTH = 0.001;
+  private static final EntityDataAccessor<Boolean> POWER =
+      SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.BOOLEAN);
   private static final EntityDataAccessor<Integer> SPEED =
       SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.INT);
   private static final EntityDataAccessor<Float> TARGET_Y_ROT =
@@ -176,6 +178,9 @@ public class TransportMachineCoreEntity extends Entity {
   }
 
   private void checkMotion() throws TransportMachineMovementException {
+    if (!getPower()) {
+      throw new TransportMachineMovementException("contraption_is_power_off");
+    }
     if (isMoving) {
       throw new TransportMachineMovementException("cannot_update_moving_contraption");
     }
@@ -244,6 +249,14 @@ public class TransportMachineCoreEntity extends Entity {
   public void dissemble() {
     ejectPassengers();
     discard();
+  }
+
+  public void powerOn() {
+    setPower(true);
+  }
+
+  public void powerOff() {
+    setPower(false);
   }
 
   // impl
@@ -397,6 +410,14 @@ public class TransportMachineCoreEntity extends Entity {
     return speed / 512f * 1.5f;
   }
 
+  public void setPower(boolean power) {
+    entityData.set(POWER, power);
+  }
+
+  public boolean getPower() {
+    return entityData.get(POWER);
+  }
+
   public void setKineticSpeed(int speed) {
     entityData.set(SPEED, Mth.clamp(Math.abs(speed), 0, 255));
   }
@@ -427,6 +448,7 @@ public class TransportMachineCoreEntity extends Entity {
   protected void defineSynchedData() {
     // entityData.clearDirty();
     entityData.packDirty();
+    entityData.define(POWER, false);
     entityData.define(SPEED, 16);
     entityData.define(TARGET_Y_ROT, 0f);
     entityData.define(TARGET_MOVEMENT, Optional.empty());
@@ -437,6 +459,7 @@ public class TransportMachineCoreEntity extends Entity {
     if (root.isEmpty())
       return;
 
+    entityData.set(POWER, root.getBoolean("power"));
     entityData.set(SPEED, root.getInt("speed"));
     entityData.set(TARGET_Y_ROT, root.getFloat("targetYRot"));
 
@@ -451,6 +474,7 @@ public class TransportMachineCoreEntity extends Entity {
 
   @Override
   protected void addAdditionalSaveData(CompoundTag root) {
+    root.putBoolean("power", getPower());
     root.putInt("speed", getKineticSpeed());
     root.putFloat("targetYRot", getTargetYRot());
 
