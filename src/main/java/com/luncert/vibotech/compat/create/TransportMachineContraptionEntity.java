@@ -1,9 +1,8 @@
 package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreEntity;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
-import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.foundation.utility.AngleHelper;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.slf4j.Logger;
 
 public class TransportMachineContraptionEntity extends OrientedContraptionEntity {
 

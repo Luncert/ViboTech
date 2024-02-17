@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.assemblestation;
+package com.luncert.vibotech.content.assemblestation;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 

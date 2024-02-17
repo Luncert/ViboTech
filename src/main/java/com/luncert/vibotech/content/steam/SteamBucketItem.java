@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.steam;
+package com.luncert.vibotech.content.steam;
 
 import com.luncert.vibotech.index.AllFluids;
 import net.minecraft.world.item.BucketItem;

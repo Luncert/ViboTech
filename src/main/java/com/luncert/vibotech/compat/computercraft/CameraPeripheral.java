@@ -1,6 +1,6 @@
 package com.luncert.vibotech.compat.computercraft;
 
-import com.luncert.vibotech.content2.camera.CameraBlockEntity;
+import com.luncert.vibotech.content.camera.CameraBlockEntity;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import org.jetbrains.annotations.Nullable;

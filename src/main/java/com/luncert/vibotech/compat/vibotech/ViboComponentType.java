@@ -1,11 +1,9 @@
 package com.luncert.vibotech.compat.vibotech;
 
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineComponent;
-import java.lang.reflect.Constructor;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineComponent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ViboComponentType {
 

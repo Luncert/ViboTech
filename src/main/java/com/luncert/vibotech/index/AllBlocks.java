@@ -4,12 +4,12 @@ import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 import static com.simibubi.create.AllInteractionBehaviours.interactionBehaviour;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
-import com.luncert.vibotech.content2.assemblestation.AssembleStationBlock;
-import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
-import com.luncert.vibotech.content2.camera.CameraBlock;
-import com.luncert.vibotech.content2.transportmachinecontrol.TransportMachineControlBlock;
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreInteractionBehaviour;
+import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
+import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
+import com.luncert.vibotech.content.camera.CameraBlock;
+import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlock;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreInteractionBehaviour;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;

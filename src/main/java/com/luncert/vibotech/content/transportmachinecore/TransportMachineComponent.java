@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.transportmachinecore;
+package com.luncert.vibotech.content.transportmachinecore;
 
 import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAPTION_MOVEMENT_DONE;
 

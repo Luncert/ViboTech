@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.camera;
+package com.luncert.vibotech.content.camera;
 
 import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
 

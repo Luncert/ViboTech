@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.geoscanner;
+package com.luncert.vibotech.content.geoscanner;
 
 import com.simibubi.create.AllTags;
 import net.minecraft.tags.TagKey;

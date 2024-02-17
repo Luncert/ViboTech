@@ -2,8 +2,8 @@ package com.luncert.vibotech.compat.computercraft;
 
 import static dan200.computercraft.shared.Capabilities.CAPABILITY_PERIPHERAL;
 
-import com.luncert.vibotech.content2.assemblestation.AssembleStationBlockEntity;
-import com.luncert.vibotech.content2.camera.CameraBlockEntity;
+import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
+import com.luncert.vibotech.content.camera.CameraBlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class Peripherals {

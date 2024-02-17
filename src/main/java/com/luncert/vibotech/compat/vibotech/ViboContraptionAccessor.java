@@ -3,7 +3,7 @@ package com.luncert.vibotech.compat.vibotech;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreEntity;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.camera;
+package com.luncert.vibotech.content.camera;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;

@@ -1,12 +1,12 @@
-package com.luncert.vibotech.content2.assemblestation;
+package com.luncert.vibotech.content.assemblestation;
 
 import com.luncert.vibotech.compat.computercraft.AssembleStationPeripheral;
 import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlockEntity;
-import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreEntity;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlockEntity;
+import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;

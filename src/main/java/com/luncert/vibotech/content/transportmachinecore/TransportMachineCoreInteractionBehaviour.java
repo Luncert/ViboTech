@@ -1,7 +1,7 @@
-package com.luncert.vibotech.content2.transportmachinecore;
+package com.luncert.vibotech.content.transportmachinecore;
 
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
-import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
+import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
