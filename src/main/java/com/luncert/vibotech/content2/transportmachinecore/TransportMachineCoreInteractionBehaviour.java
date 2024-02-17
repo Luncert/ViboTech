@@ -32,6 +32,7 @@ public class TransportMachineCoreInteractionBehaviour extends MovingInteractionB
         ItemEntity itemEntity = new ItemEntity(contraptionEntity.level(), pos.x, pos.y, pos.z, taggedItemStack);
         contraptionEntity.level().addFreshEntity(itemEntity);
       }
+      return true;
     }
     return false;
   }
