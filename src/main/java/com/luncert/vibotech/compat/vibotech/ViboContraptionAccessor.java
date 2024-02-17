@@ -103,6 +103,9 @@ public final class ViboContraptionAccessor {
 
     private void withComputer(Consumer<IComputerAccess> action) {
         transportMachineCoreEntity.getAssembleStationBlockEntity().ifPresent(blockEntity -> {
+            if (blockEntity.getPeripheral() == null) {
+                return;
+            }
             for (IComputerAccess computer : blockEntity.getPeripheral().getConnectedComputers()) {
                 action.accept(computer);
             }

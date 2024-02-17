@@ -20,8 +20,8 @@ import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +41,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   @Override
   public void tickComponent() {
     if (power) {
-      int cost = accessor.contraption.getBlocks().size();
+      int cost = accessor.contraption.getBlocks().size() * Mth.clamp(speed / 16, 1, 10);
       getEnergyStorage().ifPresent(energyStorage -> {
         if (energyStorage.extractEnergy(cost, true) == cost) {
           energyStorage.extractEnergy(cost, false);
@@ -162,7 +162,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public final void setKineticSpeed(int speed) throws LuaException {
+  public final void setSpeed(int speed) throws LuaException {
     if (speed > MAX_SPEED) {
       throw new LuaException("max speed is " + MAX_SPEED);
     }
@@ -172,7 +172,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public final int getKineticSpeed() {
+  public final int getSpeed() {
     return speed;
   }
 
