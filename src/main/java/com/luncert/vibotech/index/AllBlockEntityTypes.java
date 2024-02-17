@@ -4,6 +4,8 @@ import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.content.camera.CameraBlockEntity;
+import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
+import com.luncert.vibotech.content.gastank.GasTankBlockEntityRenderer;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -27,11 +29,11 @@ public class AllBlockEntityTypes {
       .validBlocks(AllBlocks.CAMERA)
       .register();
 
-  // public static final BlockEntityEntry<GasTankBlockEntity> GAS_TANK = REGISTRATE
-  //     .blockEntity("gas_tank", GasTankBlockEntity::new)
-  //     .validBlocks(AllBlocks.GAS_TANK)
-  //     .renderer(() -> GasTankBlockEntityRenderer::new)
-  //     .register();
+  public static final BlockEntityEntry<GasTankBlockEntity> GAS_TANK = REGISTRATE
+      .blockEntity("gas_tank", GasTankBlockEntity::new)
+      .validBlocks(AllBlocks.GAS_TANK)
+      .renderer(() -> GasTankBlockEntityRenderer::new)
+      .register();
 
   public static void register() {}
 }
