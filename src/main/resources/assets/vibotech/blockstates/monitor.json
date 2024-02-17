@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "vibotech:block/monitor",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "vibotech:block/monitor",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "vibotech:block/monitor",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "vibotech:block/monitor",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "vibotech:block/monitor",
+      "x": 90
+    },
+    "facing=down": {
+      "model": "vibotech:block/monitor",
+      "x": 270
+    }
+  }
+}

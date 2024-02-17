@@ -6,6 +6,7 @@ import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content2.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
+import com.luncert.vibotech.content2.monitor.MonitorBlock;
 import com.luncert.vibotech.content2.transportmachinecontrol.TransportMachineControlBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreInteractionBehaviour;
@@ -59,6 +60,19 @@ public class AllBlocks {
           .transform(pickaxeOnly())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
+              .getExistingFile(ctx.getId()), 0))
+          .simpleItem()
+          .register();
+
+  public static final BlockEntry<MonitorBlock> MONITOR =
+      REGISTRATE.block("monitor", MonitorBlock::new)
+          .initialProperties(SharedProperties::stone)
+          .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+              .requiresCorrectToolForDrops())
+          .properties(BlockBehaviour.Properties::noOcclusion)
+          .transform(pickaxeOnly())
+          .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
+          .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
           .simpleItem()
           .register();
