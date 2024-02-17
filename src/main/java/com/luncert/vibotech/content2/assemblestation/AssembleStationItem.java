@@ -1,12 +1,15 @@
 package com.luncert.vibotech.content2.assemblestation;
 
+import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +31,17 @@ public class AssembleStationItem extends BlockItem {
     ItemStack result = new ItemStack(this);
     if (assembleStation.isAssembled()) {
       assembleStation.write(result.getOrCreateTag());
+    }
+    return result;
+  }
+
+  public ItemStack create(TransportMachineContraptionEntity contraptionEntity) {
+    ItemStack result = new ItemStack(this);
+    Entity vehicle = contraptionEntity.getVehicle();
+    if (vehicle != null) {
+      CompoundTag compound = result.getOrCreateTag();
+      compound.putString("transport_machine_reference", vehicle.getUUID().toString());
+      compound.putBoolean("assembled", true);
     }
     return result;
   }
