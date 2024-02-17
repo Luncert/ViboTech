@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content2.monitor;
+package com.luncert.vibotech.content2.camera;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -7,9 +7,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MonitorBlockEntity extends SmartBlockEntity {
+public class CameraBlockEntity extends SmartBlockEntity {
 
-  public MonitorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+  public CameraBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
   }
 

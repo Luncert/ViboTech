@@ -3,7 +3,7 @@ package com.luncert.vibotech.index;
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
 import com.luncert.vibotech.content2.assemblestation.AssembleStationBlockEntity;
-import com.luncert.vibotech.content2.monitor.MonitorBlockEntity;
+import com.luncert.vibotech.content2.camera.CameraBlockEntity;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -22,9 +22,9 @@ public class AllBlockEntityTypes {
       .register();
 
 
-  public static final BlockEntityEntry<MonitorBlockEntity> MONITOR = REGISTRATE
-      .blockEntity("monitor", MonitorBlockEntity::new)
-      .validBlocks(AllBlocks.MONITOR)
+  public static final BlockEntityEntry<CameraBlockEntity> CAMERA = REGISTRATE
+      .blockEntity("camera", CameraBlockEntity::new)
+      .validBlocks(AllBlocks.CAMERA)
       .register();
 
   // public static final BlockEntityEntry<GasTankBlockEntity> GAS_TANK = REGISTRATE

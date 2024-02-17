@@ -1,7 +1,6 @@
-package com.luncert.vibotech.content2.monitor;
+package com.luncert.vibotech.content2.camera;
 
 import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
-import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.simibubi.create.foundation.block.IBE;
@@ -11,20 +10,20 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-public class MonitorBlock extends Block implements IBE<MonitorBlockEntity> {
+public class CameraBlock extends Block implements IBE<CameraBlockEntity> {
 
-  public MonitorBlock(Properties properties) {
+  public CameraBlock(Properties properties) {
     super(properties);
   }
 
   @Override
-  public Class<MonitorBlockEntity> getBlockEntityClass() {
-    return MonitorBlockEntity.class;
+  public Class<CameraBlockEntity> getBlockEntityClass() {
+    return CameraBlockEntity.class;
   }
 
   @Override
-  public BlockEntityType<? extends MonitorBlockEntity> getBlockEntityType() {
-    return AllBlockEntityTypes.MONITOR.get();
+  public BlockEntityType<? extends CameraBlockEntity> getBlockEntityType() {
+    return AllBlockEntityTypes.CAMERA.get();
   }
 
   @Override

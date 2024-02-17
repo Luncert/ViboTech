@@ -6,7 +6,7 @@ import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content2.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content2.assemblestation.AssembleStationItem;
-import com.luncert.vibotech.content2.monitor.MonitorBlock;
+import com.luncert.vibotech.content2.camera.CameraBlock;
 import com.luncert.vibotech.content2.transportmachinecontrol.TransportMachineControlBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreBlock;
 import com.luncert.vibotech.content2.transportmachinecore.TransportMachineCoreInteractionBehaviour;
@@ -64,8 +64,8 @@ public class AllBlocks {
           .simpleItem()
           .register();
 
-  public static final BlockEntry<MonitorBlock> MONITOR =
-      REGISTRATE.block("monitor", MonitorBlock::new)
+  public static final BlockEntry<CameraBlock> CAMERA =
+      REGISTRATE.block("camera", CameraBlock::new)
           .initialProperties(SharedProperties::stone)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
