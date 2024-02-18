@@ -1,5 +1,6 @@
 package com.luncert.vibotech.compat.vibotech;
 
+import com.luncert.vibotech.content.geoscanner.GeoScannerComponent;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineComponent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ public class ViboComponentType {
     private static final Map<String, Class<? extends IViboComponent>> TYPE_MAPPINGS = new HashMap<>();
     public static final ViboComponentType TRANSPORT_MACHINE = ViboComponentType.register("transport_machine", TransportMachineComponent.class);
     public static final ViboComponentType ENERGY_STORAGE = ViboComponentType.register("energy_storage", EnergyStorageComponent.class);
+    public static final ViboComponentType GEO_SCANNER = ViboComponentType.register("geo_scanner", GeoScannerComponent.class);
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type) {
         if (TYPE_MAPPINGS.containsKey(name)) {
