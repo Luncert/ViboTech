@@ -108,8 +108,7 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
 
   @Override
   public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation)
-      || !assembleStation.isAssembled())
+    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation))
       return super.getDrops(state, builder);
 
     builder.withDynamicDrop(DROP, (out) -> {
