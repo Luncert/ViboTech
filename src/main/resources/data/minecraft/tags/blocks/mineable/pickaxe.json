@@ -1,6 +1,7 @@
 {
   "values": [
     "vibotech:assemble_station",
-    "vibotech:transport_machine_core"
+    "vibotech:transport_machine_core",
+    "vibotech:geo_scanner"
   ]
 }

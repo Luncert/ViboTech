@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [" W ",
+    "WSW",
+    " W "],
+  "key": {
+    "W": {
+      "tag": "forge:plates/iron"
+    },
+    "S": {
+      "item": "minecraft:compass"
+    }
+  },
+  "result":{
+    "item": "vibotech:geo_scanner",
+    "count": 1
+  }
+}
