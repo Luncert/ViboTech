@@ -3,7 +3,7 @@
   "pattern":
   [" W ",
     "WSW",
-    " W "],
+    "WWW"],
   "key": {
     "W": {
       "tag": "forge:plates/iron"
