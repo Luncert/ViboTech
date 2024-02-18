@@ -20,9 +20,19 @@ import org.jetbrains.annotations.NotNull;
 public class AssembleStationItem extends BlockItem {
 
   // private static final Logger LOGGER = LogUtils.getLogger();
+  private final boolean bindTransportMachine;
 
-  public AssembleStationItem(AssembleStationBlock block, Properties properties) {
+  public static AssembleStationItem empty(Properties properties) {
+    return new AssembleStationItem(AllBlocks.ASSEMBLE_STATION.get(), properties, false);
+  }
+
+  public static AssembleStationItem active(Properties properties) {
+    return new AssembleStationItem(AllBlocks.ASSEMBLE_STATION.get(), properties, true);
+  }
+
+  public AssembleStationItem(AssembleStationBlock block, Properties properties, boolean bindTransportMachine) {
     super(block, properties);
+    this.bindTransportMachine = bindTransportMachine;
   }
 
   public ItemStack create(AssembleStationBlockEntity assembleStation) {
@@ -42,6 +52,11 @@ public class AssembleStationItem extends BlockItem {
       compound.putBoolean("assembled", true);
     }
     return result;
+  }
+
+  @Override
+  public String getDescriptionId() {
+    return bindTransportMachine ? "item.vibotech.assembled_assemble_station" : super.getDescriptionId();
   }
 
   @Override

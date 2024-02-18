@@ -5,6 +5,7 @@ import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.H
 import com.google.common.collect.ImmutableList;
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.luncert.vibotech.index.AllItems;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import java.util.List;
@@ -119,7 +120,7 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
   }
 
   private ItemStack getItem(AssembleStationBlockEntity blockEntity) {
-    AssembleStationItem item = (AssembleStationItem) this.asItem();
+    AssembleStationItem item = blockEntity.isAssembled() ? AllItems.ASSEMBLED_ASSEMBLE_STATION.get() : AllItems.ASSEMBLE_STATION.get();
     return item.create(blockEntity);
   }
 }

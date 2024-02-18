@@ -6,7 +6,6 @@ import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
-import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.content.camera.CameraBlock;
 import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
@@ -37,8 +36,6 @@ public class AllBlocks {
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
-          .item(AssembleStationItem::new)
-          .build()
           .register();
 
   public static final BlockEntry<TransportMachineCoreBlock> TRANSPORT_MACHINE_CORE =

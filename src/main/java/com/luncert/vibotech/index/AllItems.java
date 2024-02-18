@@ -3,6 +3,7 @@ package com.luncert.vibotech.index;
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
 import com.luncert.vibotech.compat.create.TransportMachineContraptionItem;
+import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.Item;
@@ -17,10 +18,15 @@ public class AllItems {
       REGISTRATE.item("transport_machine_contraption", TransportMachineContraptionItem::new)
           .register();
 
-  // public static final ItemEntry<AssembleStationItem> ASSEMBLE_STATION = REGISTRATE
-  //     .item("assemble_station", AssembleStationItem::new)
-  //     .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
-  //     .register();
+  public static final ItemEntry<AssembleStationItem> ASSEMBLE_STATION = REGISTRATE
+      .item("assemble_station", AssembleStationItem::empty)
+      .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
+      .register();
+
+  public static final ItemEntry<AssembleStationItem> ASSEMBLED_ASSEMBLE_STATION = REGISTRATE
+      .item("assembled_assemble_station", AssembleStationItem::active)
+      .model((c, p) -> p.withExistingParent(c.getName(), p.mcLoc("block/assemble_station")))
+      .register();
 
    // public static final ItemEntry<BucketItem> STEAM_BUCKET = REGISTRATE
    //     .item("steam_bucket", (p) -> new BucketItem(AllFluids.STEAM, p))
