@@ -8,23 +8,32 @@ import java.util.Map;
 
 public class ViboComponentType {
 
-    private static final Map<String, Class<? extends IViboComponent>> TYPE_MAPPINGS = new HashMap<>();
-    public static final ViboComponentType TRANSPORT_MACHINE = ViboComponentType.register("transport_machine", TransportMachineComponent.class);
-    public static final ViboComponentType ENERGY_STORAGE = ViboComponentType.register("energy_storage", EnergyStorageComponent.class);
+    private static final Map<String, ViboComponentType> NAME_MAPPINGS = new HashMap<>();
+    public static final ViboComponentType TRANSPORT_MACHINE = ViboComponentType.register("transport_machine", TransportMachineComponent.class, true);
+    public static final ViboComponentType ENERGY_STORAGE = ViboComponentType.register("energy_storage", EnergyStorageComponent.class, true);
     public static final ViboComponentType GEO_SCANNER = ViboComponentType.register("geo_scanner", GeoScannerComponent.class);
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type) {
-        if (TYPE_MAPPINGS.containsKey(name)) {
-            throw new IllegalArgumentException("cannot register duplicated component type: " + name + " " + type);
-        }
-        TYPE_MAPPINGS.put(name, type);
-        return new ViboComponentType(name);
+        return register(name, type, false);
     }
 
-    public static IViboComponent createComponent(String name) {
-        Class<? extends IViboComponent> type = TYPE_MAPPINGS.get(name);
+    public static ViboComponentType register(String name, Class<? extends IViboComponent> type, boolean singleton) {
+        if (NAME_MAPPINGS.containsKey(name)) {
+            throw new IllegalArgumentException("cannot register duplicated component type: " + name + " " + type);
+        }
+        ViboComponentType componentType = new ViboComponentType(name, singleton, type);
+        NAME_MAPPINGS.put(name, componentType);
+        return componentType;
+    }
+
+    public static ViboComponentType valueOf(String name) {
+        return NAME_MAPPINGS.get(name);
+    }
+
+    public static IViboComponent createComponent(ViboComponentType componentType) {
+        Class<? extends IViboComponent> type = componentType.type;
         if (type == null) {
-            throw new IllegalArgumentException("invalid type name: " + name);
+            throw new IllegalArgumentException("invalid type name: " + componentType);
         }
 
         try {
@@ -35,12 +44,20 @@ public class ViboComponentType {
     }
 
     private final String name;
+    private final boolean singleton;
+    private final Class<? extends IViboComponent> type;
 
-    private ViboComponentType(String name) {
+    private ViboComponentType(String name, boolean singleton, Class<? extends IViboComponent> type) {
         this.name = name;
+        this.singleton = singleton;
+        this.type = type;
     }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isSingleton() {
+        return singleton;
     }
 }

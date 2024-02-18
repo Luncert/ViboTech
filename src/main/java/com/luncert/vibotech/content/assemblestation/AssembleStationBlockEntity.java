@@ -5,6 +5,7 @@ import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
+import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlockEntity;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
@@ -74,7 +75,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     assembled = false;
   }
 
-  public Map<String, List<IViboComponent>> getComponents() {
+  public Map<ViboComponentType, List<IViboComponent>> getComponents() {
     if (transportMachineCoreEntity == null) {
       return Collections.emptyMap();
     }

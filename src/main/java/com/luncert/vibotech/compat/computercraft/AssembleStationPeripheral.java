@@ -4,6 +4,7 @@ import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
+import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.exception.TransportMachineAssemblyException;
 import com.mojang.logging.LogUtils;
@@ -100,14 +101,18 @@ public class AssembleStationPeripheral implements IPeripheral {
 
     @LuaFunction
     public final List<String> getComponents() {
-        Map<String, List<IViboComponent>> components = assembleStationBlockEntity.getComponents();
+        Map<ViboComponentType, List<IViboComponent>> components = assembleStationBlockEntity.getComponents();
         List<String> result = new ArrayList<>(components.size());
-        for (List<IViboComponent> value : components.values()) {
-            for (int i = 0; i < value.size(); i++) {
-                IViboComponent c = value.get(i);
-                result.add(c.getComponentType().getName() + "-" + i);
+        components.forEach((t, viboComponents) -> {
+            if (t.isSingleton()) {
+                result.add(t.getName());
+            } else {
+                for (int i = 0; i < viboComponents.size(); i++) {
+                    IViboComponent c = viboComponents.get(i);
+                    result.add(c.getComponentType().getName() + "-" + i);
+                }
             }
-        }
+        });
         return result;
     }
 
@@ -115,9 +120,11 @@ public class AssembleStationPeripheral implements IPeripheral {
     public final Map<String, ILuaFunction> getComponent(String componentName) throws LuaException {
         Pair<String, Integer> name = BaseViboComponent.parseName(componentName);
 
-        List<IViboComponent> components = assembleStationBlockEntity.getComponents().get(name.getKey());
-        if (components != null && components.size() > name.getValue()) {
-            return getLuaFunctions(components.get(name.getValue()));
+        List<IViboComponent> components = assembleStationBlockEntity.getComponents()
+            .get(ViboComponentType.valueOf(name.getKey()));
+        int componentId = name.getValue();
+        if (components != null && components.size() > componentId) {
+            return getLuaFunctions(components.get(componentId));
         }
 
         return Collections.emptyMap();

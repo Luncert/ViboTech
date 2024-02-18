@@ -31,9 +31,13 @@ public abstract class BaseViboComponent implements IViboComponent {
     public static Pair<String, Integer> parseName(String componentName) {
         try {
             int i = componentName.lastIndexOf('-');
-            String componentType = componentName.substring(0, i);
-            int componentId = Integer.parseInt(componentName.substring(i + 1));
-            return Pair.of(componentType, componentId);
+            if (i > 0) {
+                String componentType = componentName.substring(0, i);
+                int componentId = Integer.parseInt(componentName.substring(i + 1));
+                return Pair.of(componentType, componentId);
+            }
+            // singleton component's name doesn't contain id
+            return Pair.of(componentName, 0);
         } catch (Exception e) {
             throw new IllegalArgumentException("invalid component name");
         }

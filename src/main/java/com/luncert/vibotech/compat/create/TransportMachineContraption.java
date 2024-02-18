@@ -45,10 +45,11 @@ public class TransportMachineContraption extends Contraption {
   private static final Logger LOGGER = LogUtils.getLogger();
 
   private TransportMachineCoreEntity transportMachine;
-  // block name to vibo component
-  private final Map<String, List<IViboComponent>> components = new HashMap<>();
-  // block name to block info
+  // component type to vibo component
+  private final Map<ViboComponentType, List<IViboComponent>> components = new HashMap<>();
+  // component name to block info
   private final Map<String, StructureBlockInfo> componentBlockInfoMap = new HashMap<>();
+  // tick order of component types
   private List<List<String>> componentTickOrders;
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
@@ -64,15 +65,15 @@ public class TransportMachineContraption extends Contraption {
 
   // api
 
-  public Map<String, List<IViboComponent>> getComponents() {
+  public Map<ViboComponentType, List<IViboComponent>> getComponents() {
     return components;
   }
 
   public List<List<IViboComponent>> getOrderedComponents() {
-    return componentTickOrders.stream().map(componentTypes -> {
+    return componentTickOrders.stream().map(componentNames -> {
       List<IViboComponent> c = new ArrayList<>();
-      for (String componentType : componentTypes) {
-        c.addAll(components.get(componentType));
+      for (String componentName : componentNames) {
+        c.addAll(components.get(ViboComponentType.valueOf(componentName)));
       }
       return c;
     }).collect(Collectors.toList());
@@ -108,16 +109,16 @@ public class TransportMachineContraption extends Contraption {
   public void initComponents(Level level, TransportMachineCoreEntity transportMachineCoreEntity) {
     if (accessor == null) {
       this.transportMachine = transportMachineCoreEntity;
-      components.put(ViboComponentType.TRANSPORT_MACHINE.getName(), List.of(new TransportMachineComponent()));
-      components.put(ViboComponentType.ENERGY_STORAGE.getName(), List.of(new EnergyStorageComponent()));
+      components.put(ViboComponentType.TRANSPORT_MACHINE, List.of(new TransportMachineComponent()));
+      components.put(ViboComponentType.ENERGY_STORAGE, List.of(new EnergyStorageComponent()));
 
       accessor = new ViboContraptionAccessor(level, transportMachineCoreEntity, this);
 
       Map<Integer, List<String>> tickOrders = new HashMap<>();
 
       // resolve tick orders
-
-      for (Map.Entry<String, List<IViboComponent>> entry : components.entrySet()) {
+      //
+      for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
         List<IViboComponent> components = entry.getValue();
         for (int i = 0; i < components.size(); i++) {
           IViboComponent c = components.get(i);
@@ -136,7 +137,7 @@ public class TransportMachineContraption extends Contraption {
           if (v == null) {
             v = new LinkedList<>();
           }
-          v.add(entry.getKey());
+          v.add(entry.getKey().getName());
           return v;
         });
       }
@@ -185,7 +186,7 @@ public class TransportMachineContraption extends Contraption {
     BlockPos localPos = pos.subtract(anchor);
 
     pair.getValue().getCapability(AllCapabilities.CAPABILITY_VIBO_COMPONENT).ifPresent(c ->
-        components.compute(c.getComponentType().getName(), (k, v) -> {
+        components.compute(c.getComponentType(), (k, v) -> {
           if (v == null) {
             v = new LinkedList<>();
           }
@@ -216,11 +217,11 @@ public class TransportMachineContraption extends Contraption {
 
     // write components
     ListTag componentList = new ListTag();
-    for (Map.Entry<String, List<IViboComponent>> entry : components.entrySet()) {
+    for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
       List<IViboComponent> components = entry.getValue();
       for (int i = 0; i < components.size(); i++) {
         CompoundTag item = new CompoundTag();
-        item.putString("name", entry.getKey() + "-" + i);
+        item.putString("name", entry.getKey().getName() + (entry.getKey().isSingleton() ? "" : "-" + i));
 
         IViboComponent component = components.get(i);
         Tag c = component.writeNBT();
@@ -260,7 +261,7 @@ public class TransportMachineContraption extends Contraption {
     for (Tag tag : componentList) {
       CompoundTag componentNbt = (CompoundTag) tag;
       Pair<String, Integer> name = BaseViboComponent.parseName(componentNbt.getString("name"));
-      String componentType = name.getKey();
+      ViboComponentType componentType = ViboComponentType.valueOf(name.getKey());
       int componentId = name.getValue();
       this.components.compute(componentType, (k, v) -> {
         if (v == null) {

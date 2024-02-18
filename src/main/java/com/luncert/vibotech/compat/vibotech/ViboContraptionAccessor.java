@@ -37,14 +37,14 @@ public final class ViboContraptionAccessor {
         this.contraption = contraption;
     }
 
-    public Map<String, List<IViboComponent>> getComponents() {
+    public Map<ViboComponentType, List<IViboComponent>> getComponents() {
       return transportMachineCoreEntity.getContraption()
           .map(TransportMachineContraption::getComponents)
           .orElse(Collections.emptyMap());
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IViboComponent> Optional<T> findOne(String componentType) {
+    public <T extends IViboComponent> Optional<T> findOne(ViboComponentType componentType) {
         List<IViboComponent> components = getComponents().get(componentType);
         if (components != null && !components.isEmpty()) {
             return Optional.of((T) components.get(0));
@@ -53,7 +53,7 @@ public final class ViboContraptionAccessor {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IViboComponent> List<T> findAll(String componentType) {
+    public <T extends IViboComponent> List<T> findAll(ViboComponentType componentType) {
         List<IViboComponent> components = getComponents().get(componentType);
         return components == null ? Collections.emptyList() : (List<T>) components;
     }
@@ -61,7 +61,7 @@ public final class ViboContraptionAccessor {
     public Optional<IViboComponent> getComponent(String componentName) {
         Pair<String, Integer> name = BaseViboComponent.parseName(componentName);
 
-        List<IViboComponent> components = getComponents().get(name.getKey());
+        List<IViboComponent> components = getComponents().get(ViboComponentType.valueOf(name.getKey()));
         if (components != null && components.size() > name.getValue()) {
             return Optional.of(components.get(name.getValue()));
         }
