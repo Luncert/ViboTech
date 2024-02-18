@@ -6,6 +6,7 @@ import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.content.camera.CameraBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntityRenderer;
+import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -23,10 +24,14 @@ public class AllBlockEntityTypes {
       .validBlocks(AllBlocks.ASSEMBLE_STATION)
       .register();
 
-
   public static final BlockEntityEntry<CameraBlockEntity> CAMERA = REGISTRATE
       .blockEntity("camera", CameraBlockEntity::new)
       .validBlocks(AllBlocks.CAMERA)
+      .register();
+
+  public static final BlockEntityEntry<GeoScannerBlockEntity> GEO_SCANNER = REGISTRATE
+      .blockEntity("geo_scanner", GeoScannerBlockEntity::new)
+      .validBlocks(AllBlocks.GEO_SCANNER)
       .register();
 
   public static final BlockEntityEntry<GasTankBlockEntity> GAS_TANK = REGISTRATE

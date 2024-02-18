@@ -1,27 +1,27 @@
 {
   "variants": {
     "facing=north": {
-      "model": "vibotech:block/monitor",
+      "model": "vibotech:block/camera",
       "y": 180
     },
     "facing=south": {
-      "model": "vibotech:block/monitor",
+      "model": "vibotech:block/camera",
       "y": 0
     },
     "facing=west": {
-      "model": "vibotech:block/monitor",
+      "model": "vibotech:block/camera",
       "y": 90
     },
     "facing=east": {
-      "model": "vibotech:block/monitor",
+      "model": "vibotech:block/camera",
       "y": 270
     },
     "facing=up": {
-      "model": "vibotech:block/monitor",
+      "model": "vibotech:block/camera",
       "x": 90
     },
     "facing=down": {
-      "model": "vibotech:block/monitor",
+      "model": "vibotech:block/camera",
       "x": 270
     }
   }
