@@ -3,6 +3,7 @@ package com.luncert.vibotech.content.camera;
 import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-public class CameraBlock extends Block implements IBE<CameraBlockEntity> {
+public class CameraBlock extends Block implements IBE<CameraBlockEntity>, IWrenchable {
 
   public CameraBlock(Properties properties) {
     super(properties);

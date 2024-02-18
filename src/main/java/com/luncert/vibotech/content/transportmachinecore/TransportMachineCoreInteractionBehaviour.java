@@ -18,6 +18,7 @@ public class TransportMachineCoreInteractionBehaviour extends MovingInteractionB
   @Override
   public boolean handlePlayerInteraction(Player player, InteractionHand activeHand, BlockPos localPos,
                                          AbstractContraptionEntity contraptionEntity) {
+    // bind assemble station
     Inventory inventory = player.getInventory();
     AssembleStationItem assembleStationItem = (AssembleStationItem) AllBlocks.ASSEMBLE_STATION.asItem();
     if (inventory.getSelected().is(assembleStationItem)) {

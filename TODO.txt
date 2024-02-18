@@ -9,7 +9,7 @@
 - high speed lerp, 128
 - transport machine core direction
 - pick contraption with wrench
-- new battery can be break
+- new battery can be carry
 - split control block and thruster block
 
 New Blocks:

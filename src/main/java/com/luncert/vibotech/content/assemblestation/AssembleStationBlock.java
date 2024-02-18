@@ -5,6 +5,7 @@ import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.H
 import com.google.common.collect.ImmutableList;
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * - AssembleStationBlockEntity#assemble: create TransportMachineEntity and call assemble
  * - TransportMachineEntity#assemble: create contraption, call assemble and start riding
  */
-public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity> {
+public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity>, IWrenchable {
 
   private static final ResourceLocation DROP = ViboTechMod.asResource("assemble_station");
 

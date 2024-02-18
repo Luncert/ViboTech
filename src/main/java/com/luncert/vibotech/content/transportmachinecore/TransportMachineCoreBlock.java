@@ -3,6 +3,7 @@ package com.luncert.vibotech.content.transportmachinecore;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-public class TransportMachineCoreBlock extends Block implements IBE<TransportMachineCoreBlockEntity> {
+public class TransportMachineCoreBlock extends Block implements IBE<TransportMachineCoreBlockEntity>, IWrenchable {
 
   public TransportMachineCoreBlock(Properties pProperties) {
     super(pProperties);

@@ -1,12 +1,13 @@
 package com.luncert.vibotech.content.transportmachinecontrol;
 
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-public class TransportMachineControlBlock extends Block {
+public class TransportMachineControlBlock extends Block implements IWrenchable {
 
   public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
