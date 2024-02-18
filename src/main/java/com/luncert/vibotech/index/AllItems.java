@@ -2,6 +2,7 @@ package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
+import com.luncert.vibotech.compat.create.TransportMachineContraptionItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.Item;
@@ -11,6 +12,10 @@ public class AllItems {
   static {
     REGISTRATE.setCreativeTab(AllCreativeModeTabs.BASE_TAB);
   }
+
+  public static final ItemEntry<TransportMachineContraptionItem> TRANSPORT_MACHINE_CONTRAPTION =
+      REGISTRATE.item("transport_machine_contraption", TransportMachineContraptionItem::new)
+          .register();
 
   // public static final ItemEntry<AssembleStationItem> ASSEMBLE_STATION = REGISTRATE
   //     .item("assemble_station", AssembleStationItem::new)

@@ -9,8 +9,10 @@
 - high speed lerp, 128
 - transport machine core direction
 - pick contraption with wrench
+    - contraption entity emit interact event
 - new battery can be carry
 - split control block and thruster block
+- camera: create fake player
 
 New Blocks:
 - camera block
