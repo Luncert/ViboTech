@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "robotcontraption:block/geo_scanner",
-		"particle": "robotcontraption:block/geo_scanner"
+		"0": "vibotech:block/geo_scanner",
+		"particle": "vibotech:block/geo_scanner"
 	},
 	"elements": [
 		{
@@ -95,27 +95,34 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [-13, 129, 14],
-			"scale": [0.58, 0.58, 0.58]
+			"rotation": [7.5, -16.32, 10.4],
+			"translation": [0, 1, 0],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [-13, 129, 14],
-			"scale": [0.58, 0.58, 0.58]
+			"rotation": [7.5, -16.32, 10.4],
+			"translation": [0, 1, 0],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"firstperson_righthand": {
-			"rotation": [-13, 129, 14],
-			"scale": [0.58, 0.58, 0.58]
+			"rotation": [7.5, -16.32, 10.4],
+			"translation": [0, 1, 0],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"firstperson_lefthand": {
-			"rotation": [-13, 129, 14],
-			"scale": [0.58, 0.58, 0.58]
+			"rotation": [7.5, -16.32, 10.4],
+			"translation": [0, 1, 0],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"ground": {
-			"scale": [0.58, 0.58, 0.58]
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"gui": {
-			"rotation": [-163.8, -36.13, -177.09],
-			"scale": [0.58, 0.58, 0.58]
+			"rotation": [33.75, 45, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"scale": [0.8, 0.8, 0.8]
 		}
 	}
 }

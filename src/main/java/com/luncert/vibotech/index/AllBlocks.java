@@ -83,7 +83,7 @@ public class AllBlocks {
           .register();
 
   public static final BlockEntry<GeoScannerBlock> GEO_SCANNER =
-      REGISTRATE.block("camera", GeoScannerBlock::new)
+      REGISTRATE.block("geo_scanner", GeoScannerBlock::new)
           .initialProperties(SharedProperties::stone)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
