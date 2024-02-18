@@ -6,6 +6,11 @@
 - simulate contraption shaking
 - change name of tagged assemble station block item
 - player controller
+- high speed lerp, 128
+- transport machine core direction
+- pick contraption with wrench
+- new battery can be break
+- split control block and thruster block
 
 New Blocks:
 - camera block
