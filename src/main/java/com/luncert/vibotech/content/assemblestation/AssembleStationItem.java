@@ -37,7 +37,7 @@ public class AssembleStationItem extends BlockItem {
 
   public ItemStack create(AssembleStationBlockEntity assembleStation) {
     ItemStack result = new ItemStack(this);
-    if (assembleStation.isAssembled()) {
+    if (bindTransportMachine) {
       assembleStation.write(result.getOrCreateTag());
     }
     return result;
@@ -56,7 +56,7 @@ public class AssembleStationItem extends BlockItem {
 
   @Override
   public String getDescriptionId() {
-    return bindTransportMachine ? "item.vibotech.assembled_assemble_station" : super.getDescriptionId();
+    return bindTransportMachine ? "item.vibotech.assembled_assemble_station" : "item.vibotech.assemble_station";
   }
 
   @Override
@@ -85,9 +85,9 @@ public class AssembleStationItem extends BlockItem {
       itemStack.shrink(1);
     }
 
-    if (itemStack.getOrCreateTag().contains("transport_machine_reference")
+    if (itemStack.getTag() != null && itemStack.getTag().contains("transport_machine_reference")
         && world.getBlockEntity(pos) instanceof AssembleStationBlockEntity assembleStationBlockEntity) {
-      assembleStationBlockEntity.read(itemStack.getOrCreateTag());
+      assembleStationBlockEntity.read(itemStack.getTag());
     }
 
     AdvancementBehaviour.setPlacedBy(world, pos, player);
