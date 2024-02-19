@@ -1,4 +1,10 @@
 {
-  "item.vibotech.assembled_assemble_station": "已绑定装配站",
-  "item.vibotech.assemble_station": "装配站"
+  "block.vibotech.transport_machine_core": "瓦伯核心",
+  "block.vibotech.transport_machine_control": "瓦伯控制器",
+  "block.vibotech.camera": "相机模块",
+  "block.vibotech.geo_scanner": "地形雷达模块",
+  "block.vibotech.gas_tank": "气罐",
+  "item.vibotech.transport_machine_contraption": "瓦伯机械",
+  "item.vibotech.assembled_assemble_station": "已绑定瓦伯装配站",
+  "item.vibotech.assemble_station": "瓦伯装配站"
 }
