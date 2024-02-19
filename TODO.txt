@@ -4,7 +4,6 @@
 -// consume steam from contraption storage
 -// create stream effect under core block
 - simulate contraption shaking
-- change name of tagged assemble station block item
 - player controller
 - high speed lerp, 128
 - transport machine core direction
