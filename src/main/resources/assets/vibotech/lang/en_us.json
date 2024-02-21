@@ -1,0 +1,13 @@
+{
+  "block.vibotech.transport_machine_core": "ViboTech Transport Machine Core",
+  "block.vibotech.transport_machine_control": "ViboTech Transport Machine Controller",
+  "block.vibotech.camera": "Camera Module",
+  "block.vibotech.geo_scanner": "Geo Scanner Module",
+  "block.vibotech.gas_tank": "Gas Tank",
+  "block.vibotech.portable_accumulator": "Portable Accumulator",
+  "item.vibotech.transport_machine_contraption": "ViboTech Contraption",
+  "item.vibotech.assembled_assemble_station": "Connected Vibo Assemble Station",
+  "item.vibotech.assemble_station": "Vibo Assemble Station",
+  "item.vibotech.portable_accumulator": "Portable Accumulator",
+  "vibotech.tooltip.portableAccumulator.info": "Portable Accumulator Info："
+}
