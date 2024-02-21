@@ -6,5 +6,6 @@
   "block.vibotech.gas_tank": "气罐",
   "item.vibotech.transport_machine_contraption": "瓦伯机械",
   "item.vibotech.assembled_assemble_station": "已绑定瓦伯装配站",
-  "item.vibotech.assemble_station": "瓦伯装配站"
+  "item.vibotech.assemble_station": "瓦伯装配站",
+  "vibotech.tooltip.portableAccumulator.info": "便携式蓄电池信息："
 }

@@ -1,63 +1,39 @@
 package com.luncert.vibotech;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import java.nio.file.Path;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = ViboTechMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config
-{
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+public class Config {
+  private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
-            .define("logDirtBlock", true);
+  public static final ForgeConfigSpec.IntValue PORTABLE_ACCUMULATOR_CAPACITY = BUILDER
+      .comment("Portable Accumulator internal capacity per block in FE.")
+      .defineInRange("portable_accumulator_capacity", 500000, 0, Integer.MAX_VALUE);
 
-    private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
-            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
+  public static final ForgeConfigSpec.IntValue PORTABLE_ACCUMULATOR_MAX_INPUT = BUILDER
+      .comment("Portable Accumulator max input in FE/t (Energy transfer).")
+      .defineInRange("portable_accumulator_max_input", 1000, 0, Integer.MAX_VALUE);
+  public static final ForgeConfigSpec.IntValue PORTABLE_ACCUMULATOR_MAX_OUTPUT = BUILDER
+      .comment("Portable Accumulator max output in FE/t (Energy transfer).")
+      .defineInRange("portable_accumulator_max_output", 1000, 0, Integer.MAX_VALUE);
 
-    public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
-            .define("magicNumberIntroduction", "The magic number is... ");
+  static final ForgeConfigSpec SPEC = BUILDER.build();
 
-    // a list of strings that are treated as resource locations for items
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+  public static void loadConfig(ForgeConfigSpec spec, Path path) {
+    // see create addition
+  }
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+  @SubscribeEvent
+  public static void onLoad(ModConfigEvent.Loading event) {
+    // TODO:
+  }
 
-    public static boolean logDirtBlock;
-    public static int magicNumber;
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-
-    private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
-    }
-
-    @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
-    {
-        logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
-
-        // convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream()
-                .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))
-                .collect(Collectors.toSet());
-    }
+  @SubscribeEvent
+  public static void onReload(ModConfigEvent.Reloading event) {
+    // TODO:
+  }
 }
