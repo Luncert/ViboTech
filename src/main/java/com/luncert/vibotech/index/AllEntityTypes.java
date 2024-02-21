@@ -4,8 +4,8 @@ import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.common.Lang;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
 import com.luncert.vibotech.compat.create.TransportMachineContraptionEntityRenderer;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntityRenderer;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
 import com.tterrag.registrate.util.entry.EntityEntry;
@@ -20,9 +20,9 @@ import net.minecraft.world.entity.MobCategory;
 
 public class AllEntityTypes {
 
-  public static final EntityEntry<TransportMachineCoreEntity> TRANSPORT_MACHINE_CORE =
-      register("transport_machine_vehicle", TransportMachineCoreEntity::new, () -> TransportMachineCoreEntityRenderer::new, MobCategory.MISC,
-          1, Integer.MAX_VALUE, false, true, TransportMachineCoreEntity::build).register();
+  public static final EntityEntry<ViboMachineEntity> VIBO_MACHINE =
+      register("transport_machine_vehicle", ViboMachineEntity::new, () -> ViboMachineEntityRenderer::new, MobCategory.MISC,
+          1, Integer.MAX_VALUE, false, true, ViboMachineEntity::build).register();
 
   public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE_CONTRAPTION = contraption("transport_machine",
       TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();

@@ -1,5 +1,5 @@
 {
-  "block.vibotech.transport_machine_core": "ViboTech Transport Machine Core",
+  "block.vibotech.vibo_machine_core": "ViboTech Machine Core",
   "block.vibotech.transport_machine_control": "ViboTech Transport Machine Controller",
   "block.vibotech.camera": "Camera Module",
   "block.vibotech.geo_scanner": "Geo Scanner Module",

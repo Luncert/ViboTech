@@ -41,19 +41,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-public class TransportMachineCoreEntity extends Entity {
+public class ViboMachineEntity extends Entity {
 
   @SuppressWarnings("unused")
   private static final Logger LOGGER = LogUtils.getLogger();
   private static final double MIN_MOVE_LENGTH = 0.001;
   private static final EntityDataAccessor<Boolean> POWER =
-      SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.BOOLEAN);
+      SynchedEntityData.defineId(ViboMachineEntity.class, EntityDataSerializers.BOOLEAN);
   private static final EntityDataAccessor<Integer> SPEED =
-      SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.INT);
+      SynchedEntityData.defineId(ViboMachineEntity.class, EntityDataSerializers.INT);
   private static final EntityDataAccessor<Float> TARGET_Y_ROT =
-      SynchedEntityData.defineId(TransportMachineCoreEntity.class, EntityDataSerializers.FLOAT);
+      SynchedEntityData.defineId(ViboMachineEntity.class, EntityDataSerializers.FLOAT);
   private static final EntityDataAccessor<Optional<EntityMovementData>> TARGET_MOVEMENT =
-      SynchedEntityData.defineId(TransportMachineCoreEntity.class, MOVEMENT_SERIALIZER);
+      SynchedEntityData.defineId(ViboMachineEntity.class, MOVEMENT_SERIALIZER);
 
   private Direction initialOrientation;
   private AssembleStationBlockEntity assembleStationBlockEntity;
@@ -70,12 +70,12 @@ public class TransportMachineCoreEntity extends Entity {
   private double lerpYRot;
   private double lerpXRot;
 
-  public TransportMachineCoreEntity(EntityType<?> pEntityType, Level pLevel) {
+  public ViboMachineEntity(EntityType<?> pEntityType, Level pLevel) {
     super(pEntityType, pLevel);
   }
 
-  public TransportMachineCoreEntity(Level world, BlockPos stationPos, BlockState transportMachineCoreState) {
-    super(AllEntityTypes.TRANSPORT_MACHINE_CORE.get(), world);
+  public ViboMachineEntity(Level world, BlockPos stationPos, BlockState transportMachineCoreState) {
+    super(AllEntityTypes.VIBO_MACHINE.get(), world);
     // following data will be synced automatically
     setPos(stationPos.getX() + .5f, stationPos.getY(), stationPos.getZ() + .5f);
     this.noPhysics = true;
@@ -189,7 +189,7 @@ LOGGER.info("{}", blockDirection);
 
   public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {
     @SuppressWarnings("unchecked")
-    EntityType.Builder<TransportMachineCoreEntity> entityBuilder = (EntityType.Builder<TransportMachineCoreEntity>) builder;
+    EntityType.Builder<ViboMachineEntity> entityBuilder = (EntityType.Builder<ViboMachineEntity>) builder;
     return entityBuilder.sized(0.1f, 0.1f);
   }
 

@@ -8,7 +8,7 @@ import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntityRenderer;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlockEntity;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlockEntity;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 public class AllBlockEntityTypes {
@@ -20,8 +20,8 @@ public class AllBlockEntityTypes {
       // .renderer(() -> SchematicannonRenderer::new)
       .register();
 
-  public static final BlockEntityEntry<TransportMachineCoreBlockEntity> TRANSPORT_MACHINE_CORE = REGISTRATE
-      .blockEntity("transport_machine_core", TransportMachineCoreBlockEntity::new)
+  public static final BlockEntityEntry<ViboMachineCoreBlockEntity> VIBO_MACHINE_CORE = REGISTRATE
+      .blockEntity("vibo_machine_core", ViboMachineCoreBlockEntity::new)
       .validBlocks(AllBlocks.ASSEMBLE_STATION)
       .register();
 

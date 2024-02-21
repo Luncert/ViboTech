@@ -10,8 +10,8 @@ import com.luncert.vibotech.compat.vibotech.StorageAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineComponent;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.mojang.logging.LogUtils;
@@ -46,7 +46,7 @@ public class TransportMachineContraption extends Contraption {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
-  private TransportMachineCoreEntity transportMachine;
+  private ViboMachineEntity transportMachine;
   // component type to vibo component
   private final Map<ViboComponentType, List<IViboComponent>> components = new HashMap<>();
   // component name to block info
@@ -60,7 +60,7 @@ public class TransportMachineContraption extends Contraption {
     this(EContraptionMovementMode.ROTATE, null);
   }
 
-  public TransportMachineContraption(EContraptionMovementMode mode, TransportMachineCoreEntity transportMachine) {
+  public TransportMachineContraption(EContraptionMovementMode mode, ViboMachineEntity transportMachine) {
     this.rotationMode = mode;
     this.transportMachine = transportMachine;
   }
@@ -102,21 +102,21 @@ public class TransportMachineContraption extends Contraption {
       return false;
 
     addBlock(pos, Pair.of(new StructureBlockInfo(
-        pos, AllBlocks.TRANSPORT_MACHINE_CORE.getDefaultState(), null), null));
+        pos, AllBlocks.VIBO_MACHINE_CORE.getDefaultState(), null), null));
 
     initComponents(level, transportMachine);
     return true;
   }
 
-  public void initComponents(Level level, TransportMachineCoreEntity transportMachineCoreEntity) {
+  public void initComponents(Level level, ViboMachineEntity viboMachineEntity) {
     if (accessor == null) {
-      this.transportMachine = transportMachineCoreEntity;
-      components.put(ViboComponentType.TRANSPORT_MACHINE, List.of(new TransportMachineComponent()));
+      this.transportMachine = viboMachineEntity;
+      components.put(ViboComponentType.CORE, List.of(new ViboMachineCoreComponent()));
       components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
       components.put(ViboComponentType.STORAGE_ACCESSOR, List.of(new StorageAccessorComponent()));
       components.put(ViboComponentType.FLUID_ACCESSOR, List.of(new FluidAccessorComponent()));
 
-      accessor = new ViboContraptionAccessor(level, transportMachineCoreEntity, this);
+      accessor = new ViboContraptionAccessor(level, viboMachineEntity, this);
 
       Map<Integer, List<String>> tickOrders = new HashMap<>();
 

@@ -1,5 +1,5 @@
 {
-  "block.vibotech.transport_machine_core": "瓦伯核心",
+  "block.vibotech.vibo_machine_core": "瓦伯机械核心",
   "block.vibotech.transport_machine_control": "瓦伯控制器",
   "block.vibotech.camera": "相机模块",
   "block.vibotech.geo_scanner": "地形雷达模块",

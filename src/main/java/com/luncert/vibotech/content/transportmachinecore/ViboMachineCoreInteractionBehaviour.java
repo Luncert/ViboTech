@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-public class TransportMachineCoreInteractionBehaviour extends MovingInteractionBehaviour {
+public class ViboMachineCoreInteractionBehaviour extends MovingInteractionBehaviour {
 
   @Override
   public boolean handlePlayerInteraction(Player player, InteractionHand activeHand, BlockPos localPos,

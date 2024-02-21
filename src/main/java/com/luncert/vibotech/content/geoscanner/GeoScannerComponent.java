@@ -29,7 +29,7 @@ public class GeoScannerComponent extends BaseViboComponent {
       throw new LuaException("Invalid argument, must be one of " + Arrays.toString(EHarvestable.values()));
     }
 
-    BlockPos center = accessor.transportMachineCoreEntity.blockPosition();
+    BlockPos center = accessor.viboMachineEntity.blockPosition();
 
     LocalVariable<Pair<Vec3, Vec3>> ref = new LocalVariable<>();
 

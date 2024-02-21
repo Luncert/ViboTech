@@ -1,7 +1,7 @@
 package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.common.Lang;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllMovementBehaviours;
@@ -67,7 +67,7 @@ public class TransportMachineContraptionItem extends Item {
       return;
     if (entity instanceof AbstractContraptionEntity)
       entity = entity.getVehicle();
-    if (!(entity instanceof TransportMachineCoreEntity core))
+    if (!(entity instanceof ViboMachineEntity core))
       return;
     if (!entity.isAlive())
       return;

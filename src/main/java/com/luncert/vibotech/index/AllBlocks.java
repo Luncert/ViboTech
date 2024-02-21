@@ -11,8 +11,8 @@ import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
 import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlock;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreInteractionBehaviour;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreBlock;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreInteractionBehaviour;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -39,10 +39,10 @@ public class AllBlocks {
               .getExistingFile(ctx.getId()), 0))
           .register();
 
-  public static final BlockEntry<TransportMachineCoreBlock> TRANSPORT_MACHINE_CORE =
-      REGISTRATE.block("transport_machine_core", TransportMachineCoreBlock::new)
+  public static final BlockEntry<ViboMachineCoreBlock> VIBO_MACHINE_CORE =
+      REGISTRATE.block("vibo_machine_core", ViboMachineCoreBlock::new)
           .initialProperties(SharedProperties::stone)
-          .onRegister(interactionBehaviour(new TransportMachineCoreInteractionBehaviour()))
+          .onRegister(interactionBehaviour(new ViboMachineCoreInteractionBehaviour()))
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
           .properties(BlockBehaviour.Properties::noOcclusion)

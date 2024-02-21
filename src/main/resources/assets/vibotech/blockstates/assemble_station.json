@@ -1,20 +1,7 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "vibotech:block/assemble_station",
-      "y": 180
-    },
-    "facing=south": {
-      "model": "vibotech:block/assemble_station",
-      "y": 0
-    },
-    "facing=west": {
-      "model": "vibotech:block/assemble_station",
-      "y": 90
-    },
-    "facing=east": {
-      "model": "vibotech:block/assemble_station",
-      "y": 270
+    "": {
+      "model": "vibotech:block/assemble_station"
     }
   }
 }

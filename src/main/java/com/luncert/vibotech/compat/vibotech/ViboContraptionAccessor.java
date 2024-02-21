@@ -3,7 +3,7 @@ package com.luncert.vibotech.compat.vibotech;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.compat.create.TransportMachineContraption;
-import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreEntity;
+import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import java.util.Collections;
 import java.util.List;
@@ -22,23 +22,23 @@ import org.apache.commons.lang3.tuple.Pair;
 public final class ViboContraptionAccessor {
 
     public final Level world;
-    public final TransportMachineCoreEntity transportMachineCoreEntity;
+    public final ViboMachineEntity viboMachineEntity;
     public final TransportMachineContraption contraption;
     // public final ViboContextResources resources = new ViboContextResources();
 
     public ViboContraptionAccessor(Level world,
-                                   TransportMachineCoreEntity transportMachineCoreEntity,
+                                   ViboMachineEntity viboMachineEntity,
                                    TransportMachineContraption contraption) {
         Objects.requireNonNull(world);
-        Objects.requireNonNull(transportMachineCoreEntity);
+        Objects.requireNonNull(viboMachineEntity);
         Objects.requireNonNull(contraption);
         this.world = world;
-        this.transportMachineCoreEntity = transportMachineCoreEntity;
+        this.viboMachineEntity = viboMachineEntity;
         this.contraption = contraption;
     }
 
     public Map<ViboComponentType, List<IViboComponent>> getComponents() {
-      return transportMachineCoreEntity.getContraption()
+      return viboMachineEntity.getContraption()
           .map(TransportMachineContraption::getComponents)
           .orElse(Collections.emptyMap());
     }
@@ -88,12 +88,12 @@ public final class ViboContraptionAccessor {
     }
 
     public Optional<Direction> getAssembleStationFacing() {
-        return transportMachineCoreEntity.getAssembleStationBlockEntity().map(
+        return viboMachineEntity.getAssembleStationBlockEntity().map(
             blockEntity -> blockEntity.getBlockState().getValue(HORIZONTAL_FACING));
     }
 
     public Optional<BlockPos> getAssembleStationPosition() {
-        return transportMachineCoreEntity.getAssembleStationBlockEntity().map(
+        return viboMachineEntity.getAssembleStationBlockEntity().map(
             BlockEntity::getBlockPos);
     }
 
@@ -102,7 +102,7 @@ public final class ViboContraptionAccessor {
     }
 
     private void withComputer(Consumer<IComputerAccess> action) {
-        transportMachineCoreEntity.getAssembleStationBlockEntity().ifPresent(blockEntity -> {
+        viboMachineEntity.getAssembleStationBlockEntity().ifPresent(blockEntity -> {
             if (blockEntity.getPeripheral() == null) {
                 return;
             }

@@ -1,13 +1,13 @@
 {
   "type": "minecraft:block",
-  "random_sequence": "vibotech:transport_machine_core",
+  "random_sequence": "vibotech:vibo_machine_core",
   "pools": [
     {
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "vibotech:transport_machine_core"
+          "name": "vibotech:vibo_machine_core"
         }
       ],
       "conditions": [

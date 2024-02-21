@@ -11,20 +11,20 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-public class TransportMachineCoreBlock extends Block implements IBE<TransportMachineCoreBlockEntity>, IWrenchable {
+public class ViboMachineCoreBlock extends Block implements IBE<ViboMachineCoreBlockEntity>, IWrenchable {
 
-  public TransportMachineCoreBlock(Properties pProperties) {
+  public ViboMachineCoreBlock(Properties pProperties) {
     super(pProperties);
   }
 
   @Override
-  public Class<TransportMachineCoreBlockEntity> getBlockEntityClass() {
-    return TransportMachineCoreBlockEntity.class;
+  public Class<ViboMachineCoreBlockEntity> getBlockEntityClass() {
+    return ViboMachineCoreBlockEntity.class;
   }
 
   @Override
-  public BlockEntityType<? extends TransportMachineCoreBlockEntity> getBlockEntityType() {
-    return AllBlockEntityTypes.TRANSPORT_MACHINE_CORE.get();
+  public BlockEntityType<? extends ViboMachineCoreBlockEntity> getBlockEntityType() {
+    return AllBlockEntityTypes.VIBO_MACHINE_CORE.get();
   }
 
   @Override

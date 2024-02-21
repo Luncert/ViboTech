@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 @TickOrder(2)
-public class TransportMachineComponent extends BaseViboComponent {
+public class ViboMachineCoreComponent extends BaseViboComponent {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -45,9 +45,9 @@ public class TransportMachineComponent extends BaseViboComponent {
       getEnergyAccessor().ifPresent(energyStorage -> {
         if (energyStorage.extractEnergy(cost, true) == cost) {
           energyStorage.extractEnergy(cost, false);
-          accessor.transportMachineCoreEntity.setPower(true);
+          accessor.viboMachineEntity.setPower(true);
         } else {
-          accessor.transportMachineCoreEntity.setPower(false);
+          accessor.viboMachineEntity.setPower(false);
         }
       });
 
@@ -56,7 +56,7 @@ public class TransportMachineComponent extends BaseViboComponent {
         plasmaCurrentSource.plasmaCurrent.tick();
       }
     } else {
-      accessor.transportMachineCoreEntity.setPower(false);
+      accessor.viboMachineEntity.setPower(false);
     }
   }
 
@@ -77,7 +77,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @Override
   public ViboComponentType getComponentType() {
-    return ViboComponentType.TRANSPORT_MACHINE;
+    return ViboComponentType.CORE;
   }
 
   @LuaFunction
@@ -87,7 +87,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @LuaFunction
   public final boolean hasPower() {
-    return accessor.transportMachineCoreEntity.getPower();
+    return accessor.viboMachineEntity.getPower();
   }
 
   @LuaFunction
@@ -98,7 +98,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
     int executionId = this.executionId++;
     try {
-      accessor.transportMachineCoreEntity.up(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
+      accessor.viboMachineEntity.up(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
     } catch (TransportMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
@@ -114,7 +114,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
     int executionId = this.executionId++;
     try {
-      accessor.transportMachineCoreEntity.down(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
+      accessor.viboMachineEntity.down(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
     } catch (TransportMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
@@ -130,7 +130,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
     int executionId = this.executionId++;
     try {
-      accessor.transportMachineCoreEntity.forward(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
+      accessor.viboMachineEntity.forward(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
     } catch (TransportMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
@@ -142,7 +142,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   public final MethodResult turnLeft() throws LuaException {
     int executionId = this.executionId++;
     try {
-      accessor.transportMachineCoreEntity.turnLeft(data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
+      accessor.viboMachineEntity.turnLeft(data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
     } catch (TransportMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
@@ -154,7 +154,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   public final MethodResult turnRight() throws LuaException {
     int executionId = this.executionId++;
     try {
-      accessor.transportMachineCoreEntity.turnRight(data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
+      accessor.viboMachineEntity.turnRight(data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
     } catch (TransportMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
@@ -168,7 +168,7 @@ public class TransportMachineComponent extends BaseViboComponent {
     }
 
     this.speed = speed;
-    accessor.transportMachineCoreEntity.setKineticSpeed(speed);
+    accessor.viboMachineEntity.setKineticSpeed(speed);
   }
 
   @LuaFunction
@@ -178,7 +178,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @LuaFunction
   public final Map<String, Double> getContraptionPosition() {
-    Vec3 pos = accessor.transportMachineCoreEntity.getContraptionPosition();
+    Vec3 pos = accessor.viboMachineEntity.getContraptionPosition();
     return ImmutableMap.of(
         "x", pos.x,
         "y", pos.y,
@@ -198,7 +198,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
   @LuaFunction
   public final Map<String, Object> getContraptionFacing() {
-    Direction direction = accessor.transportMachineCoreEntity.getContraptionFacing();
+    Direction direction = accessor.viboMachineEntity.getContraptionFacing();
     Direction.AxisDirection axisDirection = direction.getAxisDirection();
     return ImmutableMap.of(
         "axis", direction.getAxis().getName(),
@@ -236,7 +236,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   private int getRotateStep(int step, Direction.Axis axis) {
     int rotateStep = 0;
 
-    Direction facingDirection = accessor.transportMachineCoreEntity.getContraptionFacing();
+    Direction facingDirection = accessor.viboMachineEntity.getContraptionFacing();
     Direction.AxisDirection axisDirection = facingDirection.getAxisDirection();
     if (!axis.equals(facingDirection.getAxis())) {
       rotateStep++;
@@ -275,7 +275,7 @@ public class TransportMachineComponent extends BaseViboComponent {
 
     @Override
     public BlockPos getAirCurrentPos() {
-      return accessor.transportMachineCoreEntity.blockPosition();
+      return accessor.viboMachineEntity.blockPosition();
     }
 
     @Override

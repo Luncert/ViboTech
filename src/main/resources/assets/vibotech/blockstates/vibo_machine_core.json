@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "vibotech:block/vibo_machine_core",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "vibotech:block/vibo_machine_core",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "vibotech:block/vibo_machine_core",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "vibotech:block/vibo_machine_core",
+      "y": 270
+    }
+  }
+}
