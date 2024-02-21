@@ -1,6 +1,6 @@
 package com.luncert.vibotech.foundation.network;
 
-import com.mrh0.createaddition.CreateAddition;
+import com.luncert.vibotech.ViboTechMod;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -53,6 +53,6 @@ public class EnergyNetworkPacket {
   }
 
   public static void send(BlockPos pos, int demand, int buff, ServerPlayer player) {
-    CreateAddition.Network.send(PacketDistributor.PLAYER.with(() -> player), new EnergyNetworkPacket(pos, demand, buff));
+    ViboTechMod.Network.send(PacketDistributor.PLAYER.with(() -> player), new EnergyNetworkPacket(pos, demand, buff));
   }
 }
