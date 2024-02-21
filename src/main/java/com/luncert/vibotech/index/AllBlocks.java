@@ -9,6 +9,7 @@ import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content.camera.CameraBlock;
 import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
+import com.luncert.vibotech.content.portableaccumulator.PortableAccumulator;
 import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlock;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreInteractionBehaviour;
@@ -101,6 +102,19 @@ public class AllBlocks {
           .properties(BlockBehaviour.Properties::noOcclusion)
           .transform(BlockStressDefaults.setCapacity(64d))
           .transform(axeOrPickaxe())
+          .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
+          .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
+              .getExistingFile(ctx.getId()), 0))
+          .simpleItem()
+          .register();
+
+  public static final BlockEntry<PortableAccumulator> PORTABLE_ACCUMULATOR =
+      REGISTRATE.block("portable_accumulator", PortableAccumulator::new)
+          .initialProperties(SharedProperties::stone)
+          .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+              .requiresCorrectToolForDrops())
+          .properties(BlockBehaviour.Properties::noOcclusion)
+          .transform(pickaxeOnly())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))

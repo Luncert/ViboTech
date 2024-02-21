@@ -7,6 +7,7 @@ import com.luncert.vibotech.content.camera.CameraBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntityRenderer;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
+import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlockEntity;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -38,6 +39,11 @@ public class AllBlockEntityTypes {
       .blockEntity("gas_tank", GasTankBlockEntity::new)
       .validBlocks(AllBlocks.GAS_TANK)
       .renderer(() -> GasTankBlockEntityRenderer::new)
+      .register();
+
+  public static final BlockEntityEntry<PortableAccumulatorBlockEntity> PORTABLE_ACCUMULATOR = REGISTRATE
+      .blockEntity("portable_accumulator", PortableAccumulatorBlockEntity::new)
+      .validBlocks(AllBlocks.PORTABLE_ACCUMULATOR)
       .register();
 
   public static void register() {}
