@@ -1,8 +1,9 @@
 package com.luncert.vibotech.content.portableaccumulator;
 
 import com.luncert.vibotech.Config;
+import com.luncert.vibotech.foundation.network.EnergyNetworkPacket;
 import com.mrh0.createaddition.energy.InternalEnergyStorage;
-import com.mrh0.createaddition.network.EnergyNetworkPacket;
+import com.mrh0.createaddition.network.IObserveTileEntity;
 import com.mrh0.createaddition.network.ObservePacket;
 import com.mrh0.createaddition.util.Util;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
@@ -13,6 +14,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -22,12 +24,10 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IObserveTileEntity {
 
-  protected LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> {
-    return this.energyStorage;
-  });
   protected InternalEnergyStorage energyStorage = this.createEnergyStorage();
+  protected LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> this.energyStorage);
 
   public PortableAccumulatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
@@ -75,5 +75,11 @@ public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements 
         .append("fe")
         .withStyle(ChatFormatting.AQUA));
     return true;
+  }
+
+  @Override
+  public void onObserved(ServerPlayer serverPlayer, ObservePacket observePacket) {
+    // triggered by observe packet
+    EnergyNetworkPacket.send(this.worldPosition, 0, energyStorage.getEnergyStored(), serverPlayer);
   }
 }
