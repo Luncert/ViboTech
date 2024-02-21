@@ -5,7 +5,6 @@ import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAP
 import com.google.common.collect.ImmutableMap;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
-import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
@@ -28,7 +27,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-@TickOrder(2)
 public class ViboMachineCoreComponent extends BaseViboComponent {
 
   private static final Logger LOGGER = LogUtils.getLogger();

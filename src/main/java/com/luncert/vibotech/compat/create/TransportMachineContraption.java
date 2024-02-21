@@ -2,12 +2,14 @@ package com.luncert.vibotech.compat.create;
 
 import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_CONTRAPTION;
 
+import com.luncert.vibotech.common.TreeNode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
+import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.EnergyAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.FluidAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.StorageAccessorComponent;
-import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
+import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
@@ -52,7 +54,7 @@ public class TransportMachineContraption extends Contraption {
   // component name to block info
   private final Map<String, StructureBlockInfo> componentBlockInfoMap = new HashMap<>();
   // tick order of component types
-  private List<List<String>> componentTickOrders;
+  private List<TreeNode<String>> componentTickOrders;
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
 
@@ -71,14 +73,17 @@ public class TransportMachineContraption extends Contraption {
     return components;
   }
 
-  public List<List<IViboComponent>> getOrderedComponents() {
-    return componentTickOrders.stream().map(componentNames -> {
-      List<IViboComponent> c = new ArrayList<>();
-      for (String componentName : componentNames) {
-        c.addAll(components.get(ViboComponentType.valueOf(componentName)));
-      }
-      return c;
-    }).collect(Collectors.toList());
+  public void tickComponents() {
+    ComponentTickContext context = new ComponentTickContext();
+    for (TreeNode<String> node : componentTickOrders) {
+      tickComponents(node, context);
+    }
+  }
+
+  private void tickComponents(TreeNode<String> node, ComponentTickContext context) {
+    components.get(ViboComponentType.valueOf(node.getData()))
+        .forEach(component -> component.tickComponent(context));
+    node.getChildren().forEach(child -> tickComponents(node, context));
   }
 
   public StructureBlockInfo getComponentBlockInfo(String name) {
@@ -118,43 +123,40 @@ public class TransportMachineContraption extends Contraption {
 
       accessor = new ViboContraptionAccessor(level, viboMachineEntity, this);
 
-      Map<Integer, List<String>> tickOrders = new HashMap<>();
-
-      // resolve tick orders
-      //
+      Map<String, TreeNode<String>> treeNodes = new HashMap<>();
       for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
+        ViboComponentType key = entry.getKey();
         List<IViboComponent> components = entry.getValue();
+
+        // call init
         for (int i = 0; i < components.size(); i++) {
           IViboComponent c = components.get(i);
-          String name = c.getComponentType().getName() + "-" + i;
+          String name = c.getComponentType().isSingleton()
+              ? c.getComponentType().getName()
+              : c.getComponentType().getName() + "-" + i;
           c.init(accessor, name);
         }
 
+        // resolve tick orders
+        TreeNode<String> current = new TreeNode<>(key.getName());
         Class<? extends IViboComponent> type = components.get(0).getClass();
-        int order = 0;
-        if (type.isAnnotationPresent(TickOrder.class)) {
-          TickOrder tickOrder = type.getAnnotation(TickOrder.class);
-          order = tickOrder.value();
+        if (type.isAnnotationPresent(TickAfter.class)) {
+          String target = type.getAnnotation(TickAfter.class).value();
+          TreeNode<String> parent = treeNodes.computeIfAbsent(target, TreeNode::new);
+          parent.addChild(current);
+        } else {
+          treeNodes.put(key.getName(), current);
         }
-
-        tickOrders.compute(order, (k, v) -> {
-          if (v == null) {
-            v = new LinkedList<>();
-          }
-          v.add(entry.getKey().getName());
-          return v;
-        });
       }
 
-      componentTickOrders = tickOrders.entrySet().stream()
+      componentTickOrders = treeNodes.entrySet().stream()
           .sorted(Map.Entry.comparingByKey())
           .map(Map.Entry::getValue)
           .collect(Collectors.toList());
+
       LOGGER.info("components {}", components);
       LOGGER.info("components order {}", componentTickOrders);
     }
-
-    // accessor.resources.clear();
   }
 
   @Override

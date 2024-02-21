@@ -1,13 +1,10 @@
 package com.luncert.vibotech.compat.create;
 
-import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
-import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.foundation.utility.AngleHelper;
-import java.util.List;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -67,14 +64,9 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
   }
 
   private void tickComponents() {
-    ComponentTickContext context = new ComponentTickContext();
     TransportMachineContraption c = (TransportMachineContraption) contraption;
     c.initComponents(level(), (ViboMachineEntity) this.getVehicle());
-    for (List<IViboComponent> value : c.getOrderedComponents()) {
-      for (IViboComponent component : value) {
-        component.tickComponent(context);
-      }
-    }
+    c.tickComponents();
   }
 
   @Override
