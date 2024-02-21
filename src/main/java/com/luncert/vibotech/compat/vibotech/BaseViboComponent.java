@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class BaseViboComponent implements IViboComponent {
@@ -43,8 +45,16 @@ public abstract class BaseViboComponent implements IViboComponent {
         }
     }
 
-    protected Optional<IEnergyStorage> getEnergyStorage() {
+    protected Optional<IEnergyStorage> getEnergyAccessor() {
         return Optional.ofNullable(PortableEnergyManager.get(accessor.contraption));
+    }
+
+    protected Optional<IItemHandler> getStorageAccessor() {
+        return Optional.ofNullable(accessor.contraption.getSharedInventory());
+    }
+
+    protected Optional<IFluidHandler> getFluidAccessor() {
+        return Optional.ofNullable(accessor.contraption.getSharedFluidTanks());
     }
 
     protected BlockPos getWorldPos() {

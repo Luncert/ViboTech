@@ -9,8 +9,12 @@ import java.util.Map;
 public class ViboComponentType {
 
     private static final Map<String, ViboComponentType> NAME_MAPPINGS = new HashMap<>();
+
     public static final ViboComponentType TRANSPORT_MACHINE = ViboComponentType.register("transport_machine", TransportMachineComponent.class, true);
-    public static final ViboComponentType ENERGY_STORAGE = ViboComponentType.register("energy_storage", EnergyStorageComponent.class, true);
+    public static final ViboComponentType ENERGY_ACCESSOR = ViboComponentType.register("energy_accessor", EnergyAccessorComponent.class, true);
+    public static final ViboComponentType STORAGE_ACCESSOR = ViboComponentType.register("storage_accessor", StorageAccessorComponent.class, true);
+    public static final ViboComponentType FLUID_ACCESSOR = ViboComponentType.register("fluid_accessor", FluidAccessorComponent.class, true);
+
     public static final ViboComponentType GEO_SCANNER = ViboComponentType.register("geo_scanner", GeoScannerComponent.class);
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type) {

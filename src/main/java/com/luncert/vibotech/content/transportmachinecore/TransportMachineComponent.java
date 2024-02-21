@@ -42,7 +42,7 @@ public class TransportMachineComponent extends BaseViboComponent {
   public void tickComponent() {
     if (power) {
       int cost = accessor.contraption.getBlocks().size() * Mth.clamp(speed / 16, 1, 10);
-      getEnergyStorage().ifPresent(energyStorage -> {
+      getEnergyAccessor().ifPresent(energyStorage -> {
         if (energyStorage.extractEnergy(cost, true) == cost) {
           energyStorage.extractEnergy(cost, false);
           accessor.transportMachineCoreEntity.setPower(true);

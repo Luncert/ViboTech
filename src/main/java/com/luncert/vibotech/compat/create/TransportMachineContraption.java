@@ -3,8 +3,9 @@ package com.luncert.vibotech.compat.create;
 import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_CONTRAPTION;
 
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.EnergyStorageComponent;
+import com.luncert.vibotech.compat.vibotech.EnergyAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
+import com.luncert.vibotech.compat.vibotech.StorageAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
@@ -110,7 +111,8 @@ public class TransportMachineContraption extends Contraption {
     if (accessor == null) {
       this.transportMachine = transportMachineCoreEntity;
       components.put(ViboComponentType.TRANSPORT_MACHINE, List.of(new TransportMachineComponent()));
-      components.put(ViboComponentType.ENERGY_STORAGE, List.of(new EnergyStorageComponent()));
+      components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
+      components.put(ViboComponentType.STORAGE_ACCESSOR, List.of(new StorageAccessorComponent()));
 
       accessor = new ViboContraptionAccessor(level, transportMachineCoreEntity, this);
 
