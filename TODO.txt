@@ -1,4 +1,9 @@
 
+- new battery can be carry
+- split control block and thruster block
+- pick contraption with wrench
+    - contraption entity emit interact event
+
 - create plasma particle under thruster block, lifetime -> max distance, bounds
 -// create new fluid steam
 -// consume steam from contraption storage
@@ -7,10 +12,6 @@
 - player controller
 - high speed lerp, 128
 - transport machine core direction
-- pick contraption with wrench
-    - contraption entity emit interact event
-- new battery can be carry
-- split control block and thruster block
 - camera: create fake player
 
 New Blocks:
