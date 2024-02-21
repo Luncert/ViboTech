@@ -9,7 +9,7 @@ import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content.camera.CameraBlock;
 import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
-import com.luncert.vibotech.content.portableaccumulator.PortableAccumulator;
+import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
 import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreBlock;
 import com.luncert.vibotech.content.transportmachinecore.TransportMachineCoreInteractionBehaviour;
@@ -108,8 +108,8 @@ public class AllBlocks {
           .simpleItem()
           .register();
 
-  public static final BlockEntry<PortableAccumulator> PORTABLE_ACCUMULATOR =
-      REGISTRATE.block("portable_accumulator", PortableAccumulator::new)
+  public static final BlockEntry<PortableAccumulatorBlock> PORTABLE_ACCUMULATOR =
+      REGISTRATE.block("portable_accumulator", PortableAccumulatorBlock::new)
           .initialProperties(SharedProperties::stone)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
@@ -118,7 +118,6 @@ public class AllBlocks {
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
-          .simpleItem()
           .register();
 
   public static void register() {

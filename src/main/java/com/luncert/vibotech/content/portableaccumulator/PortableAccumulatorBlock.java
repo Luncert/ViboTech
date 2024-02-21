@@ -1,6 +1,4 @@
-package com.luncert.vibotech.content.assemblestation;
-
-import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+package com.luncert.vibotech.content.portableaccumulator;
 
 import com.google.common.collect.ImmutableList;
 import com.luncert.vibotech.ViboTechMod;
@@ -15,7 +13,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,32 +23,22 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * AssembleStationBlockEntity assemble in tick() if block is powered.
- * - AssembleStationBlockEntity#assemble: create TransportMachineEntity and call assemble
- * - TransportMachineEntity#assemble: create contraption, call assemble and start riding
- */
-public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity>, IWrenchable {
+public class PortableAccumulatorBlock extends Block implements IBE<PortableAccumulatorBlockEntity>, IWrenchable {
 
-  private static final ResourceLocation DROP = ViboTechMod.asResource("assemble_station");
+  private static final ResourceLocation DROP = ViboTechMod.asResource("portable_accumulator");
 
-  public AssembleStationBlock(Properties properties) {
+  public PortableAccumulatorBlock(Properties properties) {
     super(properties);
   }
 
   @Override
-  public Class<AssembleStationBlockEntity> getBlockEntityClass() {
-    return AssembleStationBlockEntity.class;
+  public Class<PortableAccumulatorBlockEntity> getBlockEntityClass() {
+    return PortableAccumulatorBlockEntity.class;
   }
 
   @Override
-  public BlockEntityType<? extends AssembleStationBlockEntity> getBlockEntityType() {
-    return AllBlockEntityTypes.ASSEMBLE_STATION.get();
-  }
-
-  @Override
-  public BlockState getStateForPlacement(BlockPlaceContext context) {
-    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
+  public BlockEntityType<? extends PortableAccumulatorBlockEntity> getBlockEntityType() {
+    return AllBlockEntityTypes.PORTABLE_ACCUMULATOR.get();
   }
 
   // custom drop
@@ -68,11 +55,8 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
     super.playerWillDestroy(world, pos, state, player);
     if (!(world instanceof ServerLevel serverWorld)) return;
 
-    // We drop the item here instead of doing it in the harvest method, as we should
-    // drop computers for creative players too.
-
     var tile = world.getBlockEntity(pos);
-    if (tile instanceof AssembleStationBlockEntity) {
+    if (tile instanceof PortableAccumulatorBlockEntity) {
       var context = new LootParams.Builder(serverWorld)
           .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
           .withParameter(LootContextParams.TOOL, player.getMainHandItem())
@@ -88,17 +72,16 @@ public class AssembleStationBlock extends Block implements IBE<AssembleStationBl
 
   @Override
   public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof AssembleStationBlockEntity assembleStation))
+    if (!(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof PortableAccumulatorBlockEntity portableAccumulator))
       return super.getDrops(state, builder);
 
     builder.withDynamicDrop(DROP, (out) -> {
-      out.accept(getItem(assembleStation));
+      out.accept(getItem(portableAccumulator));
     });
-    return ImmutableList.of(getItem(assembleStation));
+    return ImmutableList.of(getItem(portableAccumulator));
   }
 
-  private ItemStack getItem(AssembleStationBlockEntity blockEntity) {
-    AssembleStationItem item = blockEntity.isAssembled() ? AllItems.ASSEMBLED_ASSEMBLE_STATION.get() : AllItems.ASSEMBLE_STATION.get();
-    return item.create(blockEntity);
+  private ItemStack getItem(PortableAccumulatorBlockEntity blockEntity) {
+    return AllItems.PORTABLE_ACCUMULATOR.get().create(blockEntity);
   }
 }

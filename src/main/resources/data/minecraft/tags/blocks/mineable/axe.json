@@ -2,6 +2,7 @@
   "values": [
     "vibotech:assemble_station",
     "vibotech:transport_machine_core",
-    "vibotech:geo_scanner"
+    "vibotech:geo_scanner",
+    "vibotech:portable_accumulator"
   ]
 }
