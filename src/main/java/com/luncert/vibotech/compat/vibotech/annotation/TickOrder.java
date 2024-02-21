@@ -1,4 +1,4 @@
-package com.luncert.vibotech.compat.vibotech;
+package com.luncert.vibotech.compat.vibotech.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

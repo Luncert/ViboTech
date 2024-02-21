@@ -8,6 +8,7 @@ import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntityRenderer;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlockEntity;
+import com.luncert.vibotech.content.thruster.ThrusterBlockEntity;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -44,6 +45,11 @@ public class AllBlockEntityTypes {
   public static final BlockEntityEntry<PortableAccumulatorBlockEntity> PORTABLE_ACCUMULATOR = REGISTRATE
       .blockEntity("portable_accumulator", PortableAccumulatorBlockEntity::new)
       .validBlocks(AllBlocks.PORTABLE_ACCUMULATOR)
+      .register();
+
+  public static final BlockEntityEntry<ThrusterBlockEntity> THRUSTER = REGISTRATE
+      .blockEntity("thruster", ThrusterBlockEntity::new)
+      .validBlocks(AllBlocks.THRUSTER)
       .register();
 
   public static void register() {}

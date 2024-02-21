@@ -1,5 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
+import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
@@ -66,11 +67,12 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
   }
 
   private void tickComponents() {
+    ComponentTickContext context = new ComponentTickContext();
     TransportMachineContraption c = (TransportMachineContraption) contraption;
     c.initComponents(level(), (ViboMachineEntity) this.getVehicle());
     for (List<IViboComponent> value : c.getOrderedComponents()) {
       for (IViboComponent component : value) {
-        component.tickComponent();
+        component.tickComponent(context);
       }
     }
   }

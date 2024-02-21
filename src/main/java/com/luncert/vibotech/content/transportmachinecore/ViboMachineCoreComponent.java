@@ -4,7 +4,8 @@ import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAP
 
 import com.google.common.collect.ImmutableMap;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.TickOrder;
+import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
+import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
@@ -39,7 +40,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
   private final PlasmaCurrentSource plasmaCurrentSource = new PlasmaCurrentSource();
 
   @Override
-  public void tickComponent() {
+  public void tickComponent(ComponentTickContext context) {
     if (power) {
       int cost = accessor.contraption.getBlocks().size() * Mth.clamp(speed / 16, 1, 10);
       getEnergyAccessor().ifPresent(energyStorage -> {

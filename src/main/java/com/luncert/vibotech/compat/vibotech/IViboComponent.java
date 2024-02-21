@@ -9,7 +9,7 @@ public interface IViboComponent {
     default void init(ViboContraptionAccessor accessor, String name) {
     }
 
-    default void tickComponent() {
+    default void tickComponent(ComponentTickContext context) {
     }
 
     ViboComponentType getComponentType();

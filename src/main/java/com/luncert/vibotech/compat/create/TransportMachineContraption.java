@@ -7,7 +7,7 @@ import com.luncert.vibotech.compat.vibotech.EnergyAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.FluidAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.StorageAccessorComponent;
-import com.luncert.vibotech.compat.vibotech.TickOrder;
+import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;

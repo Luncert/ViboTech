@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.geoscanner;
+package com.luncert.vibotech.content.thruster;
 
 import com.luncert.vibotech.index.AllCapabilities;
 import net.minecraft.core.BlockPos;
@@ -11,18 +11,18 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GeoScannerBlockEntity extends BlockEntity {
+public class ThrusterBlockEntity extends BlockEntity {
 
-  private final GeoScannerComponent geoScannerComponent = new GeoScannerComponent();
+  private final ThrusterComponent thrusterComponent = new ThrusterComponent();
 
-  public GeoScannerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public ThrusterBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
+    super(pType, pPos, pBlockState);
   }
 
   @Override
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (AllCapabilities.isViboComponent(cap)) {
-      return LazyOptional.of(() -> geoScannerComponent).cast();
+      return LazyOptional.of(() -> thrusterComponent).cast();
     }
     return super.getCapability(cap, side);
   }

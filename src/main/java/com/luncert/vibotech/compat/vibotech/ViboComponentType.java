@@ -1,6 +1,7 @@
 package com.luncert.vibotech.compat.vibotech;
 
 import com.luncert.vibotech.content.geoscanner.GeoScannerComponent;
+import com.luncert.vibotech.content.thruster.ThrusterComponent;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class ViboComponentType {
     public static final ViboComponentType FLUID_ACCESSOR = ViboComponentType.register("fluid_accessor", FluidAccessorComponent.class, true);
 
     public static final ViboComponentType GEO_SCANNER = ViboComponentType.register("geo_scanner", GeoScannerComponent.class);
+    public static final ViboComponentType THRUSTER = ViboComponentType.register("thruster", ThrusterComponent.class);
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type) {
         return register(name, type, false);

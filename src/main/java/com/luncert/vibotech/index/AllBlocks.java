@@ -10,6 +10,7 @@ import com.luncert.vibotech.content.camera.CameraBlock;
 import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
+import com.luncert.vibotech.content.thruster.ThrusterBlock;
 import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreBlock;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreInteractionBehaviour;
@@ -52,7 +53,6 @@ public class AllBlocks {
               .getExistingFile(ctx.getId()), 0))
           .simpleItem()
           .register();
-
 
   public static final BlockEntry<TransportMachineControlBlock> TRANSPORT_MACHINE_CONTROL =
       REGISTRATE.block("transport_machine_control", TransportMachineControlBlock::new)
@@ -118,6 +118,19 @@ public class AllBlocks {
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
+          .register();
+
+  public static final BlockEntry<ThrusterBlock> THRUSTER =
+      REGISTRATE.block("thruster", ThrusterBlock::new)
+          .initialProperties(SharedProperties::stone)
+          .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+              .requiresCorrectToolForDrops())
+          .properties(BlockBehaviour.Properties::noOcclusion)
+          .transform(pickaxeOnly())
+          .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
+          .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
+              .getExistingFile(ctx.getId()), 0))
+          .simpleItem()
           .register();
 
   public static void register() {
