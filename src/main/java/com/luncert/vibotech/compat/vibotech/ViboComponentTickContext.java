@@ -1,6 +1,5 @@
 package com.luncert.vibotech.compat.vibotech;
 
-import com.luncert.vibotech.compat.vibotech.annotation.IViboMachineResource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.luncert.vibotech.compat.vibotech.annotation;
+package com.luncert.vibotech.compat.vibotech;
 
 public interface IViboMachineResource {
 

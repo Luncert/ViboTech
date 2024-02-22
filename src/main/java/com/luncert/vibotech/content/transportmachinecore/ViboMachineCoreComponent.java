@@ -4,31 +4,23 @@ import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAP
 
 import com.google.common.collect.ImmutableMap;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
+import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
-import com.luncert.vibotech.content.thruster.ThrustResource;
+import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.content.kinetics.fan.AirCurrent;
-import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.lua.MethodResult;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+@TickOrder(0)
 public class ViboMachineCoreComponent extends BaseViboComponent {
 
   private static final Logger LOGGER = LogUtils.getLogger();
@@ -37,7 +29,6 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
   private boolean power = false;
   private int speed = 0;
   private int executionId;
-  private final PlasmaCurrentSource plasmaCurrentSource = new PlasmaCurrentSource();
 
   @Override
   public ViboComponentType getComponentType() {
@@ -223,56 +214,4 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     return rotateStep;
   }
 
-  private class PlasmaCurrentSource implements IAirCurrentSource {
-
-    private final PlasmaCurrent plasmaCurrent;
-
-    public PlasmaCurrentSource() {
-      plasmaCurrent = new PlasmaCurrent(this);
-    }
-
-    @Nullable
-    @Override
-    public AirCurrent getAirCurrent() {
-      return plasmaCurrent;
-    }
-
-    @Nullable
-    @Override
-    public Level getAirCurrentWorld() {
-      return accessor.world;
-    }
-
-    @Override
-    public BlockPos getAirCurrentPos() {
-      return accessor.viboMachineEntity.blockPosition();
-    }
-
-    @Override
-    public float getSpeed() {
-      return 1;
-    }
-
-    @Override
-    public Direction getAirflowOriginSide() {
-      return Direction.DOWN;
-    }
-
-    @Nullable
-    @Override
-    public Direction getAirFlowDirection() {
-      return Direction.DOWN;
-    }
-
-    // TODO
-    @Override
-    public boolean isSourceRemoved() {
-      return false;
-    }
-
-    @Override
-    public float getMaxDistance() {
-      return 30;
-    }
-  }
 }

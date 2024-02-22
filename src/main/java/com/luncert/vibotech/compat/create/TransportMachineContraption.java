@@ -4,12 +4,13 @@ import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_C
 
 import com.luncert.vibotech.common.TreeNode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.FinalizeComponent;
+import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
+import com.luncert.vibotech.compat.vibotech.component.FinalizeComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
-import com.luncert.vibotech.compat.vibotech.EnergyAccessorComponent;
-import com.luncert.vibotech.compat.vibotech.FluidAccessorComponent;
+import com.luncert.vibotech.compat.vibotech.component.EnergyAccessorComponent;
+import com.luncert.vibotech.compat.vibotech.component.FluidAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
-import com.luncert.vibotech.compat.vibotech.StorageAccessorComponent;
+import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
@@ -25,6 +26,7 @@ import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,7 +57,7 @@ public class TransportMachineContraption extends Contraption {
   // component name to block info
   private final Map<String, StructureBlockInfo> componentBlockInfoMap = new HashMap<>();
   // tick order of component types
-  private List<TreeNode<String>> componentTickOrders;
+  private List<TreeNode<ViboComponentType>> componentTickOrders;
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
   private ViboComponentTickContext context = new ViboComponentTickContext();
@@ -77,16 +79,15 @@ public class TransportMachineContraption extends Contraption {
   }
 
   public void tickComponents() {
-    for (TreeNode<String> node : componentTickOrders) {
+    for (TreeNode<ViboComponentType> node : componentTickOrders) {
       tickComponents(node);
     }
     context.reset();
   }
 
-  private void tickComponents(TreeNode<String> node) {
-    components.get(ViboComponentType.valueOf(node.getData()))
-        .forEach(component -> component.tickComponent(context));
-    node.getChildren().forEach(child -> tickComponents(node));
+  private void tickComponents(TreeNode<ViboComponentType> node) {
+    components.get(node.getData()).forEach(component -> component.tickComponent(context));
+    node.getChildren().forEach(this::tickComponents);
   }
 
   public StructureBlockInfo getComponentBlockInfo(String name) {
@@ -127,7 +128,7 @@ public class TransportMachineContraption extends Contraption {
 
       accessor = new ViboContraptionAccessor(level, viboMachineEntity, this);
 
-      Map<String, TreeNode<String>> treeNodes = new HashMap<>();
+      Map<ViboComponentType, TreeNode<ViboComponentType>> treeNodes = new HashMap<>();
       for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
         ViboComponentType key = entry.getKey();
         List<IViboComponent> components = entry.getValue();
@@ -142,19 +143,22 @@ public class TransportMachineContraption extends Contraption {
         }
 
         // resolve tick orders
-        TreeNode<String> current = new TreeNode<>(key.getName());
-        Class<? extends IViboComponent> type = components.get(0).getClass();
+        TreeNode<ViboComponentType> current = new TreeNode<>(key);
+        Class<? extends IViboComponent> type = key.getType();
         if (type.isAnnotationPresent(TickAfter.class)) {
           String target = type.getAnnotation(TickAfter.class).value();
-          TreeNode<String> parent = treeNodes.computeIfAbsent(target, TreeNode::new);
+          TreeNode<ViboComponentType> parent = treeNodes.computeIfAbsent(ViboComponentType.valueOf(target), TreeNode::new);
           parent.addChild(current);
         } else {
-          treeNodes.put(key.getName(), current);
+          treeNodes.put(key, current);
         }
       }
 
       componentTickOrders = treeNodes.entrySet().stream()
-          .sorted(Map.Entry.comparingByKey())
+          .sorted(Comparator.comparing(a -> {
+            TickOrder tickOrder = a.getKey().getType().getAnnotation(TickOrder.class);
+            return tickOrder == null ? Integer.MAX_VALUE : tickOrder.value();
+          }))
           .map(Map.Entry::getValue)
           .collect(Collectors.toList());
 

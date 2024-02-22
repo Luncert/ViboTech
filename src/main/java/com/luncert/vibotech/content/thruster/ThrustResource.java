@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content.thruster;
 
-import com.luncert.vibotech.compat.vibotech.annotation.IViboMachineResource;
+import com.luncert.vibotech.compat.vibotech.IViboMachineResource;
 
 public class ThrustResource implements IViboMachineResource {
 

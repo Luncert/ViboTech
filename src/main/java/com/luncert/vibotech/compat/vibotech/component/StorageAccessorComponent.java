@@ -1,5 +1,7 @@
-package com.luncert.vibotech.compat.vibotech;
+package com.luncert.vibotech.compat.vibotech.component;
 
+import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
+import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import net.minecraft.resources.ResourceLocation;

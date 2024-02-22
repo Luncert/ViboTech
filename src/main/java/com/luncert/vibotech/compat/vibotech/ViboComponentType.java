@@ -1,5 +1,9 @@
 package com.luncert.vibotech.compat.vibotech;
 
+import com.luncert.vibotech.compat.vibotech.component.EnergyAccessorComponent;
+import com.luncert.vibotech.compat.vibotech.component.FinalizeComponent;
+import com.luncert.vibotech.compat.vibotech.component.FluidAccessorComponent;
+import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.content.geoscanner.GeoScannerComponent;
 import com.luncert.vibotech.content.thruster.ThrusterComponent;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
@@ -70,11 +74,25 @@ public class ViboComponentType {
         return name;
     }
 
+    public Class<? extends IViboComponent> getType() {
+        return type;
+    }
+
     public boolean isSingleton() {
         return singleton;
     }
 
     public boolean isInternal() {
         return internal;
+    }
+
+    @Override
+    public String toString() {
+        return "ViboComponentType{" +
+            "name='" + name + '\'' +
+            ", singleton=" + singleton +
+            ", internal=" + internal +
+            ", type=" + type +
+            '}';
     }
 }
