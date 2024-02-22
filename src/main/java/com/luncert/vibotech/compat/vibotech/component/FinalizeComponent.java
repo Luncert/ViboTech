@@ -5,7 +5,7 @@ import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.content.thruster.ThrustResource;
-import com.luncert.vibotech.content.transportmachinecore.PlasmaCurrent;
+import com.luncert.vibotech.content.vibomachinecore.PlasmaCurrent;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import net.minecraft.core.BlockPos;

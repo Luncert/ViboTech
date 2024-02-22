@@ -1,6 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
-import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_CONTRAPTION;
+import static com.luncert.vibotech.index.AllContraptionTypes.VIBO_MACHINE_CONTRAPTION;
 
 import com.luncert.vibotech.common.TreeNode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
@@ -14,8 +14,8 @@ import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreComponent;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.mojang.logging.LogUtils;
@@ -46,12 +46,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
-// FIXME: Caused by: java.lang.RuntimeException: com.luncert.vibotech.exception.TransportMachineAssemblyException: Unmovable Block (Piston) at [-10,-59,3]
-public class TransportMachineContraption extends Contraption {
+// FIXME: Caused by: java.lang.RuntimeException: com.luncert.vibotech.exception.ViboMachineAssemblyException: Unmovable Block (Piston) at [-10,-59,3]
+public class ViboMachineContraption extends Contraption {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
-  private ViboMachineEntity transportMachine;
+  private ViboMachineEntity viboMachine;
   // component type to vibo component
   private final Map<ViboComponentType, List<IViboComponent>> components = new HashMap<>();
   // component name to block info
@@ -63,13 +63,13 @@ public class TransportMachineContraption extends Contraption {
   private final ViboComponentTickContext context = new ViboComponentTickContext();
 
 
-  public TransportMachineContraption() {
+  public ViboMachineContraption() {
     this(EContraptionMovementMode.ROTATE, null);
   }
 
-  public TransportMachineContraption(EContraptionMovementMode mode, ViboMachineEntity transportMachine) {
+  public ViboMachineContraption(EContraptionMovementMode mode, ViboMachineEntity viboMachine) {
     this.rotationMode = mode;
-    this.transportMachine = transportMachine;
+    this.viboMachine = viboMachine;
   }
 
   // api
@@ -95,14 +95,14 @@ public class TransportMachineContraption extends Contraption {
   }
 
   public BlockPos getWorldPos(BlockPos pos) {
-    return transportMachine.blockPosition().offset(pos.getX(), pos.getY(), pos.getZ());
+    return viboMachine.blockPosition().offset(pos.getX(), pos.getY(), pos.getZ());
   }
 
   // impl
 
   @Override
   public ContraptionType getType() {
-    return TRANSPORT_MACHINE_CONTRAPTION;
+    return VIBO_MACHINE_CONTRAPTION;
   }
 
   @Override
@@ -113,13 +113,13 @@ public class TransportMachineContraption extends Contraption {
     addBlock(pos, Pair.of(new StructureBlockInfo(
         pos, AllBlocks.VIBO_MACHINE_CORE.getDefaultState(), null), null));
 
-    initComponents(level, transportMachine);
+    initComponents(level, viboMachine);
     return true;
   }
 
   public void initComponents(Level level, ViboMachineEntity viboMachineEntity) {
     if (accessor == null) {
-      this.transportMachine = viboMachineEntity;
+      this.viboMachine = viboMachineEntity;
       components.put(ViboComponentType.CORE, List.of(new ViboMachineCoreComponent()));
       components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
       components.put(ViboComponentType.STORAGE_ACCESSOR, List.of(new StorageAccessorComponent()));

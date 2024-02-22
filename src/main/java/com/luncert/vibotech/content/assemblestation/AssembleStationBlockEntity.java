@@ -3,12 +3,12 @@ package com.luncert.vibotech.content.assemblestation;
 import com.luncert.vibotech.compat.computercraft.AssembleStationPeripheral;
 import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
-import com.luncert.vibotech.compat.create.TransportMachineContraption;
+import com.luncert.vibotech.compat.create.ViboMachineContraption;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreBlockEntity;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
-import com.luncert.vibotech.exception.TransportMachineAssemblyException;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreBlockEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
+import com.luncert.vibotech.exception.ViboMachineAssemblyException;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -31,7 +31,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
   private AssembleStationPeripheral peripheral;
   private ViboMachineEntity viboMachineEntity;
-  private UUID transportMachineCoreEntityId;
+  private UUID viboMachineCoreEntityId;
   private boolean assembled;
 
   public AssembleStationBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -50,7 +50,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     return assembled;
   }
 
-  public void assemble(EContraptionMovementMode mode) throws TransportMachineAssemblyException {
+  public void assemble(EContraptionMovementMode mode) throws ViboMachineAssemblyException {
     // check above block
     BlockState blockState = level.getBlockState(worldPosition.above());
 
@@ -61,16 +61,16 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     if (level.getBlockEntity(worldPosition.above()) instanceof ViboMachineCoreBlockEntity blockEntity) {
       viboMachineEntity = blockEntity.assemble(mode);
       viboMachineEntity.bindAssembleStation(this);
-      transportMachineCoreEntityId = viboMachineEntity.getUUID();
+      viboMachineCoreEntityId = viboMachineEntity.getUUID();
       assembled = true;
     }
   }
 
-  public void dissemble() throws TransportMachineAssemblyException {
+  public void dissemble() throws ViboMachineAssemblyException {
     if (viboMachineEntity != null) {
       viboMachineEntity.dissemble();
       viboMachineEntity = null;
-      transportMachineCoreEntityId = null;
+      viboMachineCoreEntityId = null;
     }
     assembled = false;
   }
@@ -79,7 +79,7 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
     if (viboMachineEntity == null) {
       return Collections.emptyMap();
     }
-    return viboMachineEntity.getContraption().map(TransportMachineContraption::getComponents).orElse(Collections.emptyMap());
+    return viboMachineEntity.getContraption().map(ViboMachineContraption::getComponents).orElse(Collections.emptyMap());
   }
 
   // impl
@@ -112,15 +112,15 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
     // bind & unbind vehicle entity to station
 
-    if (level instanceof ServerLevel world && viboMachineEntity == null && transportMachineCoreEntityId != null) {
-      if (world.getEntity(transportMachineCoreEntityId) instanceof ViboMachineEntity entity) {
+    if (level instanceof ServerLevel world && viboMachineEntity == null && viboMachineCoreEntityId != null) {
+      if (world.getEntity(viboMachineCoreEntityId) instanceof ViboMachineEntity entity) {
         viboMachineEntity = entity;
         entity.bindAssembleStation(this);
       }
     }
 
     if (viboMachineEntity != null && viboMachineEntity.isRemoved()) {
-      transportMachineCoreEntityId = null;
+      viboMachineCoreEntityId = null;
       viboMachineEntity = null;
     }
   }
@@ -135,8 +135,8 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   void write(CompoundTag compound) {
-    if (transportMachineCoreEntityId != null) {
-      compound.putString("transport_machine_reference", transportMachineCoreEntityId.toString());
+    if (viboMachineCoreEntityId != null) {
+      compound.putString("vibo_machine_reference", viboMachineCoreEntityId.toString());
     }
     compound.putBoolean("assembled", assembled);
   }
@@ -151,8 +151,8 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   void read(CompoundTag compound) {
-    if (compound.contains("transport_machine_reference")) {
-      transportMachineCoreEntityId = UUID.fromString(compound.getString("transport_machine_reference"));
+    if (compound.contains("vibo_machine_reference")) {
+      viboMachineCoreEntityId = UUID.fromString(compound.getString("vibo_machine_reference"));
     }
     assembled = compound.getBoolean("assembled");
   }

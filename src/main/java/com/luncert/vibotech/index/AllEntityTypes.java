@@ -2,10 +2,10 @@ package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.common.Lang;
-import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
-import com.luncert.vibotech.compat.create.TransportMachineContraptionEntityRenderer;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntityRenderer;
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntityRenderer;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
 import com.tterrag.registrate.util.entry.EntityEntry;
@@ -21,11 +21,11 @@ import net.minecraft.world.entity.MobCategory;
 public class AllEntityTypes {
 
   public static final EntityEntry<ViboMachineEntity> VIBO_MACHINE =
-      register("transport_machine_vehicle", ViboMachineEntity::new, () -> ViboMachineEntityRenderer::new, MobCategory.MISC,
+      register("vibo_machine_vehicle", ViboMachineEntity::new, () -> ViboMachineEntityRenderer::new, MobCategory.MISC,
           1, Integer.MAX_VALUE, false, true, ViboMachineEntity::build).register();
 
-  public static final EntityEntry<TransportMachineContraptionEntity> TRANSPORT_MACHINE_CONTRAPTION = contraption("transport_machine",
-      TransportMachineContraptionEntity::new, () -> TransportMachineContraptionEntityRenderer::new, 5, 3, true).register();
+  public static final EntityEntry<ViboMachineContraptionEntity> VIBO_MACHINE_CONTRAPTION = contraption("vibo_machine",
+      ViboMachineContraptionEntity::new, () -> ViboMachineContraptionEntityRenderer::new, 5, 3, true).register();
 
   private static <T extends Entity> CreateEntityBuilder<T, ?> contraption(String name, EntityType.EntityFactory<T> factory,
                                                                           NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer,

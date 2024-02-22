@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
 import java.util.Optional;
 import net.minecraft.MethodsReturnNonnullByDefault;

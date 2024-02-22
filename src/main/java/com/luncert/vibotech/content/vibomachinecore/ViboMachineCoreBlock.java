@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 

@@ -6,7 +6,7 @@ import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
-import com.luncert.vibotech.exception.TransportMachineAssemblyException;
+import com.luncert.vibotech.exception.ViboMachineAssemblyException;
 import com.mojang.logging.LogUtils;
 import dan200.computercraft.api.lua.IArguments;
 import dan200.computercraft.api.lua.ILuaFunction;
@@ -85,7 +85,7 @@ public class AssembleStationPeripheral implements IPeripheral {
 
         try {
             assembleStationBlockEntity.assemble(mode);
-        } catch (TransportMachineAssemblyException e) {
+        } catch (ViboMachineAssemblyException e) {
             throw new LuaException("failed to assemble structure: " + e.getMessage());
         }
     }
@@ -94,7 +94,7 @@ public class AssembleStationPeripheral implements IPeripheral {
     public final void dissemble() throws LuaException {
         try {
             assembleStationBlockEntity.dissemble();
-        } catch (TransportMachineAssemblyException e) {
+        } catch (ViboMachineAssemblyException e) {
             throw new LuaException("failed to dissemble structure: " + e.getMessage());
         }
     }

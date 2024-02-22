@@ -12,9 +12,9 @@ import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlock;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
 import com.luncert.vibotech.content.thruster.ThrusterBlock;
-import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreBlock;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreInteractionBehaviour;
+import com.luncert.vibotech.content.vibomachinecontrol.ViboMachineControlBlock;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreBlock;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreInteractionBehaviour;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -55,8 +55,8 @@ public class AllBlocks {
           .simpleItem()
           .register();
 
-  public static final BlockEntry<TransportMachineControlBlock> TRANSPORT_MACHINE_CONTROL =
-      REGISTRATE.block("transport_machine_control", TransportMachineControlBlock::new)
+  public static final BlockEntry<ViboMachineControlBlock> VIBO_MACHINE_CONTROL =
+      REGISTRATE.block("vibo_machine_control", ViboMachineControlBlock::new)
           .initialProperties(SharedProperties::stone)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())

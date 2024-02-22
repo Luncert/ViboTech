@@ -2,7 +2,7 @@ package com.luncert.vibotech.index;
 
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
-import com.luncert.vibotech.compat.create.TransportMachineContraptionItem;
+import com.luncert.vibotech.compat.create.ViboMachineContraptionItem;
 import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
@@ -15,8 +15,8 @@ public class AllItems {
     REGISTRATE.setCreativeTab(AllCreativeModeTabs.BASE_TAB);
   }
 
-  public static final ItemEntry<TransportMachineContraptionItem> TRANSPORT_MACHINE_CONTRAPTION =
-      REGISTRATE.item("transport_machine_contraption", TransportMachineContraptionItem::new)
+  public static final ItemEntry<ViboMachineContraptionItem> VIBO_MACHINE_CONTRAPTION =
+      REGISTRATE.item("vibo_machine_contraption", ViboMachineContraptionItem::new)
           .register();
 
   public static final ItemEntry<AssembleStationItem> ASSEMBLE_STATION = REGISTRATE

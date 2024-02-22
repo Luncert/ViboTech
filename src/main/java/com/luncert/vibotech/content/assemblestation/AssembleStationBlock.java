@@ -28,8 +28,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * AssembleStationBlockEntity assemble in tick() if block is powered.
- * - AssembleStationBlockEntity#assemble: create TransportMachineEntity and call assemble
- * - TransportMachineEntity#assemble: create contraption, call assemble and start riding
+ * - AssembleStationBlockEntity#assemble: create ViboMachineEntity and call assemble
+ * - ViboMachineEntity#assemble: create contraption, call assemble and start riding
  */
 public class AssembleStationBlock extends Block implements IBE<AssembleStationBlockEntity>, IWrenchable {
 

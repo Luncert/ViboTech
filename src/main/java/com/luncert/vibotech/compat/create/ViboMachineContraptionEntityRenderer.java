@@ -6,16 +6,16 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import org.slf4j.Logger;
 
-public class TransportMachineContraptionEntityRenderer extends ContraptionEntityRenderer<TransportMachineContraptionEntity> {
+public class ViboMachineContraptionEntityRenderer extends ContraptionEntityRenderer<ViboMachineContraptionEntity> {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
-  public TransportMachineContraptionEntityRenderer(EntityRendererProvider.Context context) {
+  public ViboMachineContraptionEntityRenderer(EntityRendererProvider.Context context) {
     super(context);
   }
 
   @Override
-  public boolean shouldRender(TransportMachineContraptionEntity entity, Frustum clippingHelper, double cameraX, double cameraY, double cameraZ) {
+  public boolean shouldRender(ViboMachineContraptionEntity entity, Frustum clippingHelper, double cameraX, double cameraY, double cameraZ) {
     if (!super.shouldRender(entity, clippingHelper, cameraX, cameraY, cameraZ))
       return false;
     return entity.getVehicle() != null;

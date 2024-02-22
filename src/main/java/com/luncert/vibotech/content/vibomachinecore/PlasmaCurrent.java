@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.AirFlowParticleData;

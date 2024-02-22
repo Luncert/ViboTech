@@ -1,7 +1,7 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
-import com.luncert.vibotech.exception.TransportMachineAssemblyException;
+import com.luncert.vibotech.exception.ViboMachineAssemblyException;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -21,14 +21,14 @@ public class ViboMachineCoreBlockEntity extends SmartBlockEntity {
 
   // api
 
-  public ViboMachineEntity assemble(EContraptionMovementMode mode) throws TransportMachineAssemblyException {
+  public ViboMachineEntity assemble(EContraptionMovementMode mode) throws ViboMachineAssemblyException {
     BlockState blockState = getBlockState();
 
     ViboMachineEntity viboMachineEntity = new ViboMachineEntity(level, worldPosition, blockState);
     level.addFreshEntity(viboMachineEntity);
     if (!viboMachineEntity.assemble(mode, worldPosition)) {
       viboMachineEntity.discard();
-      throw new TransportMachineAssemblyException("structure_not_found");
+      throw new ViboMachineAssemblyException("structure_not_found");
     }
     return viboMachineEntity;
   }

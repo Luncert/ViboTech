@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -12,7 +12,7 @@ public class ViboMachineEntityRenderer extends EntityRenderer<ViboMachineEntity>
   }
 
   @Override
-  public ResourceLocation getTextureLocation(ViboMachineEntity transportMachineEntity) {
+  public ResourceLocation getTextureLocation(ViboMachineEntity viboMachineEntity) {
     return null;
   }
 

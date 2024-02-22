@@ -1,6 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
@@ -12,16 +12,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class TransportMachineContraptionEntity extends OrientedContraptionEntity {
+public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
 
   // private static final Logger LOGGER = LogUtils.getLogger();
 
-  public TransportMachineContraptionEntity(EntityType<?> type, Level world) {
+  public ViboMachineContraptionEntity(EntityType<?> type, Level world) {
     super(type, world);
   }
 
-  public static TransportMachineContraptionEntity create(Level world, Contraption contraption, Direction initialOrientation) {
-    TransportMachineContraptionEntity entity = new TransportMachineContraptionEntity(AllEntityTypes.TRANSPORT_MACHINE_CONTRAPTION.get(), world);
+  public static ViboMachineContraptionEntity create(Level world, Contraption contraption, Direction initialOrientation) {
+    ViboMachineContraptionEntity entity = new ViboMachineContraptionEntity(AllEntityTypes.VIBO_MACHINE_CONTRAPTION.get(), world);
     entity.setContraption(contraption);
     entity.setInitialOrientation(initialOrientation);
     entity.startAtInitialYaw();
@@ -36,7 +36,7 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
 
     boolean pauseWhileRotating = false;
     boolean wasStalled = isStalled();
-    if (contraption instanceof TransportMachineContraption c) {
+    if (contraption instanceof ViboMachineContraption c) {
       pauseWhileRotating = c.rotationMode == EContraptionMovementMode.ROTATE_PAUSED;
     }
 
@@ -64,7 +64,7 @@ public class TransportMachineContraptionEntity extends OrientedContraptionEntity
   }
 
   private void tickComponents() {
-    TransportMachineContraption c = (TransportMachineContraption) contraption;
+    ViboMachineContraption c = (ViboMachineContraption) contraption;
     c.initComponents(level(), (ViboMachineEntity) this.getVehicle());
     c.tickComponents();
   }

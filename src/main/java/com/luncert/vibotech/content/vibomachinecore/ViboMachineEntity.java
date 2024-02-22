@@ -1,17 +1,17 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
-import static com.luncert.vibotech.content.transportmachinecore.EntityMovementData.MOVEMENT_SERIALIZER;
+import static com.luncert.vibotech.content.vibomachinecore.EntityMovementData.MOVEMENT_SERIALIZER;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.common.ActionCallback;
 import com.luncert.vibotech.common.Signal;
 import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
-import com.luncert.vibotech.compat.create.TransportMachineContraption;
-import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
+import com.luncert.vibotech.compat.create.ViboMachineContraption;
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
-import com.luncert.vibotech.exception.TransportMachineAssemblyException;
-import com.luncert.vibotech.exception.TransportMachineMovementException;
+import com.luncert.vibotech.exception.ViboMachineAssemblyException;
+import com.luncert.vibotech.exception.ViboMachineMovementException;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
@@ -74,12 +74,12 @@ public class ViboMachineEntity extends Entity {
     super(pEntityType, pLevel);
   }
 
-  public ViboMachineEntity(Level world, BlockPos stationPos, BlockState transportMachineCoreState) {
+  public ViboMachineEntity(Level world, BlockPos stationPos, BlockState viboMachineCoreState) {
     super(AllEntityTypes.VIBO_MACHINE.get(), world);
     // following data will be synced automatically
     setPos(stationPos.getX() + .5f, stationPos.getY(), stationPos.getZ() + .5f);
     this.noPhysics = true;
-    Direction blockDirection = transportMachineCoreState.getValue(HORIZONTAL_FACING).getOpposite();
+    Direction blockDirection = viboMachineCoreState.getValue(HORIZONTAL_FACING).getOpposite();
 LOGGER.info("{}", blockDirection);
     this.initialOrientation = blockDirection;
     setYRot(blockDirection.toYRot());
@@ -91,7 +91,7 @@ LOGGER.info("{}", blockDirection);
 
   public Vec3 getContraptionPosition() {
     BlockPos blockPos = blockPosition();
-    // transport machine entity is invisible, so contraption's position should be above the entity position
+    // vibo machine entity is invisible, so contraption's position should be above the entity position
     return new Vec3(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ());
   }
 
@@ -100,7 +100,7 @@ LOGGER.info("{}", blockDirection);
   }
 
 
-  public void up(int n, ActionCallback callback) throws TransportMachineMovementException {
+  public void up(int n, ActionCallback callback) throws ViboMachineMovementException {
     checkSpeed();
     checkMotion();
     checkSignal();
@@ -110,7 +110,7 @@ LOGGER.info("{}", blockDirection);
     asyncCallbacks.add(callback);
   }
 
-  public void down(int n, ActionCallback callback) throws TransportMachineMovementException {
+  public void down(int n, ActionCallback callback) throws ViboMachineMovementException {
     checkSpeed();
     checkMotion();
     checkSignal();
@@ -120,21 +120,21 @@ LOGGER.info("{}", blockDirection);
     asyncCallbacks.add(callback);
   }
 
-  public void forward(int n, ActionCallback callback) throws TransportMachineMovementException {
+  public void forward(int n, ActionCallback callback) throws ViboMachineMovementException {
     checkSpeed();
     checkMotion();
     checkSignal();
     moveForward(n, callback);
   }
 
-  public void turnLeft(ActionCallback callback) throws TransportMachineMovementException {
+  public void turnLeft(ActionCallback callback) throws ViboMachineMovementException {
     checkSpeed();
     checkMotion();
     checkSignal();
     rotate(-90, callback);
   }
 
-  public void turnRight(ActionCallback callback) throws TransportMachineMovementException {
+  public void turnRight(ActionCallback callback) throws ViboMachineMovementException {
     checkSpeed();
     checkMotion();
     checkSignal();
@@ -170,18 +170,18 @@ LOGGER.info("{}", blockDirection);
     asyncCallbacks.add(callback);
   }
 
-  private void checkSpeed() throws TransportMachineMovementException {
+  private void checkSpeed() throws ViboMachineMovementException {
     if (getKineticSpeed() == 0) {
-      throw new TransportMachineMovementException("speed_is_zero");
+      throw new ViboMachineMovementException("speed_is_zero");
     }
   }
 
-  private void checkMotion() throws TransportMachineMovementException {
+  private void checkMotion() throws ViboMachineMovementException {
     if (!getPower()) {
-      throw new TransportMachineMovementException("contraption_is_power_off");
+      throw new ViboMachineMovementException("contraption_is_power_off");
     }
     if (isMoving) {
-      throw new TransportMachineMovementException("cannot_update_moving_contraption");
+      throw new ViboMachineMovementException("cannot_update_moving_contraption");
     }
   }
 
@@ -201,15 +201,15 @@ LOGGER.info("{}", blockDirection);
     return Optional.ofNullable(assembleStationBlockEntity);
   }
 
-  public Optional<TransportMachineContraption> getContraption() {
-    return getContraptionEntity().map(e -> (TransportMachineContraption) e.getContraption());
+  public Optional<ViboMachineContraption> getContraption() {
+    return getContraptionEntity().map(e -> (ViboMachineContraption) e.getContraption());
   }
 
-  private Optional<TransportMachineContraptionEntity> getContraptionEntity() {
+  private Optional<ViboMachineContraptionEntity> getContraptionEntity() {
     List<Entity> passengers = getPassengers();
     if (!passengers.isEmpty()) {
       for (Entity passenger : passengers) {
-        if (passenger instanceof TransportMachineContraptionEntity contraptionEntity) {
+        if (passenger instanceof ViboMachineContraptionEntity contraptionEntity) {
           return Optional.of(contraptionEntity);
         }
       }
@@ -219,24 +219,24 @@ LOGGER.info("{}", blockDirection);
   }
 
   public boolean assemble(EContraptionMovementMode mode, BlockPos pos)
-      throws TransportMachineAssemblyException {
+      throws ViboMachineAssemblyException {
     Level world = level();
 
     // create contraption
-    TransportMachineContraption contraption = new TransportMachineContraption(mode, this);
+    ViboMachineContraption contraption = new ViboMachineContraption(mode, this);
     try {
       if (!contraption.assemble(world, pos)) {
         return false;
       }
     } catch (AssemblyException e) {
-      throw new TransportMachineAssemblyException(e);
+      throw new ViboMachineAssemblyException(e);
     }
     contraption.removeBlocksFromWorld(world, BlockPos.ZERO);
     contraption.startMoving(world);
     contraption.expandBoundsAroundAxis(Direction.Axis.Y);
 
     // create contraption entity
-    TransportMachineContraptionEntity contraptionEntity = TransportMachineContraptionEntity
+    ViboMachineContraptionEntity contraptionEntity = ViboMachineContraptionEntity
         .create(world, contraption, initialOrientation);
     contraptionEntity.setPos(pos.getX() + .5f, pos.getY(), pos.getZ() + .5f);
     world.addFreshEntity(contraptionEntity);
@@ -335,7 +335,7 @@ LOGGER.info("{}", blockDirection);
       //   motion = motion.relative(Direction.UP, Create.RANDOM.nextDouble() / 2 - 0.5);
       // }
       setDeltaMovement(motion);
-      // used by TransportMachineContraptionEntity#updateOrientation
+      // used by ViboMachineContraptionEntity#updateOrientation
       setOldPosAndRot();
       setPos(getX() + motion.x, getY() + motion.y, getZ() + motion.z);
     });

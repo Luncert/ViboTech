@@ -7,7 +7,7 @@ import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.content.geoscanner.GeoScannerComponent;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelComponent;
 import com.luncert.vibotech.content.thruster.ThrusterComponent;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreComponent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;

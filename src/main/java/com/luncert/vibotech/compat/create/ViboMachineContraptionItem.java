@@ -1,7 +1,7 @@
 package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.common.Lang;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllMovementBehaviours;
@@ -33,11 +33,11 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.slf4j.Logger;
 
 @Mod.EventBusSubscriber
-public class TransportMachineContraptionItem extends Item {
+public class ViboMachineContraptionItem extends Item {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
-  public TransportMachineContraptionItem(Properties properties) {
+  public ViboMachineContraptionItem(Properties properties) {
     super(properties);
   }
 
@@ -52,7 +52,7 @@ public class TransportMachineContraptionItem extends Item {
   }
 
   @SubscribeEvent
-  public static void wrenchCanBeUsedToPickUpTransportMachineContraptions(PlayerInteractEvent.EntityInteract event) {
+  public static void wrenchCanBeUsedToPickUpViboMachineContraptions(PlayerInteractEvent.EntityInteract event) {
     LOGGER.info("entity interact event");
 
     Entity entity = event.getTarget();
@@ -81,7 +81,7 @@ public class TransportMachineContraptionItem extends Item {
 
     if (ContraptionMovementSetting.isNoPickup(contraption.getBlocks()
         .values())) {
-      player.displayClientMessage(Lang.translateDirect("contraption.transport_machine_contraption_illegal_pickup")
+      player.displayClientMessage(Lang.translateDirect("contraption.vibo_machine_contraption_illegal_pickup")
           .withStyle(ChatFormatting.RED), true);
       return;
     }
@@ -101,7 +101,7 @@ public class TransportMachineContraptionItem extends Item {
     ItemStack generatedStack = create(oce).setHoverName(entity.getCustomName());
 
     if (ContraptionData.isTooLargeForPickup(generatedStack.serializeNBT())) {
-      MutableComponent message = Lang.translateDirect("contraption.transport_machine_contraption_too_big")
+      MutableComponent message = Lang.translateDirect("contraption.vibo_machine_contraption_too_big")
           .withStyle(ChatFormatting.RED);
       player.displayClientMessage(message, true);
       return;

@@ -1,6 +1,6 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
-import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
@@ -22,7 +22,7 @@ public class ViboMachineCoreInteractionBehaviour extends MovingInteractionBehavi
     Inventory inventory = player.getInventory();
     AssembleStationItem assembleStationItem = (AssembleStationItem) AllBlocks.ASSEMBLE_STATION.asItem();
     if (inventory.getSelected().is(assembleStationItem)) {
-      ItemStack taggedItemStack = assembleStationItem.create((TransportMachineContraptionEntity) contraptionEntity);
+      ItemStack taggedItemStack = assembleStationItem.create((ViboMachineContraptionEntity) contraptionEntity);
       int freeSlot = inventory.getFreeSlot();
       if (freeSlot != -1) {
         ItemStack itemStack = inventory.removeFromSelected(true);

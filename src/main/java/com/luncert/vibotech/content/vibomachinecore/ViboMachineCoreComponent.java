@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.transportmachinecore;
+package com.luncert.vibotech.content.vibomachinecore;
 
 import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAPTION_MOVEMENT_DONE;
 
@@ -8,7 +8,7 @@ import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.annotation.TickOrder;
-import com.luncert.vibotech.exception.TransportMachineMovementException;
+import com.luncert.vibotech.exception.ViboMachineMovementException;
 import com.mojang.logging.LogUtils;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
@@ -60,7 +60,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     int executionId = this.executionId++;
     try {
       accessor.viboMachineEntity.up(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
-    } catch (TransportMachineMovementException e) {
+    } catch (ViboMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
 
@@ -76,7 +76,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     int executionId = this.executionId++;
     try {
       accessor.viboMachineEntity.down(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
-    } catch (TransportMachineMovementException e) {
+    } catch (ViboMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
 
@@ -92,7 +92,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     int executionId = this.executionId++;
     try {
       accessor.viboMachineEntity.forward(n, data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
-    } catch (TransportMachineMovementException e) {
+    } catch (ViboMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
 
@@ -104,7 +104,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     int executionId = this.executionId++;
     try {
       accessor.viboMachineEntity.turnLeft(data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
-    } catch (TransportMachineMovementException e) {
+    } catch (ViboMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
 
@@ -116,7 +116,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     int executionId = this.executionId++;
     try {
       accessor.viboMachineEntity.turnRight(data -> accessor.queueEvent(EVENT_CONTRAPTION_MOVEMENT_DONE, executionId, data));
-    } catch (TransportMachineMovementException e) {
+    } catch (ViboMachineMovementException e) {
       throw new LuaException(e.getMessage());
     }
     return ViboApiCallback.hook(executionId, EVENT_CONTRAPTION_MOVEMENT_DONE);

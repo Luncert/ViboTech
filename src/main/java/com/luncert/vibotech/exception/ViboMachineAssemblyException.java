@@ -3,13 +3,13 @@ package com.luncert.vibotech.exception;
 import com.luncert.vibotech.common.Lang;
 import com.simibubi.create.content.contraptions.AssemblyException;
 
-public class TransportMachineAssemblyException extends AssemblyException {
+public class ViboMachineAssemblyException extends AssemblyException {
 
-  public TransportMachineAssemblyException(AssemblyException e) {
+  public ViboMachineAssemblyException(AssemblyException e) {
     super(e.component);
   }
 
-  public TransportMachineAssemblyException(String langKey, Object... objects) {
+  public ViboMachineAssemblyException(String langKey, Object... objects) {
     super(Lang.translateDirect("gui.assembly.exception." + langKey, objects));
   }
 

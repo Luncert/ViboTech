@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content.assemblestation;
 
-import com.luncert.vibotech.compat.create.TransportMachineContraptionEntity;
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class AssembleStationItem extends BlockItem {
 
   // private static final Logger LOGGER = LogUtils.getLogger();
-  private final boolean bindTransportMachine;
+  private final boolean bindViboMachine;
 
   public static AssembleStationItem empty(Properties properties) {
     return new AssembleStationItem(AllBlocks.ASSEMBLE_STATION.get(), properties, false);
@@ -30,25 +30,25 @@ public class AssembleStationItem extends BlockItem {
     return new AssembleStationItem(AllBlocks.ASSEMBLE_STATION.get(), properties, true);
   }
 
-  public AssembleStationItem(AssembleStationBlock block, Properties properties, boolean bindTransportMachine) {
+  public AssembleStationItem(AssembleStationBlock block, Properties properties, boolean bindViboMachine) {
     super(block, properties);
-    this.bindTransportMachine = bindTransportMachine;
+    this.bindViboMachine = bindViboMachine;
   }
 
   public ItemStack create(AssembleStationBlockEntity assembleStation) {
     ItemStack result = new ItemStack(this);
-    if (bindTransportMachine) {
+    if (bindViboMachine) {
       assembleStation.write(result.getOrCreateTag());
     }
     return result;
   }
 
-  public ItemStack create(TransportMachineContraptionEntity contraptionEntity) {
+  public ItemStack create(ViboMachineContraptionEntity contraptionEntity) {
     ItemStack result = new ItemStack(this);
     Entity vehicle = contraptionEntity.getVehicle();
     if (vehicle != null) {
       CompoundTag compound = result.getOrCreateTag();
-      compound.putString("transport_machine_reference", vehicle.getUUID().toString());
+      compound.putString("vibo_machine_reference", vehicle.getUUID().toString());
       compound.putBoolean("assembled", true);
     }
     return result;
@@ -56,7 +56,7 @@ public class AssembleStationItem extends BlockItem {
 
   @Override
   public String getDescriptionId() {
-    return bindTransportMachine ? "item.vibotech.assembled_assemble_station" : "item.vibotech.assemble_station";
+    return bindViboMachine ? "item.vibotech.assembled_assemble_station" : "item.vibotech.assemble_station";
   }
 
   @Override
@@ -85,7 +85,7 @@ public class AssembleStationItem extends BlockItem {
       itemStack.shrink(1);
     }
 
-    if (itemStack.getTag() != null && itemStack.getTag().contains("transport_machine_reference")
+    if (itemStack.getTag() != null && itemStack.getTag().contains("vibo_machine_reference")
         && world.getBlockEntity(pos) instanceof AssembleStationBlockEntity assembleStationBlockEntity) {
       assembleStationBlockEntity.read(itemStack.getTag());
     }

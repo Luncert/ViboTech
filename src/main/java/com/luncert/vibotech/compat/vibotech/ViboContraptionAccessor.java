@@ -2,8 +2,8 @@ package com.luncert.vibotech.compat.vibotech;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
-import com.luncert.vibotech.compat.create.TransportMachineContraption;
-import com.luncert.vibotech.content.transportmachinecore.ViboMachineEntity;
+import com.luncert.vibotech.compat.create.ViboMachineContraption;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import java.util.Collections;
 import java.util.List;
@@ -23,11 +23,11 @@ public final class ViboContraptionAccessor {
 
     public final Level world;
     public final ViboMachineEntity viboMachineEntity;
-    public final TransportMachineContraption contraption;
+    public final ViboMachineContraption contraption;
 
     public ViboContraptionAccessor(Level world,
                                    ViboMachineEntity viboMachineEntity,
-                                   TransportMachineContraption contraption) {
+                                   ViboMachineContraption contraption) {
         Objects.requireNonNull(world);
         Objects.requireNonNull(viboMachineEntity);
         Objects.requireNonNull(contraption);
@@ -38,7 +38,7 @@ public final class ViboContraptionAccessor {
 
     public Map<ViboComponentType, List<IViboComponent>> getComponents() {
       return viboMachineEntity.getContraption()
-          .map(TransportMachineContraption::getComponents)
+          .map(ViboMachineContraption::getComponents)
           .orElse(Collections.emptyMap());
     }
 
