@@ -4,9 +4,10 @@ import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAP
 
 import com.google.common.collect.ImmutableMap;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
+import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.ViboApiCallback;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
+import com.luncert.vibotech.content.thruster.ThrustResource;
 import com.luncert.vibotech.exception.TransportMachineMovementException;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
@@ -17,6 +18,7 @@ import dan200.computercraft.api.lua.MethodResult;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,45 +40,14 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
   private final PlasmaCurrentSource plasmaCurrentSource = new PlasmaCurrentSource();
 
   @Override
-  public void tickComponent(ComponentTickContext context) {
-    if (power) {
-      int cost = accessor.contraption.getBlocks().size() * Mth.clamp(speed / 16, 1, 10);
-      getEnergyAccessor().ifPresent(energyStorage -> {
-        if (energyStorage.extractEnergy(cost, true) == cost) {
-          energyStorage.extractEnergy(cost, false);
-          accessor.viboMachineEntity.setPower(true);
-        } else {
-          accessor.viboMachineEntity.setPower(false);
-        }
-      });
-
-      // TODO: create particle only if power on
-      if (accessor.world.isClientSide) {
-        plasmaCurrentSource.plasmaCurrent.tick();
-      }
-    } else {
-      accessor.viboMachineEntity.setPower(false);
-    }
-  }
-
-  @Override
-  public Tag writeNBT() {
-    CompoundTag tag = new CompoundTag();
-    tag.putBoolean("power", power);
-    tag.putInt("speed", speed);
-    return tag;
-  }
-
-  @Override
-  public void readNBT(Level world, Tag tag) {
-    CompoundTag compoundTag = (CompoundTag) tag;
-    power = compoundTag.getBoolean("power");
-    speed = compoundTag.getInt("speed");
-  }
-
-  @Override
   public ViboComponentType getComponentType() {
     return ViboComponentType.CORE;
+  }
+
+  @Override
+  public void tickComponent(ViboComponentTickContext context) {
+    context.setPowerOn(power);
+    context.setSpeed(speed);
   }
 
   @LuaFunction

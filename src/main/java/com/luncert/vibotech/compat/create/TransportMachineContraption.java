@@ -4,7 +4,8 @@ import static com.luncert.vibotech.index.AllContraptionTypes.TRANSPORT_MACHINE_C
 
 import com.luncert.vibotech.common.TreeNode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
-import com.luncert.vibotech.compat.vibotech.ComponentTickContext;
+import com.luncert.vibotech.compat.vibotech.FinalizeComponent;
+import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.EnergyAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.FluidAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
@@ -57,6 +58,8 @@ public class TransportMachineContraption extends Contraption {
   private List<TreeNode<String>> componentTickOrders;
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
+  private ViboComponentTickContext context = new ViboComponentTickContext();
+
 
   public TransportMachineContraption() {
     this(EContraptionMovementMode.ROTATE, null);
@@ -74,16 +77,16 @@ public class TransportMachineContraption extends Contraption {
   }
 
   public void tickComponents() {
-    ComponentTickContext context = new ComponentTickContext();
     for (TreeNode<String> node : componentTickOrders) {
-      tickComponents(node, context);
+      tickComponents(node);
     }
+    context.reset();
   }
 
-  private void tickComponents(TreeNode<String> node, ComponentTickContext context) {
+  private void tickComponents(TreeNode<String> node) {
     components.get(ViboComponentType.valueOf(node.getData()))
         .forEach(component -> component.tickComponent(context));
-    node.getChildren().forEach(child -> tickComponents(node, context));
+    node.getChildren().forEach(child -> tickComponents(node));
   }
 
   public StructureBlockInfo getComponentBlockInfo(String name) {
@@ -120,6 +123,7 @@ public class TransportMachineContraption extends Contraption {
       components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
       components.put(ViboComponentType.STORAGE_ACCESSOR, List.of(new StorageAccessorComponent()));
       components.put(ViboComponentType.FLUID_ACCESSOR, List.of(new FluidAccessorComponent()));
+      components.put(ViboComponentType.FINALIZE, List.of(new FinalizeComponent()));
 
       accessor = new ViboContraptionAccessor(level, viboMachineEntity, this);
 
@@ -221,6 +225,9 @@ public class TransportMachineContraption extends Contraption {
 
     NBTHelper.writeEnum(tag, "RotationMode", rotationMode);
 
+    // write context
+    tag.put("context", context.writeNBT());
+
     // write components
     ListTag componentList = new ListTag();
     for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
@@ -260,6 +267,9 @@ public class TransportMachineContraption extends Contraption {
     // System.out.println("read - " + nbt);
 
     rotationMode = NBTHelper.readEnum(nbt, "RotationMode", EContraptionMovementMode.class);
+
+    // read context
+    context.readNBT(nbt.getCompound("context"));
 
     // read components
     this.components.clear();

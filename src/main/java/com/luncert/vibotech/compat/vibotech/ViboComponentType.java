@@ -12,6 +12,7 @@ public class ViboComponentType {
     private static final Map<String, ViboComponentType> NAME_MAPPINGS = new HashMap<>();
 
     public static final ViboComponentType CORE = ViboComponentType.register("core", ViboMachineCoreComponent.class, true);
+    public static final ViboComponentType FINALIZE = ViboComponentType.register("finalize", FinalizeComponent.class, true, true);
     public static final ViboComponentType ENERGY_ACCESSOR = ViboComponentType.register("energy_accessor", EnergyAccessorComponent.class, true);
     public static final ViboComponentType STORAGE_ACCESSOR = ViboComponentType.register("storage_accessor", StorageAccessorComponent.class, true);
     public static final ViboComponentType FLUID_ACCESSOR = ViboComponentType.register("fluid_accessor", FluidAccessorComponent.class, true);
@@ -20,14 +21,18 @@ public class ViboComponentType {
     public static final ViboComponentType THRUSTER = ViboComponentType.register("thruster", ThrusterComponent.class);
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type) {
-        return register(name, type, false);
+        return register(name, type, false, false);
     }
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type, boolean singleton) {
+        return register(name, type, singleton, false);
+    }
+
+    public static ViboComponentType register(String name, Class<? extends IViboComponent> type, boolean singleton, boolean internal) {
         if (NAME_MAPPINGS.containsKey(name)) {
             throw new IllegalArgumentException("cannot register duplicated component type: " + name + " " + type);
         }
-        ViboComponentType componentType = new ViboComponentType(name, singleton, type);
+        ViboComponentType componentType = new ViboComponentType(name, singleton, internal, type);
         NAME_MAPPINGS.put(name, componentType);
         return componentType;
     }
@@ -51,11 +56,13 @@ public class ViboComponentType {
 
     private final String name;
     private final boolean singleton;
+    private final boolean internal;
     private final Class<? extends IViboComponent> type;
 
-    private ViboComponentType(String name, boolean singleton, Class<? extends IViboComponent> type) {
+    private ViboComponentType(String name, boolean singleton, boolean internal, Class<? extends IViboComponent> type) {
         this.name = name;
         this.singleton = singleton;
+        this.internal = internal;
         this.type = type;
     }
 
@@ -65,5 +72,9 @@ public class ViboComponentType {
 
     public boolean isSingleton() {
         return singleton;
+    }
+
+    public boolean isInternal() {
+        return internal;
     }
 }
