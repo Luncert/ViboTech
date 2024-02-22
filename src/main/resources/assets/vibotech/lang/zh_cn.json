@@ -5,9 +5,13 @@
   "block.vibotech.geo_scanner": "地形雷达模块",
   "block.vibotech.gas_tank": "气罐",
   "block.vibotech.portable_accumulator": "便携式蓄电池",
+  "block.vibotech.thruster": "等离子推进器",
+  "block.vibotech.photovoltaic": "光伏板",
   "item.vibotech.transport_machine_contraption": "瓦伯机械",
   "item.vibotech.assembled_assemble_station": "已绑定瓦伯装配站",
   "item.vibotech.assemble_station": "瓦伯装配站",
   "item.vibotech.portable_accumulator": "便携式蓄电池",
+  "item.vibotech.thruster": "等离子推进器",
+  "item.vibotech.photovoltaic": "光伏板",
   "vibotech.tooltip.portableAccumulator.info": "便携式蓄电池信息："
 }

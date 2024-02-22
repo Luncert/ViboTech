@@ -5,6 +5,7 @@ import com.luncert.vibotech.compat.vibotech.component.FinalizeComponent;
 import com.luncert.vibotech.compat.vibotech.component.FluidAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.content.geoscanner.GeoScannerComponent;
+import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelComponent;
 import com.luncert.vibotech.content.thruster.ThrusterComponent;
 import com.luncert.vibotech.content.transportmachinecore.ViboMachineCoreComponent;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +24,7 @@ public class ViboComponentType {
 
     public static final ViboComponentType GEO_SCANNER = ViboComponentType.register("geo_scanner", GeoScannerComponent.class);
     public static final ViboComponentType THRUSTER = ViboComponentType.register("thruster", ThrusterComponent.class);
+    public static final ViboComponentType PHOTOVOLTAIC_PANEL = ViboComponentType.register("photovoltaic_panel", PhotovoltaicPanelComponent.class);
 
     public static ViboComponentType register(String name, Class<? extends IViboComponent> type) {
         return register(name, type, false, false);

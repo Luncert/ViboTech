@@ -9,6 +9,7 @@ import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content.camera.CameraBlock;
 import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
+import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlock;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
 import com.luncert.vibotech.content.thruster.ThrusterBlock;
 import com.luncert.vibotech.content.transportmachinecontrol.TransportMachineControlBlock;
@@ -122,6 +123,19 @@ public class AllBlocks {
 
   public static final BlockEntry<ThrusterBlock> THRUSTER =
       REGISTRATE.block("thruster", ThrusterBlock::new)
+          .initialProperties(SharedProperties::stone)
+          .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+              .requiresCorrectToolForDrops())
+          .properties(BlockBehaviour.Properties::noOcclusion)
+          .transform(pickaxeOnly())
+          .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
+          .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
+              .getExistingFile(ctx.getId()), 0))
+          .simpleItem()
+          .register();
+
+  public static final BlockEntry<PhotovoltaicPanelBlock> PHOTOVOLTAIC_PANEL =
+      REGISTRATE.block("photovoltaic_panel", PhotovoltaicPanelBlock::new)
           .initialProperties(SharedProperties::stone)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())

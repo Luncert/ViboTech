@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "vibotech:block/photovoltaic_panel"
+    }
+  }
+}

@@ -6,19 +6,16 @@ import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.content.thruster.ThrustResource;
 import com.luncert.vibotech.content.transportmachinecore.PlasmaCurrent;
-import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 @TickAfter("thruster")
 public class FinalizeComponent extends BaseViboComponent {
 
-  private static final Logger LOGGER = LogUtils.getLogger();
   private final PlasmaCurrentSource plasmaCurrentSource = new PlasmaCurrentSource();
 
   @Override
@@ -33,7 +30,6 @@ public class FinalizeComponent extends BaseViboComponent {
           .map(r -> r.getPower() >= accessor.contraption.getBlocks().size())
           .orElse(false);
       accessor.viboMachineEntity.setPower(gotEnoughPower);
-      LOGGER.info("{}", gotEnoughPower);
 
       // TODO: create particle only if power on
       //if (accessor.world.isClientSide) {

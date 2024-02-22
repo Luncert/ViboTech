@@ -60,7 +60,7 @@ public class TransportMachineContraption extends Contraption {
   private List<TreeNode<ViboComponentType>> componentTickOrders;
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
-  private ViboComponentTickContext context = new ViboComponentTickContext();
+  private final ViboComponentTickContext context = new ViboComponentTickContext();
 
 
   public TransportMachineContraption() {
@@ -128,7 +128,8 @@ public class TransportMachineContraption extends Contraption {
 
       accessor = new ViboContraptionAccessor(level, viboMachineEntity, this);
 
-      Map<ViboComponentType, TreeNode<ViboComponentType>> treeNodes = new HashMap<>();
+      Map<ViboComponentType, TreeNode<ViboComponentType>> roots = new HashMap<>();
+      Map<ViboComponentType, TreeNode<ViboComponentType>> nodes = new HashMap<>();
       for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
         ViboComponentType key = entry.getKey();
         List<IViboComponent> components = entry.getValue();
@@ -143,18 +144,18 @@ public class TransportMachineContraption extends Contraption {
         }
 
         // resolve tick orders
-        TreeNode<ViboComponentType> current = new TreeNode<>(key);
+        TreeNode<ViboComponentType> current = nodes.computeIfAbsent(key, TreeNode::new);
         Class<? extends IViboComponent> type = key.getType();
         if (type.isAnnotationPresent(TickAfter.class)) {
-          String target = type.getAnnotation(TickAfter.class).value();
-          TreeNode<ViboComponentType> parent = treeNodes.computeIfAbsent(ViboComponentType.valueOf(target), TreeNode::new);
+          ViboComponentType target = ViboComponentType.valueOf(type.getAnnotation(TickAfter.class).value());
+          TreeNode<ViboComponentType> parent = nodes.computeIfAbsent(target, TreeNode::new);
           parent.addChild(current);
         } else {
-          treeNodes.put(key, current);
+          roots.put(key, current);
         }
       }
 
-      componentTickOrders = treeNodes.entrySet().stream()
+      componentTickOrders = roots.entrySet().stream()
           .sorted(Comparator.comparing(a -> {
             TickOrder tickOrder = a.getKey().getType().getAnnotation(TickOrder.class);
             return tickOrder == null ? Integer.MAX_VALUE : tickOrder.value();

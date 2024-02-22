@@ -4,6 +4,7 @@
     "vibotech:vibo_machine_core",
     "vibotech:thruster",
     "vibotech:geo_scanner",
-    "vibotech:portable_accumulator"
+    "vibotech:portable_accumulator",
+    "vibotech:photovoltaic_panel"
   ]
 }
