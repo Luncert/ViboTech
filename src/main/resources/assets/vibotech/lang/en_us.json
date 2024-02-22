@@ -5,9 +5,13 @@
   "block.vibotech.geo_scanner": "Geo Scanner Module",
   "block.vibotech.gas_tank": "Gas Tank",
   "block.vibotech.portable_accumulator": "Portable Accumulator",
+  "block.vibotech.thruster": "Plasma Thruster",
+  "block.vibotech.photovoltaic_panel": "Photovoltaic Panel",
   "item.vibotech.transport_machine_contraption": "ViboTech Contraption",
   "item.vibotech.assembled_assemble_station": "Connected Vibo Assemble Station",
   "item.vibotech.assemble_station": "Vibo Assemble Station",
   "item.vibotech.portable_accumulator": "Portable Accumulator",
+  "item.vibotech.thruster": "Plasma Thruster",
+  "item.vibotech.photovoltaic_panel": "Photovoltaic Panel",
   "vibotech.tooltip.portableAccumulator.info": "Portable Accumulator Info："
 }

@@ -1,18 +1,20 @@
 
-- split control block and thruster block
 - pick contraption with wrench
     - contraption entity emit interact event
 
 - create plasma particle under thruster block, lifetime -> max distance, bounds
--// create new fluid steam
--// consume steam from contraption storage
--// create stream effect under core block
--// portable accumulator
 - simulate contraption shaking
 - player controller
 - high speed lerp, 128
 - transport machine core direction
 - camera: create fake player
+
+-// photovoltaic panel
+-// create new fluid steam
+-// consume steam from contraption storage
+-// create stream effect under core block
+-// portable accumulator
+-// split control block and thruster block
 
 New Blocks:
 - camera block
