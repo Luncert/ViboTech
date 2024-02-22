@@ -1,15 +1,11 @@
 package com.luncert.vibotech.content.vibomachinecontrolseat;
 
 import static com.simibubi.create.content.contraptions.actors.seat.SeatBlock.getLeashed;
-import static com.simibubi.create.content.contraptions.actors.seat.SeatBlock.sitDown;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.index.AllShapes;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.BlockHelper;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
@@ -19,8 +15,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,6 +28,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class ViboMachineControlSeatBlock extends Block implements IWrenchable, ProperWaterloggedBlock {
 
@@ -47,7 +42,7 @@ public class ViboMachineControlSeatBlock extends Block implements IWrenchable, P
   }
 
   @Override
-  public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+  public VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
     return SHAPE;
   }
 
@@ -63,13 +58,13 @@ public class ViboMachineControlSeatBlock extends Block implements IWrenchable, P
   }
 
   @Override
-  public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+  public BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pDirection, @NotNull BlockState pNeighborState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pNeighborPos) {
     this.updateWater(pLevel, pState, pCurrentPos);
     return pState;
   }
 
   @Override
-  public FluidState getFluidState(BlockState pState) {
+  public FluidState getFluidState(@NotNull BlockState pState) {
     return this.fluidState(pState);
   }
 
@@ -79,13 +74,13 @@ public class ViboMachineControlSeatBlock extends Block implements IWrenchable, P
   }
 
   @Override
-  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult p_225533_6_) {
+  public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult p_225533_6_) {
     if (player.isShiftKeyDown()) {
       return InteractionResult.PASS;
     } else {
-      List<SeatEntity> seats = world.getEntitiesOfClass(SeatEntity.class, new AABB(pos));
+      List<ViboMachineControlSeatEntity> seats = world.getEntitiesOfClass(ViboMachineControlSeatEntity.class, new AABB(pos));
       if (!seats.isEmpty()) {
-        SeatEntity seatEntity = seats.get(0);
+        ViboMachineControlSeatEntity seatEntity = seats.get(0);
         List<Entity> passengers = seatEntity.getPassengers();
         if (!passengers.isEmpty() && passengers.get(0) instanceof Player) {
           return InteractionResult.PASS;
@@ -106,4 +101,16 @@ public class ViboMachineControlSeatBlock extends Block implements IWrenchable, P
     }
   }
 
+  public static void sitDown(Level world, BlockPos pos, Entity entity) {
+    if (!world.isClientSide) {
+      ViboMachineControlSeatEntity seat = new ViboMachineControlSeatEntity(world, pos);
+      seat.setPos((float)pos.getX() + 0.5F, pos.getY(), (float)pos.getZ() + 0.5F);
+      world.addFreshEntity(seat);
+      entity.startRiding(seat, true);
+      //if (entity instanceof TamableAnimal) {
+      //  TamableAnimal ta = (TamableAnimal)entity;
+      //  ta.setInSittingPose(true);
+      //}
+    }
+  }
 }

@@ -2,6 +2,7 @@
 - player controller
 - high speed lerp, 128
 - transport machine core direction
+- control seat block sit pose
 
 - pick contraption with wrench
     - contraption entity emit interact event

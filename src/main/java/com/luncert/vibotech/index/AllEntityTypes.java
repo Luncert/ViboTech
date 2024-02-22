@@ -4,9 +4,11 @@ import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.common.Lang;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntityRenderer;
+import com.luncert.vibotech.content.vibomachinecontrolseat.ViboMachineControlSeatEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
@@ -19,6 +21,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public class AllEntityTypes {
+
+  public static final EntityEntry<ViboMachineControlSeatEntity> VIBO_MACHINE_CONTROL_SEAT =
+      register("seat", ViboMachineControlSeatEntity::new, () -> ViboMachineControlSeatEntity.Render::new, MobCategory.MISC, 5, Integer.MAX_VALUE, false, true, ViboMachineControlSeatEntity::build).register();
 
   public static final EntityEntry<ViboMachineEntity> VIBO_MACHINE =
       register("vibo_machine_vehicle", ViboMachineEntity::new, () -> ViboMachineEntityRenderer::new, MobCategory.MISC,
