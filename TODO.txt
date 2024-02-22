@@ -1,12 +1,12 @@
 
-- pick contraption with wrench
-    - contraption entity emit interact event
-
-- create plasma particle under thruster block, lifetime -> max distance, bounds
-- simulate contraption shaking
 - player controller
 - high speed lerp, 128
 - transport machine core direction
+
+- pick contraption with wrench
+    - contraption entity emit interact event
+- create plasma particle under thruster block, lifetime -> max distance, bounds
+- simulate contraption shaking
 - camera: create fake player
 
 -// photovoltaic panel
