@@ -57,6 +57,10 @@ public class ControlSeatBlock extends Block implements IWrenchable, ProperWaterl
     }
   }
 
+  public static boolean isSeatOccupied(Level world, BlockPos pos) {
+    return !world.getEntitiesOfClass(ControlSeatEntity.class, new AABB(pos)).isEmpty();
+  }
+
   @Override
   public VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
     return SHAPE;

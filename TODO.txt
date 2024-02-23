@@ -1,5 +1,4 @@
 
-- player controller
 - high speed lerp, 128
 - transport machine core direction
 - control seat block sit pose
@@ -11,6 +10,7 @@
 - camera: create fake player
 - MovementContext mixin getAnimationSpeed
 
+-// player controller
 -// photovoltaic panel
 -// create new fluid steam
 -// consume steam from contraption storage

@@ -25,6 +25,7 @@ import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
@@ -286,6 +287,24 @@ public class ViboMachineContraption extends Contraption {
       return (Map<BlockPos, Entity>) fieldInitialPassengers.get(this);
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public void addPassengersToWorld(Level world, StructureTransform transform, List<Entity> seatedEntities) {
+    for (Entity seatedEntity : seatedEntities) {
+      if (getSeatMapping().isEmpty())
+        continue;
+      Integer seatIndex = getSeatMapping().get(seatedEntity.getUUID());
+      if (seatIndex == null)
+        continue;
+      BlockPos seatPos = getSeats().get(seatIndex);
+      seatPos = transform.apply(seatPos);
+      if (!(world.getBlockState(seatPos).getBlock() instanceof ControlSeatBlock))
+        continue;
+      if (ControlSeatBlock.isSeatOccupied(world, seatPos))
+        continue;
+      ControlSeatBlock.sitDown(world, seatPos, seatedEntity);
     }
   }
 
