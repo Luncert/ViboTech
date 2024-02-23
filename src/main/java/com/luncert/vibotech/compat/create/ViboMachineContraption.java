@@ -14,17 +14,22 @@ import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
+import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatBlock;
+import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreComponent;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AssemblyException;
+import com.simibubi.create.content.contraptions.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
+import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
 import com.simibubi.create.foundation.utility.NBTHelper;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,24 +37,40 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 // FIXME: Caused by: java.lang.RuntimeException: com.luncert.vibotech.exception.ViboMachineAssemblyException: Unmovable Block (Piston) at [-10,-59,3]
 public class ViboMachineContraption extends Contraption {
 
   private static final Logger LOGGER = LogUtils.getLogger();
+
+  private static final Field fieldInitialPassengers;
+
+  static {
+    try {
+      fieldInitialPassengers = Contraption.class.getDeclaredField("initialPassengers");
+      fieldInitialPassengers.setAccessible(true);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   private ViboMachineEntity viboMachine;
   // component type to vibo component
@@ -221,6 +242,51 @@ public class ViboMachineContraption extends Contraption {
   @OnlyIn(Dist.CLIENT)
   public ContraptionLighter<?> makeLighter() {
     return new NonStationaryLighter<>(this);
+  }
+
+  @Override
+  protected boolean moveBlock(Level world, @Nullable Direction forcedDirection, Queue<BlockPos> frontier, Set<BlockPos> visited) throws AssemblyException {
+    boolean ok = super.moveBlock(world, forcedDirection, frontier, visited);
+    if (!ok) {
+      return false;
+    }
+
+    BlockPos pos = frontier.poll();
+    BlockState state = world.getBlockState(pos);
+    if (!world.isOutsideBuildHeight(pos)
+        && world.isLoaded(pos)
+        && !this.isAnchoringBlockAt(pos)
+        && BlockMovementChecks.isMovementNecessary(state, world, pos)
+        && this.movementAllowed(state, world, pos)
+    ) {
+      if (state.getBlock() instanceof ControlSeatBlock) {
+        this.moveSeat(world, pos);
+      }
+    }
+
+    return true;
+  }
+
+  private void moveSeat(Level world, BlockPos pos) {
+    BlockPos local = this.toLocalPos(pos);
+    this.getSeats().add(local);
+    List<ControlSeatEntity> seatsEntities = world.getEntitiesOfClass(ControlSeatEntity.class, new AABB(pos));
+    if (!seatsEntities.isEmpty()) {
+      SeatEntity seat = seatsEntities.get(0);
+      List<Entity> passengers = seat.getPassengers();
+      if (!passengers.isEmpty()) {
+        getInitialPassengers().put(local, passengers.get(0));
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<BlockPos, Entity> getInitialPassengers() {
+    try {
+      return (Map<BlockPos, Entity>) fieldInitialPassengers.get(this);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
