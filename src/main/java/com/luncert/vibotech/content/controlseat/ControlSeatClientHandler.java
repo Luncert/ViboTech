@@ -1,29 +1,22 @@
 package com.luncert.vibotech.content.controlseat;
 
-import static com.mojang.blaze3d.platform.InputConstants.*;
+import static com.mojang.blaze3d.platform.InputConstants.Key;
+import static com.mojang.blaze3d.platform.InputConstants.Type;
 
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllKeys;
-import com.simibubi.create.foundation.utility.ControlsUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Vector;
-import java.util.stream.Collectors;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
-import org.slf4j.Logger;
 
 public class ControlSeatClientHandler {
-
-  private static final Logger LOGGER = LogUtils.getLogger();
   private static final Field FIELD_MAP;
 
   static {
@@ -49,7 +42,7 @@ public class ControlSeatClientHandler {
     Minecraft mc = Minecraft.getInstance();
     LocalPlayer player = mc.player;
 
-    if (player == null || !(player.getVehicle() instanceof ControlSeatEntity)) {
+    if (player == null || !(player.getVehicle() instanceof ControlSeatEntity) && !(player.getVehicle() instanceof ViboMachineContraptionEntity)) {
       return;
     }
 
