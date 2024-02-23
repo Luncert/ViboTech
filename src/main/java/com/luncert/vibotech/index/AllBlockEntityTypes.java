@@ -10,7 +10,7 @@ import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlockEntity;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlockEntity;
 import com.luncert.vibotech.content.thruster.ThrusterBlockEntity;
-import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatBlockEntity;
+import com.luncert.vibotech.content.controlseat.ControlSeatBlockEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 

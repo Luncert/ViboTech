@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.vibomachinecontrolseat;
+package com.luncert.vibotech.content.controlseat;
 
 import static com.simibubi.create.content.contraptions.actors.seat.SeatBlock.getLeashed;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;

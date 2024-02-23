@@ -12,7 +12,7 @@ import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlock;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
 import com.luncert.vibotech.content.thruster.ThrusterBlock;
-import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatBlock;
+import com.luncert.vibotech.content.controlseat.ControlSeatBlock;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreBlock;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreInteractionBehaviour;
 import com.simibubi.create.AllTags;

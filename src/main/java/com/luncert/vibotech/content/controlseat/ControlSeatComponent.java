@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.vibomachinecontrolseat;
+package com.luncert.vibotech.content.controlseat;
 
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;

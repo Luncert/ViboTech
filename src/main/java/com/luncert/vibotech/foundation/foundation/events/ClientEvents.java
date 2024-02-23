@@ -2,7 +2,7 @@ package com.luncert.vibotech.foundation.foundation.events;
 
 import static com.jozufozu.flywheel.backend.Backend.isGameActive;
 
-import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatClientHandler;
+import com.luncert.vibotech.content.controlseat.ControlSeatClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;

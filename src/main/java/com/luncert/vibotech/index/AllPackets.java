@@ -1,7 +1,7 @@
 package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
-import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatInputPacket;
+import com.luncert.vibotech.content.controlseat.ControlSeatInputPacket;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorEnergyPacket;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.function.BiConsumer;

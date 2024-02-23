@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.vibomachinecontrolseat;
+package com.luncert.vibotech.content.controlseat;
 
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;

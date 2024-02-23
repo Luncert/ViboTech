@@ -4,7 +4,7 @@ import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.common.Lang;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntityRenderer;
-import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatEntity;
+import com.luncert.vibotech.content.controlseat.ControlSeatEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntityRenderer;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
