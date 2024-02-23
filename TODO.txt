@@ -9,6 +9,7 @@
 - create plasma particle under thruster block, lifetime -> max distance, bounds
 - simulate contraption shaking
 - camera: create fake player
+- MovementContext mixin getAnimationSpeed
 
 -// photovoltaic panel
 -// create new fluid steam

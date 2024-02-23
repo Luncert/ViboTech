@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content.controlseat;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.ArrayList;
@@ -15,11 +16,10 @@ public class ControlSeatInputPacket extends SimplePacketBase {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
-  private final Collection<Integer> activatedButtons;
+  private final Collection<InputConstants.Key> activatedButtons;
   private final boolean press;
 
-  public ControlSeatInputPacket(Collection<Integer> activatedButtons, boolean press) {
-    LOGGER.info("xxx {}", activatedButtons);
+  public ControlSeatInputPacket(Collection<InputConstants.Key> activatedButtons, boolean press) {
     this.activatedButtons = activatedButtons;
     this.press = press;
   }
@@ -28,15 +28,27 @@ public class ControlSeatInputPacket extends SimplePacketBase {
     activatedButtons = new ArrayList<>();
     press = buffer.readBoolean();
     int size = buffer.readVarInt();
-    for (int i = 0; i < size; i++)
-      activatedButtons.add(buffer.readVarInt());
+    for (int i = 0; i < size; i++) {
+      InputConstants.Key key =
+          switch (InputConstants.Type.values()[buffer.readVarInt()]) {
+            case KEYSYM -> InputConstants.Type.KEYSYM.getOrCreate(buffer.readVarInt());
+            case MOUSE -> InputConstants.Type.MOUSE.getOrCreate(buffer.readVarInt());
+            case SCANCODE -> null;
+          };
+      if (key != null) {
+        activatedButtons.add(key);
+      }
+    }
   }
 
   @Override
   public void write(FriendlyByteBuf buffer) {
     buffer.writeBoolean(press);
     buffer.writeVarInt(activatedButtons.size());
-    activatedButtons.forEach(buffer::writeVarInt);
+    activatedButtons.forEach(activated -> {
+      buffer.writeVarInt(activated.getType().ordinal());
+      buffer.writeVarInt(activated.getValue());
+    });
   }
 
   @Override
