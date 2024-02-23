@@ -4,7 +4,6 @@ import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.foundation.utility.WorldAttached;
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Collection;
 import java.util.Collections;

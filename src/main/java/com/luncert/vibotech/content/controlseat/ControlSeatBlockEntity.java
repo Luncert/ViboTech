@@ -1,5 +1,7 @@
 package com.luncert.vibotech.content.controlseat;
 
+import com.luncert.vibotech.compat.computercraft.ControlSeatPeripheral;
+import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.index.AllCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class ControlSeatBlockEntity extends BlockEntity {
 
   private final ControlSeatComponent component = new ControlSeatComponent();
+  private final ControlSeatPeripheral peripheral = Peripherals.createControlSeatPeripheral(this);
 
   public ControlSeatBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
     super(pType, pPos, pBlockState);
@@ -23,6 +26,9 @@ public class ControlSeatBlockEntity extends BlockEntity {
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (AllCapabilities.isViboComponent(cap)) {
       return LazyOptional.of(() -> component).cast();
+    }
+    if (Peripherals.isPeripheral(cap)) {
+      return LazyOptional.of(() -> peripheral).cast();
     }
     return super.getCapability(cap, side);
   }
