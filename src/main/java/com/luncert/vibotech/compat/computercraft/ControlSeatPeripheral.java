@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import java.util.Collection;
+import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 public class ControlSeatPeripheral implements IPeripheral {
@@ -39,7 +40,7 @@ public class ControlSeatPeripheral implements IPeripheral {
   }
 
   @LuaFunction
-  public final Collection<String> getInputs() {
-    return component.getInputs().stream().map(InputConstants.Key::getName).toList();
+  public final List<String> getInputs() {
+    return component.getInputs();
   }
 }

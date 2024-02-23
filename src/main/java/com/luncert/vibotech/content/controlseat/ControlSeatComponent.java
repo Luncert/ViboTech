@@ -8,6 +8,7 @@ import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import net.minecraft.world.level.LevelAccessor;
@@ -30,8 +31,8 @@ public class ControlSeatComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public Collection<InputConstants.Key> getInputs() {
-    return receivedInputs;
+  public List<String> getInputs() {
+    return receivedInputs.stream().map(InputConstants.Key::getName).toList();
   }
 
   public static void receivePressed(LevelAccessor world,
