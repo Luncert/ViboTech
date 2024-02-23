@@ -1,7 +1,7 @@
 package com.luncert.vibotech.content.portableaccumulator;
 
 import com.luncert.vibotech.Config;
-import com.luncert.vibotech.foundation.network.EnergyNetworkPacket;
+import com.luncert.vibotech.index.AllPackets;
 import com.mrh0.createaddition.energy.InternalEnergyStorage;
 import com.mrh0.createaddition.network.IObserveTileEntity;
 import com.mrh0.createaddition.network.ObservePacket;
@@ -21,6 +21,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +65,7 @@ public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements 
         .append(Component.translatable("createaddition.tooltip.energy.stored").withStyle(ChatFormatting.GRAY)));
     tooltip.add(Component.literal("    ")
         .append(Component.literal(" "))
-        .append(Util.format(EnergyNetworkPacket.clientBuff))
+        .append(Util.format(PortableAccumulatorEnergyPacket.clientBuff))
         .append("fe")
         .withStyle(ChatFormatting.AQUA));
     tooltip.add(Component.literal("    ")
@@ -79,7 +80,8 @@ public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements 
 
   @Override
   public void onObserved(ServerPlayer serverPlayer, ObservePacket observePacket) {
-    // triggered by observe packet
-    EnergyNetworkPacket.send(this.worldPosition, 0, energyStorage.getEnergyStored(), serverPlayer);
+    // triggered by observe packet, see createaddition
+    AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
+        new PortableAccumulatorEnergyPacket(this.worldPosition, 0, energyStorage.getEnergyStored()));
   }
 }

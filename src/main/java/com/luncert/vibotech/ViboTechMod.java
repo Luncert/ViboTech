@@ -1,7 +1,6 @@
 package com.luncert.vibotech;
 
 import com.luncert.vibotech.foundation.item.ItemDescription;
-import com.luncert.vibotech.foundation.network.EnergyNetworkPacket;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllContraptionTypes;
@@ -28,10 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file

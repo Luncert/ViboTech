@@ -2,7 +2,7 @@ package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatInputPacket;
-import com.luncert.vibotech.foundation.network.EnergyNetworkPacket;
+import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorEnergyPacket;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -20,7 +20,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 public enum AllPackets {
 
   CONTROL_SEAT_INPUT(ControlSeatInputPacket.class, ControlSeatInputPacket::new, NetworkDirection.PLAY_TO_SERVER),
-  // PORTABLE_ACCUMULATOR_ENERGY(EnergyNetworkPacket.class, EnergyNetworkPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+  PORTABLE_ACCUMULATOR_ENERGY(PortableAccumulatorEnergyPacket.class, PortableAccumulatorEnergyPacket::new, NetworkDirection.PLAY_TO_CLIENT);
   ;
 
   public static final ResourceLocation CHANNEL_NAME = ViboTechMod.asResource("main");
@@ -28,7 +28,7 @@ public enum AllPackets {
   public static final String NETWORK_VERSION_STR = String.valueOf(NETWORK_VERSION);
   private static SimpleChannel channel;
 
-  private PacketType<?> packetType;
+  private final PacketType<?> packetType;
 
   <T extends SimplePacketBase> AllPackets(Class<T> type,
                                           Function<FriendlyByteBuf, T> factory,
@@ -60,11 +60,11 @@ public enum AllPackets {
   private static class PacketType<T extends SimplePacketBase> {
     private static int index = 0;
 
-    private BiConsumer<T, FriendlyByteBuf> encoder;
-    private Function<FriendlyByteBuf, T> decoder;
-    private BiConsumer<T, Supplier<Context>> handler;
-    private Class<T> type;
-    private NetworkDirection direction;
+    private final BiConsumer<T, FriendlyByteBuf> encoder;
+    private final Function<FriendlyByteBuf, T> decoder;
+    private final BiConsumer<T, Supplier<Context>> handler;
+    private final Class<T> type;
+    private final NetworkDirection direction;
 
     private PacketType(Class<T> type, Function<FriendlyByteBuf, T> factory, NetworkDirection direction) {
       encoder = T::write;
