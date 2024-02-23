@@ -10,6 +10,7 @@ import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlockEntity;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlockEntity;
 import com.luncert.vibotech.content.thruster.ThrusterBlockEntity;
+import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatBlockEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -56,6 +57,11 @@ public class AllBlockEntityTypes {
   public static final BlockEntityEntry<PhotovoltaicPanelBlockEntity> PHOTOVOLTAIC_PANEL = REGISTRATE
       .blockEntity("photovoltaic_panel", PhotovoltaicPanelBlockEntity::new)
       .validBlocks(AllBlocks.PHOTOVOLTAIC_PANEL)
+      .register();
+
+  public static final BlockEntityEntry<ControlSeatBlockEntity> CONTROL_SEAT = REGISTRATE
+      .blockEntity("control_seat", ControlSeatBlockEntity::new)
+      .validBlocks(AllBlocks.CONTROL_SEAT)
       .register();
 
   public static void register() {}

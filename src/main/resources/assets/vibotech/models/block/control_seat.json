@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "vibotech:block/vibo_machine_control_seat",
-		"particle": "vibotech:block/vibo_machine_control_seat"
+		"0": "vibotech:block/control_seat",
+		"particle": "vibotech:block/control_seat"
 	},
 	"elements": [
 		{

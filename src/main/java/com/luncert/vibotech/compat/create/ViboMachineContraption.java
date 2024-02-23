@@ -62,7 +62,6 @@ public class ViboMachineContraption extends Contraption {
   public EContraptionMovementMode rotationMode;
   private final ViboComponentTickContext context = new ViboComponentTickContext();
 
-
   public ViboMachineContraption() {
     this(EContraptionMovementMode.ROTATE, null);
   }

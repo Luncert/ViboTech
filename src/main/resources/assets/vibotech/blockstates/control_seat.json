@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "vibotech:block/control_seat",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "vibotech:block/control_seat",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "vibotech:block/control_seat",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "vibotech:block/control_seat",
+      "y": 270
+    }
+  }
+}
