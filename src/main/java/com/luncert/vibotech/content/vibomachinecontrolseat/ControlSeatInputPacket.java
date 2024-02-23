@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content.vibomachinecontrolseat;
 
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,13 +9,17 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
+import org.slf4j.Logger;
 
 public class ControlSeatInputPacket extends SimplePacketBase {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   private final Collection<Integer> activatedButtons;
   private final boolean press;
 
   public ControlSeatInputPacket(Collection<Integer> activatedButtons, boolean press) {
+    LOGGER.info("xxx {}", activatedButtons);
     this.activatedButtons = activatedButtons;
     this.press = press;
   }

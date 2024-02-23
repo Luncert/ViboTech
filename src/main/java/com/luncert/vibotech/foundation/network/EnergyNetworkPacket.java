@@ -1,6 +1,7 @@
 package com.luncert.vibotech.foundation.network;
 
 import com.luncert.vibotech.ViboTechMod;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
-public class EnergyNetworkPacket {
+public class EnergyNetworkPacket extends SimplePacketBase {
 
   private BlockPos pos;
   private int demand;
@@ -53,6 +54,16 @@ public class EnergyNetworkPacket {
   }
 
   public static void send(BlockPos pos, int demand, int buff, ServerPlayer player) {
-    ViboTechMod.Network.send(PacketDistributor.PLAYER.with(() -> player), new EnergyNetworkPacket(pos, demand, buff));
+    // ViboTechMod.Network.send(PacketDistributor.PLAYER.with(() -> player), new EnergyNetworkPacket(pos, demand, buff));
+  }
+
+  @Override
+  public void write(FriendlyByteBuf friendlyByteBuf) {
+
+  }
+
+  @Override
+  public boolean handle(NetworkEvent.Context context) {
+    return false;
   }
 }

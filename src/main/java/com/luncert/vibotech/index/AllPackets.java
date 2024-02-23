@@ -2,6 +2,7 @@ package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.content.vibomachinecontrolseat.ControlSeatInputPacket;
+import com.luncert.vibotech.foundation.network.EnergyNetworkPacket;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -18,7 +19,8 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public enum AllPackets {
 
-  CONTROL_SEAT_INPUT(ControlSeatInputPacket.class, ControlSeatInputPacket::new, NetworkDirection.PLAY_TO_SERVER)
+  CONTROL_SEAT_INPUT(ControlSeatInputPacket.class, ControlSeatInputPacket::new, NetworkDirection.PLAY_TO_SERVER),
+  // PORTABLE_ACCUMULATOR_ENERGY(EnergyNetworkPacket.class, EnergyNetworkPacket::new, NetworkDirection.PLAY_TO_CLIENT);
   ;
 
   public static final ResourceLocation CHANNEL_NAME = ViboTechMod.asResource("main");

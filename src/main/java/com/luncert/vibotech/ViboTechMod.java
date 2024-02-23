@@ -9,6 +9,7 @@ import com.luncert.vibotech.index.AllCreativeModeTabs;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.luncert.vibotech.index.AllFluids;
 import com.luncert.vibotech.index.AllItems;
+import com.luncert.vibotech.index.AllPackets;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -44,21 +45,14 @@ public class ViboTechMod
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
-    private static final String PROTOCOL = "1";
-    public static final SimpleChannel Network = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(ViboTechMod.ID, "main"))
-        .clientAcceptedVersions(PROTOCOL::equals)
-        .serverAcceptedVersions(PROTOCOL::equals)
-        .networkProtocolVersion(() -> PROTOCOL)
-        .simpleChannel();
-
     static {
         REGISTRATE.setTooltipModifierFactory(item -> new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
             .andThen(TooltipModifier.mapNull(KineticStats.create(item))));
     }
 
     public ViboTechMod() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        eventBus.addListener(this::postInit);
+        // IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        // eventBus.addListener(this::postInit);
 
         onCtor();
     }
@@ -78,6 +72,7 @@ public class ViboTechMod
         AllItems.register();
         AllContraptionTypes.register();
         AllFluids.register();
+        AllPackets.registerPackets();
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -92,14 +87,6 @@ public class ViboTechMod
         // // Register the item to a creative tab
         // modEventBus.addListener(this::addCreative);
         //
-    }
-
-    public void postInit(FMLLoadCompleteEvent evt) {
-        Network.registerMessage(1,
-            EnergyNetworkPacket.class, EnergyNetworkPacket::encode,
-            EnergyNetworkPacket::decode, EnergyNetworkPacket::handle);
-
-        System.out.println("Create Crafts & Additions Initialized!");
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

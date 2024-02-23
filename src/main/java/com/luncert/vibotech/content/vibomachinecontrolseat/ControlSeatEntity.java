@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content.vibomachinecontrolseat;
 
+import com.luncert.vibotech.index.AllEntityTypes;
 import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -11,12 +12,13 @@ import net.minecraft.world.level.Level;
 
 public class ControlSeatEntity extends SeatEntity {
 
-  public ControlSeatEntity(EntityType<?> p_i48580_1_, Level p_i48580_2_) {
-    super(p_i48580_1_, p_i48580_2_);
+  public ControlSeatEntity(EntityType<?> entityType, Level world) {
+    super(entityType, world);
   }
 
   public ControlSeatEntity(Level world, BlockPos pos) {
-    super(world, pos);
+    super(AllEntityTypes.CONTROL_SEAT.get(), world);
+    this.noPhysics = true;
   }
 
   @Override

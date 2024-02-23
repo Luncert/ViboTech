@@ -246,12 +246,12 @@ public class ViboMachineContraption extends Contraption {
 
   @Override
   protected boolean moveBlock(Level world, @Nullable Direction forcedDirection, Queue<BlockPos> frontier, Set<BlockPos> visited) throws AssemblyException {
+    BlockPos pos = frontier.peek();
     boolean ok = super.moveBlock(world, forcedDirection, frontier, visited);
     if (!ok) {
       return false;
     }
 
-    BlockPos pos = frontier.poll();
     BlockState state = world.getBlockState(pos);
     if (!world.isOutsideBuildHeight(pos)
         && world.isLoaded(pos)
