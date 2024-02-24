@@ -4,6 +4,7 @@ import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.common.Lang;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntityRenderer;
+import com.luncert.vibotech.content.camera.CameraEntity;
 import com.luncert.vibotech.content.controlseat.ControlSeatEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntityRenderer;
@@ -20,6 +21,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public class AllEntityTypes {
+
+  public static final EntityEntry<CameraEntity> CAMERA =
+      register("camera", CameraEntity::new, () -> CameraEntity.Render::new, MobCategory.MISC, 5, Integer.MAX_VALUE, false, true, CameraEntity::build).register();
 
   public static final EntityEntry<ControlSeatEntity> CONTROL_SEAT =
       register("control_seat", ControlSeatEntity::new, () -> ControlSeatEntity.Render::new, MobCategory.MISC, 5, Integer.MAX_VALUE, false, true, ControlSeatEntity::build).register();

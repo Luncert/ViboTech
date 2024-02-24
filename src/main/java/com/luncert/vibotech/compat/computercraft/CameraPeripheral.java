@@ -28,7 +28,8 @@ public class CameraPeripheral implements IPeripheral {
   // api
 
   @LuaFunction
-  public final void capture() {
-    // TODO:
+  public final void connect() {
+    // which player?
+    // cameraBlockEntity.connect();
   }
 }
