@@ -1,6 +1,7 @@
 package com.luncert.vibotech.content.camera;
 
 import com.luncert.vibotech.index.AllPackets;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -10,8 +11,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
+import org.slf4j.Logger;
 
 public class PreConnectCameraPacket extends SimplePacketBase {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   private final BlockPos pos;
 
@@ -47,8 +51,9 @@ public class PreConnectCameraPacket extends SimplePacketBase {
       } else {
         entity = entities.get(0);
       }
+      LOGGER.info("yy {}", entity);
 
-      player.connection.send(new ConnectCameraPacket(entity.getId()));
+      AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ConnectCameraPacket(entity.getId()));
     });
     return true;
   }

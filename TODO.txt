@@ -25,3 +25,7 @@ New Blocks:
 - turret
 - vacuum pump
 - seat
+
+[23:37:23] [Render thread/INFO] [co.lu.vi.co.ca.TestPacket/]: xx CameraEntity['entity.vibotech.camera'/4, l='ClientLevel', x=5.50, y=-59.50, z=5.50]
+[23:37:23] [Render thread/INFO] [co.lu.vi.co.ca.TestPacket/]: xx CameraEntity['entity.vibotech.camera'/4, l='ClientLevel', x=5.50, y=-59.50, z=5.50]
+[23:37:23] [Render thread/WARN] [minecraft/ClientPacketListener]: Unknown custom packet identifier: vibotech:main
