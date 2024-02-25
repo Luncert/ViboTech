@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFW;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public enum AllKeys {
 
-  BASE("base", GLFW.GLFW_KEY_ESCAPE),
+  // ESC("esc", GLFW.GLFW_KEY_ESCAPE),
   ;
 
   private KeyMapping keybind;

@@ -52,14 +52,16 @@ public class ControlSeatClientHandler {
     newKeys.removeAll(releasedKeys);
     releasedKeys.removeAll(pressedKeys);
 
-
+    // Released Keys
     if (!releasedKeys.isEmpty()) {
       AllPackets.getChannel().sendToServer(new ControlSeatInputPacket(releasedKeys, false));
     }
+    // Newly Pressed Keys
     if (!newKeys.isEmpty()) {
       AllPackets.getChannel().sendToServer(new ControlSeatInputPacket(newKeys, true));
       packetCooldown = PACKET_RATE;
     }
+    // Keep alive Pressed Keys
     if (packetCooldown == 0 && !pressedKeys.isEmpty()) {
       AllPackets.getChannel().sendToServer(new ControlSeatInputPacket(pressedKeys, true));
       packetCooldown = PACKET_RATE;

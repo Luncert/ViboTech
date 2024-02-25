@@ -14,6 +14,8 @@ public class CameraData {
   }
 
   static Entity popCameraEntity() {
-    return orignalCameraEntity;
+    Entity r = orignalCameraEntity;
+    orignalCameraEntity = null;
+    return r;
   }
 }
