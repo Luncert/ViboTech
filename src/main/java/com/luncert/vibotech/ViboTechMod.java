@@ -36,6 +36,7 @@ public class ViboTechMod
 {
     // Define mod id in a common place for everything to reference
     public static final String ID = "vibotech";
+    public static final String NAME = "ViboTech";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 

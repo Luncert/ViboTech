@@ -4,9 +4,9 @@ import static com.mojang.blaze3d.platform.InputConstants.Key;
 import static com.mojang.blaze3d.platform.InputConstants.Type;
 
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
+import com.luncert.vibotech.index.AllKeys;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.simibubi.create.AllKeys;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -77,19 +77,15 @@ public class ControlSeatClientHandler {
     try {
       ((Int2ObjectMap<InputConstants.Key>) FIELD_MAP.get(Type.KEYSYM))
           .values()
-          .stream().filter(k -> k.getValue() > -1 && isActuallyPressed(k))
+          .stream().filter(k -> k.getValue() > -1 && AllKeys.isActuallyPressed(k))
           .forEach(keys::add);
       ((Int2ObjectMap<InputConstants.Key>) FIELD_MAP.get(Type.MOUSE))
           .values()
-          .stream().filter(k -> k.getValue() > -1 && isActuallyPressed(k))
+          .stream().filter(k -> k.getValue() > -1 && AllKeys.isActuallyPressed(k))
           .forEach(keys::add);
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
     return keys;
-  }
-
-  public static boolean isActuallyPressed(Key key) {
-    return key.getType() == Type.MOUSE ? AllKeys.isMouseButtonDown(key.getValue()) : AllKeys.isKeyDown(key.getValue());
   }
 }
