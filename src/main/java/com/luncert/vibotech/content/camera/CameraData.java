@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content.camera;
 
-import java.util.Optional;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,10 +14,11 @@ public class CameraData {
     orignalCameraEntity = currentCameraEntity;
   }
 
-  static Optional<Entity> popCameraEntity() {
-    Entity r = orignalCameraEntity;
-    orignalCameraEntity = null;
-    return Optional.ofNullable(r);
+  public static void restoreCamera() {
+    if (orignalCameraEntity != null) {
+      Minecraft.getInstance().setCameraEntity(orignalCameraEntity);
+      orignalCameraEntity = null;
+    }
   }
 
   public static boolean isEnabled() {
