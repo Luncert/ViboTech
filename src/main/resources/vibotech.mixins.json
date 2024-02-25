@@ -1,9 +1,12 @@
 {
   "required": true,
   "priority": 1000,
-  "package": "com.luncert.vibotech.mixin",
+  "package": "com.luncert.vibotech.foundation.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+  ],
+  "client": [
+    "EntityMixin"
   ],
   "minVersion": "0.8.5"
 }

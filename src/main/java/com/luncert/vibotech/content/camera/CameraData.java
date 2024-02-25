@@ -18,4 +18,8 @@ public class CameraData {
     orignalCameraEntity = null;
     return r;
   }
+
+  public static boolean isEnabled() {
+    return orignalCameraEntity != null;
+  }
 }

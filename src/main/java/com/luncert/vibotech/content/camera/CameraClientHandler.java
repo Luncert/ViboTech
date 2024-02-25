@@ -18,7 +18,7 @@ public class CameraClientHandler {
     if (packetCooldown == 0) {
       packetCooldown = PACKET_RATE;
 
-      if (AllKeys.isActuallyPressed(InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_ESCAPE))) {
+      if (AllKeys.isActuallyPressed(InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_LSHIFT))) {
         Minecraft mc = Minecraft.getInstance();
         Entity entity = CameraData.popCameraEntity();
         if (entity != null) {
