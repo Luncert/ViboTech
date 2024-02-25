@@ -7,23 +7,12 @@ import net.minecraft.world.entity.Entity;
 
 public class CameraClientHandler {
 
-  public static int PACKET_RATE = 5;
-  private static int packetCooldown;
-
   public static void tick() {
-    if (packetCooldown > 0) {
-      --packetCooldown;
-    }
-
-    if (packetCooldown == 0) {
-      packetCooldown = PACKET_RATE;
-
-      if (AllKeys.isActuallyPressed(InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_LSHIFT))) {
+    if (AllKeys.isActuallyPressed(InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_LSHIFT))) {
+      Entity entity = CameraData.popCameraEntity();
+      if (entity != null) {
         Minecraft mc = Minecraft.getInstance();
-        Entity entity = CameraData.popCameraEntity();
-        if (entity != null) {
-          mc.setCameraEntity(entity);
-        }
+        mc.setCameraEntity(entity);
       }
     }
   }
