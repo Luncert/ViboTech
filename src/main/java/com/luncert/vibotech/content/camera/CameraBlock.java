@@ -3,6 +3,7 @@ package com.luncert.vibotech.content.camera;
 import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.luncert.vibotech.index.AllPackets;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
@@ -55,5 +56,13 @@ public class CameraBlock extends Block implements IBE<CameraBlockEntity>, IWrenc
       be.connect(world, player);
     });
     return InteractionResult.SUCCESS;
+  }
+
+  @Override
+  public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+    super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+    if (pLevel.isClientSide) {
+      AllPackets.getChannel().sendToServer(new PreDisconnectCameraPacket());
+    }
   }
 }

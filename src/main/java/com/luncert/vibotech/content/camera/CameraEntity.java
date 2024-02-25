@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -24,10 +25,6 @@ public class CameraEntity extends Entity {
     return builder.sized(0.25F, 0.35F);
   }
 
-  // public CameraEntity(Level level, Vec3 pos, float yaw, float pitch) {
-  //   super(AllEntityTypes.CAMERA.get(), level);
-  // }
-
   @Override
   protected void defineSynchedData() {
 
@@ -41,6 +38,13 @@ public class CameraEntity extends Entity {
   @Override
   protected void addAdditionalSaveData(CompoundTag pCompound) {
 
+  }
+
+  @Override
+  public void turn(double pYRot, double pXRot) {
+    super.turn(pYRot, pXRot);
+    this.setYRot(Mth.clamp(this.getYRot(), -90.0F, 90.0F));
+    this.yRotO = Mth.clamp(this.yRotO, -90.0F, 90.0F);
   }
 
   public static class Render extends EntityRenderer<CameraEntity> {
