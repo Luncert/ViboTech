@@ -12,6 +12,7 @@ public class ClientPacketListenerMixin {
 
   @Inject(method = "handleRespawn", at = @At("HEAD"))
   private void onPlayerRespawn(CallbackInfo ci) {
+    // release camera when the player respawns/switches dimensions.
     CameraData.restoreCamera();
   }
 }

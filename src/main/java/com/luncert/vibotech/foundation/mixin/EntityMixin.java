@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public class EntityMixin {
 
-  // Makes mouse input rotate the FreeCamera.
+  // Makes mouse input rotate the camera entity.
   @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
-  private void onChangeLookDirection(double x, double y, CallbackInfo ci) {
+  private void onChangeLookDirection(double pYRot, double pXRot, CallbackInfo ci) {
     Minecraft mc = Minecraft.getInstance();
     if (CameraData.isEnabled() && this.equals(mc.player) && mc.getCameraEntity() instanceof CameraEntity camera) {
-      camera.turn(x, y);
+      camera.turn(pYRot, pXRot);
       ci.cancel();
     }
   }

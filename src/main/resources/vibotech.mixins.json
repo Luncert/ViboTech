@@ -6,7 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "EntityMixin"
+    "EntityMixin",
+    "ClientPacketListenerMixin",
+    "ItemInHandRendererMixin"
   ],
   "minVersion": "0.8.5"
 }

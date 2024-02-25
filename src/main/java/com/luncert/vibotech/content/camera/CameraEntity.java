@@ -48,6 +48,7 @@ public class CameraEntity extends Entity {
   }
 
   public static class Render extends EntityRenderer<CameraEntity> {
+
     public Render(EntityRendererProvider.Context context) {
       super(context);
     }
