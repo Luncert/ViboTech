@@ -1,8 +1,10 @@
 package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
+import com.luncert.vibotech.content.camera.DisconnectCameraPacket;
 import com.luncert.vibotech.content.camera.PreConnectCameraPacket;
 import com.luncert.vibotech.content.camera.ConnectCameraPacket;
+import com.luncert.vibotech.content.camera.PreDisconnectCameraPacket;
 import com.luncert.vibotech.content.controlseat.ControlSeatInputPacket;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorEnergyPacket;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
@@ -24,7 +26,9 @@ public enum AllPackets {
   CONTROL_SEAT_INPUT(ControlSeatInputPacket.class, ControlSeatInputPacket::new, NetworkDirection.PLAY_TO_SERVER),
   PORTABLE_ACCUMULATOR_ENERGY(PortableAccumulatorEnergyPacket.class, PortableAccumulatorEnergyPacket::new, NetworkDirection.PLAY_TO_CLIENT),
   PRE_CONNECT_CAMERA(PreConnectCameraPacket.class, PreConnectCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
-  CONNECT_CAMERA(ConnectCameraPacket.class, ConnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT)
+  CONNECT_CAMERA(ConnectCameraPacket.class, ConnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT),
+  PRE_DISCONNECT_CAMERA(PreDisconnectCameraPacket.class, PreDisconnectCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
+  DISCONNECT_CAMERA(DisconnectCameraPacket.class, DisconnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT)
   ;
 
   public static final ResourceLocation CHANNEL_NAME = ViboTechMod.asResource("main");

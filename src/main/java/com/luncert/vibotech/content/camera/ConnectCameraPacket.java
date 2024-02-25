@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 import org.slf4j.Logger;
@@ -31,11 +30,19 @@ public class ConnectCameraPacket extends SimplePacketBase {
   @Override
   public boolean handle(NetworkEvent.Context context) {
     context.enqueueWork(() -> {
-      ServerPlayer sender = context.getSender();
       Minecraft mc = Minecraft.getInstance();
+      if (mc.level == null) {
+        LOGGER.warn("invalid level");
+        return;
+      }
       Entity cameraEntity = mc.level.getEntity(cameraEntityId);
-      LOGGER.info("xx {}", cameraEntity);
+      if (cameraEntity == null) {
+        LOGGER.warn("camera entity {} not found", cameraEntityId);
+        return;
+      }
+      CameraData.pushCameraEntity(mc.getCameraEntity());
+      mc.setCameraEntity(cameraEntity);
     });
-    return false;
+    return true;
   }
 }

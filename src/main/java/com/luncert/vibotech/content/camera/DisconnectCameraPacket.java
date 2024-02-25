@@ -1,0 +1,30 @@
+package com.luncert.vibotech.content.camera;
+
+import com.simibubi.create.foundation.networking.SimplePacketBase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.network.NetworkEvent;
+
+public class DisconnectCameraPacket extends SimplePacketBase {
+
+  public DisconnectCameraPacket() {
+  }
+
+  public DisconnectCameraPacket(FriendlyByteBuf friendlyByteBuf) {
+  }
+
+  @Override
+  public void write(FriendlyByteBuf friendlyByteBuf) {
+  }
+
+  @Override
+  public boolean handle(NetworkEvent.Context context) {
+    context.enqueueWork(() -> {
+      Minecraft mc = Minecraft.getInstance();
+      Entity entity = CameraData.popCameraEntity();
+      mc.setCameraEntity(entity);
+    });
+    return true;
+  }
+}

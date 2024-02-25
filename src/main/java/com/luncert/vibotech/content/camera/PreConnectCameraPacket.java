@@ -51,7 +51,6 @@ public class PreConnectCameraPacket extends SimplePacketBase {
       } else {
         entity = entities.get(0);
       }
-      LOGGER.info("yy {}", entity);
 
       AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ConnectCameraPacket(entity.getId()));
     });

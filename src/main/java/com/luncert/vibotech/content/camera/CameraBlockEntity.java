@@ -29,4 +29,10 @@ public class CameraBlockEntity extends SmartBlockEntity {
       AllPackets.getChannel().sendToServer(new PreConnectCameraPacket(worldPosition));
     }
   }
+
+  public void disconnect(Level world, Player player) {
+    if (world.isClientSide) {
+      AllPackets.getChannel().sendToServer(new PreDisconnectCameraPacket());
+    }
+  }
 }
