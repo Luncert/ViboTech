@@ -2,6 +2,7 @@ package com.luncert.vibotech.foundation.foundation.events;
 
 import static com.jozufozu.flywheel.backend.Backend.isGameActive;
 
+import com.luncert.vibotech.content.camera.CameraClientHandler;
 import com.luncert.vibotech.content.controlseat.ControlSeatClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
@@ -21,6 +22,7 @@ public class ClientEvents {
     Level world = Minecraft.getInstance().level;
     if (event.phase == TickEvent.Phase.START) {
       ControlSeatClientHandler.tick();
+      CameraClientHandler.tick();
     }
   }
 }
