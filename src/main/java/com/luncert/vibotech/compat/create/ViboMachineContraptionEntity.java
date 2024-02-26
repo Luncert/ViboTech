@@ -2,17 +2,27 @@ package com.luncert.vibotech.compat.create;
 
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
+import com.mojang.logging.LogUtils;
+import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
+import com.simibubi.create.content.contraptions.sync.ContraptionSeatMappingPacket;
 import com.simibubi.create.foundation.utility.AngleHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
+import org.slf4j.Logger;
 
 public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   // private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -109,5 +119,32 @@ public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
     }
 
     return rotating;
+  }
+
+  // add camera entity to seat mapping
+  @Override
+  public void addSittingPassenger(Entity passenger, int seatIndex) {
+    // called by onEntityInitialize
+    for (Entity entity : getPassengers()) {
+      BlockPos seatOf = contraption.getSeatOf(entity.getUUID());
+      if (seatOf != null && seatOf.equals(contraption.getSeats().get(seatIndex))) {
+        if (entity instanceof Player) {
+          return;
+        }
+        if (!(passenger instanceof Player)) {
+          return;
+        }
+        entity.stopRiding();
+      }
+    }
+
+    passenger.startRiding(this, true);
+    if (passenger instanceof TamableAnimal ta)
+      ta.setInSittingPose(true);
+    if (level().isClientSide)
+      return;
+    contraption.getSeatMapping().put(passenger.getUUID(), seatIndex);
+    AllPackets.getChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> this),
+        new ContraptionSeatMappingPacket(getId(), contraption.getSeatMapping()));
   }
 }

@@ -15,6 +15,7 @@ import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
 import com.luncert.vibotech.content.camera.CameraBlock;
+import com.luncert.vibotech.content.camera.CameraData;
 import com.luncert.vibotech.content.camera.CameraEntity;
 import com.luncert.vibotech.content.controlseat.ControlSeatBlock;
 import com.luncert.vibotech.content.controlseat.ControlSeatEntity;
@@ -89,7 +90,7 @@ public class ViboMachineContraption extends Contraption {
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
 
-  protected List<BlockPos> cameras = new ArrayList();
+  // protected List<BlockPos> cameras = new ArrayList();
   private final ViboComponentTickContext context = new ViboComponentTickContext();
 
   public ViboMachineContraption() {
@@ -281,7 +282,7 @@ public class ViboMachineContraption extends Contraption {
 
   private void moveControlSeat(Level world, BlockPos pos) {
     BlockPos local = this.toLocalPos(pos);
-    this.getSeats().add(local);
+    getSeats().add(local);
     List<ControlSeatEntity> seatsEntities = world.getEntitiesOfClass(ControlSeatEntity.class, new AABB(pos));
     if (!seatsEntities.isEmpty()) {
       SeatEntity seat = seatsEntities.get(0);
@@ -295,13 +296,12 @@ public class ViboMachineContraption extends Contraption {
 
   private void moveCamera(Level world, BlockPos pos) {
     BlockPos local = this.toLocalPos(pos);
-    this.cameras.add(local);
-    List<CameraEntity> entities = world.getEntitiesOfClass(CameraEntity.class, new AABB(pos));
-    if (!entities.isEmpty()) {
-      CameraEntity camera = entities.get(0);
-      // let camera entity rides contraption entity
-      getInitialPassengers().put(local, camera);
-    }
+    getSeats().add(local);
+    // cameras.add(local);
+
+    CameraEntity camera = CameraData.getOrCreateCameraEntity(world, pos);
+    // let camera entity rides contraption entity
+    getInitialPassengers().put(local, camera);
   }
 
   @SuppressWarnings("unchecked")
@@ -324,7 +324,8 @@ public class ViboMachineContraption extends Contraption {
         continue;
 
       if (passenger instanceof CameraEntity) {
-        BlockPos seatPos = cameras.get(seatIndex);
+        // BlockPos seatPos = cameras.get(seatIndex);
+        BlockPos seatPos = seats.get(seatIndex);
         seatPos = transform.apply(seatPos);
         // set camera entity pos
         passenger.setPos(seatPos.getX() + 0.5, seatPos.getY() + 0.5, seatPos.getZ() + 0.5);
@@ -350,10 +351,6 @@ public class ViboMachineContraption extends Contraption {
         }
       }
     }
-  }
-
-  public List<BlockPos> getCameras() {
-    return cameras;
   }
 
   @Override
@@ -394,8 +391,6 @@ public class ViboMachineContraption extends Contraption {
     tag.put("components", componentList);
     tag.put("componentInfoMappings", componentInfoList);
 
-    tag.put("cameras", NBTHelper.writeCompoundList(cameras, NbtUtils::writeBlockPos));
-    // System.out.println("write -" + tag);
     return tag;
   }
 
@@ -439,11 +434,5 @@ public class ViboMachineContraption extends Contraption {
       String name = componentNbt.getString("name");
       this.componentBlockInfoMap.put(name, blocks.get(BlockPos.of(componentNbt.getLong("pos"))));
     }
-
-    // read cameras
-    cameras.clear();
-    NBTHelper.iterateCompoundList(nbt.getList("cameras", 10), (c) -> {
-      cameras.add(NbtUtils.readBlockPos(c));
-    });
   }
 }

@@ -4,6 +4,7 @@ import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.content.camera.packet.ClientConnectCameraPacket;
 import com.luncert.vibotech.index.AllPackets;
+import com.mojang.logging.LogUtils;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Map;
@@ -13,9 +14,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraftforge.network.PacketDistributor;
+import org.slf4j.Logger;
 
 public class CameraComponent extends BaseViboComponent {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   @Override
   public ViboComponentType getComponentType() {
@@ -37,8 +42,9 @@ public class CameraComponent extends BaseViboComponent {
   }
 
   private Optional<Entity> getCameraEntity() {
-    BlockPos componentPos = accessor.getComponentPos(name);
-    int seatIndex = accessor.contraption.getCameras().indexOf(componentPos);
+    StructureTemplate.StructureBlockInfo componentBlockInfo = accessor.contraption.getComponentBlockInfo(name);
+    BlockPos componentPos = componentBlockInfo.pos();
+    int seatIndex = accessor.contraption.getSeats().indexOf(componentPos);
     for (Map.Entry<UUID, Integer> entry : accessor.contraption.getSeatMapping().entrySet()) {
       if (entry.getValue().equals(seatIndex)) {
         return Optional.ofNullable(accessor.world.getEntity(entry.getKey()));
