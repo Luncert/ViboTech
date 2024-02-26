@@ -14,6 +14,8 @@ import com.luncert.vibotech.compat.vibotech.component.StorageAccessorComponent;
 import com.luncert.vibotech.compat.vibotech.annotation.TickAfter;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
+import com.luncert.vibotech.content.camera.CameraBlock;
+import com.luncert.vibotech.content.camera.CameraEntity;
 import com.luncert.vibotech.content.controlseat.ControlSeatBlock;
 import com.luncert.vibotech.content.controlseat.ControlSeatEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreComponent;
@@ -21,11 +23,13 @@ import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.mojang.logging.LogUtils;
+import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.contraptions.actors.seat.SeatBlock;
 import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
@@ -44,7 +48,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -82,6 +88,8 @@ public class ViboMachineContraption extends Contraption {
   private List<TreeNode<ViboComponentType>> componentTickOrders;
   private ViboContraptionAccessor accessor;
   public EContraptionMovementMode rotationMode;
+
+  protected List<BlockPos> cameras = new ArrayList();
   private final ViboComponentTickContext context = new ViboComponentTickContext();
 
   public ViboMachineContraption() {
@@ -139,7 +147,7 @@ public class ViboMachineContraption extends Contraption {
   }
 
   public void initComponents(Level level, ViboMachineEntity viboMachineEntity) {
-    if (accessor == null) {
+    if (!level.isClientSide && accessor == null) {
       this.viboMachine = viboMachineEntity;
       components.put(ViboComponentType.CORE, List.of(new ViboMachineCoreComponent()));
       components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
@@ -147,7 +155,7 @@ public class ViboMachineContraption extends Contraption {
       components.put(ViboComponentType.FLUID_ACCESSOR, List.of(new FluidAccessorComponent()));
       components.put(ViboComponentType.FINALIZE, List.of(new FinalizeComponent()));
 
-      accessor = new ViboContraptionAccessor(level, viboMachineEntity, this);
+      accessor = new ViboContraptionAccessor((ServerLevel) level, viboMachineEntity, this);
 
       Map<ViboComponentType, TreeNode<ViboComponentType>> roots = new HashMap<>();
       Map<ViboComponentType, TreeNode<ViboComponentType>> nodes = new HashMap<>();
@@ -261,14 +269,17 @@ public class ViboMachineContraption extends Contraption {
         && this.movementAllowed(state, world, pos)
     ) {
       if (state.getBlock() instanceof ControlSeatBlock) {
-        this.moveSeat(world, pos);
+        moveControlSeat(world, pos);
+      }
+      if (state.getBlock() instanceof CameraBlock) {
+        moveCamera(world, pos);
       }
     }
 
     return true;
   }
 
-  private void moveSeat(Level world, BlockPos pos) {
+  private void moveControlSeat(Level world, BlockPos pos) {
     BlockPos local = this.toLocalPos(pos);
     this.getSeats().add(local);
     List<ControlSeatEntity> seatsEntities = world.getEntitiesOfClass(ControlSeatEntity.class, new AABB(pos));
@@ -276,8 +287,20 @@ public class ViboMachineContraption extends Contraption {
       SeatEntity seat = seatsEntities.get(0);
       List<Entity> passengers = seat.getPassengers();
       if (!passengers.isEmpty()) {
+        // see onEntityInitialize -> addSittingPassenger
         getInitialPassengers().put(local, passengers.get(0));
       }
+    }
+  }
+
+  private void moveCamera(Level world, BlockPos pos) {
+    BlockPos local = this.toLocalPos(pos);
+    this.cameras.add(local);
+    List<CameraEntity> entities = world.getEntitiesOfClass(CameraEntity.class, new AABB(pos));
+    if (!entities.isEmpty()) {
+      CameraEntity camera = entities.get(0);
+      // let camera entity rides contraption entity
+      getInitialPassengers().put(local, camera);
     }
   }
 
@@ -291,21 +314,46 @@ public class ViboMachineContraption extends Contraption {
   }
 
   @Override
-  public void addPassengersToWorld(Level world, StructureTransform transform, List<Entity> seatedEntities) {
-    for (Entity seatedEntity : seatedEntities) {
-      if (getSeatMapping().isEmpty())
-        continue;
-      Integer seatIndex = getSeatMapping().get(seatedEntity.getUUID());
+  public void addPassengersToWorld(Level world, StructureTransform transform, List<Entity> passengers) {
+    if (getSeatMapping().isEmpty()) {
+      return;
+    }
+    for (Entity passenger : passengers) {
+      Integer seatIndex = getSeatMapping().get(passenger.getUUID());
       if (seatIndex == null)
         continue;
-      BlockPos seatPos = getSeats().get(seatIndex);
-      seatPos = transform.apply(seatPos);
-      if (!(world.getBlockState(seatPos).getBlock() instanceof ControlSeatBlock))
-        continue;
-      if (ControlSeatBlock.isSeatOccupied(world, seatPos))
-        continue;
-      ControlSeatBlock.sitDown(world, seatPos, seatedEntity);
+
+      if (passenger instanceof CameraEntity) {
+        BlockPos seatPos = cameras.get(seatIndex);
+        seatPos = transform.apply(seatPos);
+        // set camera entity pos
+        passenger.setPos(seatPos.getX() + 0.5, seatPos.getY() + 0.5, seatPos.getZ() + 0.5);
+        // if (!(world.getBlockState(seatPos).getBlock() instanceof CameraBlock)) {
+        //   continue;
+        // }
+      } else {
+        BlockPos seatPos = getSeats().get(seatIndex);
+        seatPos = transform.apply(seatPos);
+
+        if (passenger instanceof ControlSeatEntity) {
+          if (!(world.getBlockState(seatPos).getBlock() instanceof ControlSeatBlock)
+              || ControlSeatBlock.isSeatOccupied(world, seatPos)) {
+            continue;
+          }
+          ControlSeatBlock.sitDown(world, seatPos, passenger);
+        } else if (passenger instanceof SeatEntity) {
+          if (!(world.getBlockState(seatPos).getBlock() instanceof SeatBlock)
+              || SeatBlock.isSeatOccupied(world, seatPos)) {
+            continue;
+          }
+          SeatBlock.sitDown(world, seatPos, passenger);
+        }
+      }
     }
+  }
+
+  public List<BlockPos> getCameras() {
+    return cameras;
   }
 
   @Override
@@ -346,6 +394,7 @@ public class ViboMachineContraption extends Contraption {
     tag.put("components", componentList);
     tag.put("componentInfoMappings", componentInfoList);
 
+    tag.put("cameras", NBTHelper.writeCompoundList(cameras, NbtUtils::writeBlockPos));
     // System.out.println("write -" + tag);
     return tag;
   }
@@ -390,5 +439,11 @@ public class ViboMachineContraption extends Contraption {
       String name = componentNbt.getString("name");
       this.componentBlockInfoMap.put(name, blocks.get(BlockPos.of(componentNbt.getLong("pos"))));
     }
+
+    // read cameras
+    cameras.clear();
+    NBTHelper.iterateCompoundList(nbt.getList("cameras", 10), (c) -> {
+      cameras.add(NbtUtils.readBlockPos(c));
+    });
   }
 }

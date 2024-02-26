@@ -26,6 +26,16 @@ public class CameraEntity extends Entity {
   }
 
   @Override
+  public void tick() {
+    if (level().isClientSide)
+      return;
+    boolean blockPresent = level().getBlockState(blockPosition()).getBlock() instanceof CameraBlock;
+    if (isVehicle() && blockPresent)
+      return;
+    this.discard();
+  }
+
+  @Override
   protected void defineSynchedData() {
 
   }

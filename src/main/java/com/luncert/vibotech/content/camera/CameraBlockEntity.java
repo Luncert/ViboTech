@@ -1,10 +1,13 @@
 package com.luncert.vibotech.content.camera;
 
 import com.luncert.vibotech.compat.computercraft.Peripherals;
+import com.luncert.vibotech.compat.vibotech.IViboComponent;
+import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.content.camera.packet.ClientConnectCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ClientDisconnectCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ServerCreateCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ServerDisconnectCameraPacket;
+import com.luncert.vibotech.index.AllCapabilities;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -30,6 +33,7 @@ public class CameraBlockEntity extends SmartBlockEntity {
 
   private static final Logger LOGGER = LogUtils.getLogger();
   private final IPeripheral peripheral = Peripherals.createCameraPeripheral(this);
+  private final IViboComponent component = new CameraComponent();
 
   public CameraBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
@@ -43,6 +47,9 @@ public class CameraBlockEntity extends SmartBlockEntity {
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (Peripherals.isPeripheral(cap)) {
       return LazyOptional.of(() -> peripheral).cast();
+    }
+    if (AllCapabilities.isViboComponent(cap)) {
+      return LazyOptional.of(() -> component).cast();
     }
     return super.getCapability(cap, side);
   }

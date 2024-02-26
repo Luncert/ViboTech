@@ -44,7 +44,9 @@ public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
     if (!rotating || !pauseWhileRotating) {
       // will update isStalled
       tickActors();
-      tickComponents();
+      if (!level().isClientSide) {
+        tickComponents();
+      }
     }
 
     Entity riding = getVehicle();
