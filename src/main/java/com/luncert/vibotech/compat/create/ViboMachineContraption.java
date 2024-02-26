@@ -322,32 +322,21 @@ public class ViboMachineContraption extends Contraption {
       Integer seatIndex = getSeatMapping().get(passenger.getUUID());
       if (seatIndex == null)
         continue;
+      BlockPos seatPos = getSeats().get(seatIndex);
+      seatPos = transform.apply(seatPos);
 
       if (passenger instanceof CameraEntity) {
-        // BlockPos seatPos = cameras.get(seatIndex);
-        BlockPos seatPos = seats.get(seatIndex);
-        seatPos = transform.apply(seatPos);
         // set camera entity pos
         passenger.setPos(seatPos.getX() + 0.5, seatPos.getY() + 0.5, seatPos.getZ() + 0.5);
-        // if (!(world.getBlockState(seatPos).getBlock() instanceof CameraBlock)) {
-        //   continue;
-        // }
       } else {
-        BlockPos seatPos = getSeats().get(seatIndex);
-        seatPos = transform.apply(seatPos);
-
-        if (passenger instanceof ControlSeatEntity) {
-          if (!(world.getBlockState(seatPos).getBlock() instanceof ControlSeatBlock)
-              || ControlSeatBlock.isSeatOccupied(world, seatPos)) {
-            continue;
+        if (world.getBlockState(seatPos).getBlock() instanceof ControlSeatBlock) {
+          if (!ControlSeatBlock.isSeatOccupied(world, seatPos)) {
+            ControlSeatBlock.sitDown(world, seatPos, passenger);
           }
-          ControlSeatBlock.sitDown(world, seatPos, passenger);
-        } else if (passenger instanceof SeatEntity) {
-          if (!(world.getBlockState(seatPos).getBlock() instanceof SeatBlock)
-              || SeatBlock.isSeatOccupied(world, seatPos)) {
-            continue;
+        } else if (world.getBlockState(seatPos).getBlock() instanceof SeatBlock) {
+          if (!SeatBlock.isSeatOccupied(world, seatPos)) {
+            SeatBlock.sitDown(world, seatPos, passenger);
           }
-          SeatBlock.sitDown(world, seatPos, passenger);
         }
       }
     }
