@@ -1,6 +1,5 @@
 
 - high speed lerp, 128
-- transport machine core direction
 - control seat block sit pose
 
 - pick contraption with wrench
@@ -19,9 +18,6 @@
 -// split control block and thruster block
 
 New Blocks:
-- camera block
-- geo scanner
-- storage monitor
 - turret
 - vacuum pump
 - seat
