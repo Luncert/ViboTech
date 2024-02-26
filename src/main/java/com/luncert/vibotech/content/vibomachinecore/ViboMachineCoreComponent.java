@@ -1,6 +1,7 @@
 package com.luncert.vibotech.content.vibomachinecore;
 
 import static com.luncert.vibotech.compat.vibotech.ViboActionEvent.EVENT_CONTRAPTION_MOVEMENT_DONE;
+import static net.minecraft.util.Mth.ceil;
 
 import com.google.common.collect.ImmutableMap;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
@@ -16,6 +17,7 @@ import dan200.computercraft.api.lua.MethodResult;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -157,25 +159,36 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     return speed;
   }
 
-  @LuaFunction
-  public final Map<String, Double> getContraptionPosition() {
-    Vec3 pos = accessor.viboMachineEntity.getContraptionPosition();
-    return ImmutableMap.of(
-        "x", pos.x,
-        "y", pos.y,
-        "z", pos.z
-    );
-  }
+  // @LuaFunction
+  // public final Map<String, Integer> getAssembleStationPosition() {
+  //   return accessor.getAssembleStationPosition().<Map<String, Integer>>map(pos ->
+  //       ImmutableMap.of(
+  //           "x", pos.getX(),
+  //           "y", pos.getY(),
+  //           "z", pos.getZ()
+  //       )).orElse(Collections.emptyMap());
+  // }
 
-  @LuaFunction
-  public final Map<String, Integer> getAssembleStationPosition() {
-    return accessor.getAssembleStationPosition().<Map<String, Integer>>map(pos ->
-        ImmutableMap.of(
-            "x", pos.getX(),
-            "y", pos.getY(),
-            "z", pos.getZ()
-        )).orElse(Collections.emptyMap());
-  }
+  // @LuaFunction
+  // public final Map<String, Object> getAssembleStationFacing() {
+  //   return accessor.getAssembleStationFacing().<Map<String, Object>>map(direction -> {
+  //     Direction.AxisDirection axisDirection = direction.getAxisDirection();
+  //     return ImmutableMap.of(
+  //         "axis", direction.getAxis().getName(),
+  //         "step", axisDirection.getStep()
+  //     );
+  //   }).orElse(Collections.emptyMap());
+  // }
+
+  // @LuaFunction
+  // public final Map<String, Double> getContraptionPosition() {
+  //   Vec3 pos = accessor.viboMachineEntity.getContraptionPosition();
+  //   return ImmutableMap.of(
+  //       "x", pos.x,
+  //       "y", pos.y,
+  //       "z", pos.z
+  //   );
+  // }
 
   @LuaFunction
   public final Map<String, Object> getContraptionFacing() {
@@ -188,18 +201,20 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public final Map<String, Object> getAssembleStationFacing() {
-    return accessor.getAssembleStationFacing().<Map<String, Object>>map(direction -> {
-      Direction.AxisDirection axisDirection = direction.getAxisDirection();
-      return ImmutableMap.of(
-          "axis", direction.getAxis().getName(),
-          "step", axisDirection.getStep()
-      );
-    }).orElse(Collections.emptyMap());
+  public final Map<String, Integer> getRelativeCoordinate() {
+    return accessor.getAssembleStationPosition().map(pos -> {
+      Vec3 pos1 = accessor.viboMachineEntity.getContraptionPosition();
+      return new BlockPos(ceil(pos1.x - 0.5), ceil(pos1.y - 0.5), ceil(pos1.z - 0.5)).subtract(pos);
+    }).<Map<String, Integer>>map(pos ->
+        ImmutableMap.of(
+            "x", pos.getX(),
+            "y", pos.getY(),
+            "z", pos.getZ()
+        )).orElse(Collections.emptyMap());
   }
 
   @LuaFunction
-  public final int calcRotationTo(String a, int step) throws LuaException {
+  public final int calcRotationTo(String a, boolean positive) throws LuaException {
     Direction.Axis axis;
     try {
       axis = Direction.Axis.valueOf(a.toUpperCase());
@@ -211,10 +226,10 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
       return 0;
     }
 
-    return getRotateStep(step, axis);
+    return getRotateStep(positive, axis);
   }
 
-  private int getRotateStep(int step, Direction.Axis axis) {
+  private int getRotateStep(boolean positive, Direction.Axis axis) {
     int rotateStep = 0;
 
     Direction facingDirection = accessor.viboMachineEntity.getContraptionFacing();
@@ -224,7 +239,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
       axisDirection = Direction.fromYRot(facingDirection.toYRot() + 90).getAxisDirection();
     }
 
-    if (axisDirection.getStep() != step) {
+    if (axisDirection.getStep() != (positive ? 1 : -1)) {
       rotateStep += 2;
     }
 

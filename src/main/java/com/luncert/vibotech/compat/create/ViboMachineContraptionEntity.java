@@ -66,7 +66,7 @@ public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
         this.motionBeforeStall = riding.getDeltaMovement();
       }
 
-      // block movement
+      // block entity movement
       riding.setDeltaMovement(Vec3.ZERO);
       riding.setPos(riding.xOld, riding.yOld, riding.zOld);
     } else if (wasStalled) {

@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 
 public class ViboMachineEntity extends Entity {
 
-  @SuppressWarnings("unused")
   private static final Logger LOGGER = LogUtils.getLogger();
   private static final double MIN_MOVE_LENGTH = 0.001;
   private static final EntityDataAccessor<Boolean> POWER =
@@ -80,7 +79,6 @@ public class ViboMachineEntity extends Entity {
     setPos(stationPos.getX() + .5f, stationPos.getY(), stationPos.getZ() + .5f);
     this.noPhysics = true;
     Direction blockDirection = viboMachineCoreState.getValue(HORIZONTAL_FACING).getOpposite();
-LOGGER.info("{}", blockDirection);
     this.initialOrientation = blockDirection;
     setYRot(blockDirection.toYRot());
     setTargetYRot(getYRot());
@@ -330,7 +328,6 @@ LOGGER.info("{}", blockDirection);
     }
 
     updateMotion().ifPresent(motion -> {
-      // TODO:
       // if (Create.RANDOM.nextBoolean()) {
       //   motion = motion.relative(Direction.UP, Create.RANDOM.nextDouble() / 2 - 0.5);
       // }
@@ -347,8 +344,10 @@ LOGGER.info("{}", blockDirection);
       EntityMovementData movement = opt.get();
       double v = position().get(movement.axis);
       double absDist = Math.abs(movement.expectedPos - v);
-      if (absDist > 0) {
-        return Optional.ofNullable(updateMotion(absDist, movement));
+      if (absDist < MIN_MOVE_LENGTH) {
+        setPos(Utils.set(position(), movement.axis, movement.expectedPos));
+      } else {
+        return Optional.of(updateMotion(absDist, movement));
       }
       // When linear movement done, update yrot.
       // The rotation animation is controlled by contraption entity itself,
@@ -362,14 +361,9 @@ LOGGER.info("{}", blockDirection);
   }
 
   private Vec3 updateMotion(double absDistance, EntityMovementData movement) {
-    if (absDistance < MIN_MOVE_LENGTH) {
-      setPos(Utils.set(position(), movement.axis, movement.expectedPos));
-      return null;
-    }
-
     float speed;
     if (getYRot() != getTargetYRot()) {
-      // speed while rotating
+      // set speed to 16 while rotating
       speed = getMovementSpeed(16);
     } else {
       speed = getMovementSpeed();
@@ -378,7 +372,7 @@ LOGGER.info("{}", blockDirection);
     if (!movement.positive) {
       linearMotion = -linearMotion;
     }
-
+    // LOGGER.info("{} {} {}", linearMotion, getYRot(), getTargetYRot());
     return Utils.linear(movement.axis, linearMotion);
   }
 

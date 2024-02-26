@@ -52,7 +52,7 @@ public class CameraEntity extends Entity {
 
   @Override
   public void turn(double pYRot, double pXRot) {
-    super.turn(pYRot * 0.3, pXRot * 0.3);
+    super.turn(pYRot * 0.2, pXRot * 0.2);
     this.setXRot(Mth.clamp(this.getXRot(), -45.0F, 45.0F));
     this.xRotO = Mth.clamp(this.xRotO, -45.0F, 45.0F);
     this.setYRot(Mth.clamp(this.getYRot(), -45.0F, 45.0F));
