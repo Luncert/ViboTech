@@ -2,6 +2,7 @@ package com.luncert.vibotech.content.camera;
 
 import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
 
+import com.luncert.vibotech.content.camera.packet.ServerDisconnectCameraPacket;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllPackets;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
@@ -53,7 +54,9 @@ public class CameraBlock extends Block implements IBE<CameraBlockEntity>, IWrenc
       return InteractionResult.PASS;
     }
     withBlockEntityDo(world, pos, be -> {
-      be.connect(world, player);
+      if (world.isClientSide) {
+        be.connectFromClient(player);
+      }
     });
     return InteractionResult.SUCCESS;
   }
@@ -62,7 +65,7 @@ public class CameraBlock extends Block implements IBE<CameraBlockEntity>, IWrenc
   public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
     super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
     if (pLevel.isClientSide) {
-      AllPackets.getChannel().sendToServer(new PreDisconnectCameraPacket());
+      AllPackets.getChannel().sendToServer(new ServerDisconnectCameraPacket());
     }
   }
 }

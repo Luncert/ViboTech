@@ -3,8 +3,11 @@ package com.luncert.vibotech.compat.computercraft;
 import static dan200.computercraft.shared.Capabilities.CAPABILITY_PERIPHERAL;
 
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
+import com.luncert.vibotech.content.assemblestation.AssembleStationPeripheral;
 import com.luncert.vibotech.content.camera.CameraBlockEntity;
+import com.luncert.vibotech.content.camera.CameraPeripheral;
 import com.luncert.vibotech.content.controlseat.ControlSeatBlockEntity;
+import com.luncert.vibotech.content.controlseat.ControlSeatPeripheral;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class Peripherals {

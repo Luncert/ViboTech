@@ -1,15 +1,16 @@
-package com.luncert.vibotech.content.camera;
+package com.luncert.vibotech.content.camera.packet;
 
+import com.luncert.vibotech.content.camera.CameraData;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-public class DisconnectCameraPacket extends SimplePacketBase {
+public class ClientDisconnectCameraPacket extends SimplePacketBase {
 
-  public DisconnectCameraPacket() {
+  public ClientDisconnectCameraPacket() {
   }
 
-  public DisconnectCameraPacket(FriendlyByteBuf friendlyByteBuf) {
+  public ClientDisconnectCameraPacket(FriendlyByteBuf friendlyByteBuf) {
   }
 
   @Override

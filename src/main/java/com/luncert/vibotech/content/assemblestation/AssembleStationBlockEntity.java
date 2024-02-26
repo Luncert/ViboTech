@@ -1,6 +1,5 @@
 package com.luncert.vibotech.content.assemblestation;
 
-import com.luncert.vibotech.compat.computercraft.AssembleStationPeripheral;
 import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;
 import com.luncert.vibotech.compat.create.ViboMachineContraption;

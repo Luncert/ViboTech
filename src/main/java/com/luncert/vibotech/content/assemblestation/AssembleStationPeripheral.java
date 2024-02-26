@@ -1,4 +1,4 @@
-package com.luncert.vibotech.compat.computercraft;
+package com.luncert.vibotech.content.assemblestation;
 
 import com.luncert.vibotech.common.Utils;
 import com.luncert.vibotech.compat.create.EContraptionMovementMode;

@@ -1,4 +1,4 @@
-package com.luncert.vibotech.compat.computercraft;
+package com.luncert.vibotech.content.controlseat;
 
 import com.luncert.vibotech.content.controlseat.ControlSeatBlockEntity;
 import com.luncert.vibotech.content.controlseat.ControlSeatComponent;

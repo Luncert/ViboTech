@@ -1,10 +1,10 @@
 package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
-import com.luncert.vibotech.content.camera.DisconnectCameraPacket;
-import com.luncert.vibotech.content.camera.PreConnectCameraPacket;
-import com.luncert.vibotech.content.camera.ConnectCameraPacket;
-import com.luncert.vibotech.content.camera.PreDisconnectCameraPacket;
+import com.luncert.vibotech.content.camera.packet.ServerCreateCameraPacket;
+import com.luncert.vibotech.content.camera.packet.ClientDisconnectCameraPacket;
+import com.luncert.vibotech.content.camera.packet.ClientConnectCameraPacket;
+import com.luncert.vibotech.content.camera.packet.ServerDisconnectCameraPacket;
 import com.luncert.vibotech.content.controlseat.ControlSeatInputPacket;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorEnergyPacket;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
@@ -25,10 +25,10 @@ public enum AllPackets {
 
   CONTROL_SEAT_INPUT(ControlSeatInputPacket.class, ControlSeatInputPacket::new, NetworkDirection.PLAY_TO_SERVER),
   PORTABLE_ACCUMULATOR_ENERGY(PortableAccumulatorEnergyPacket.class, PortableAccumulatorEnergyPacket::new, NetworkDirection.PLAY_TO_CLIENT),
-  PRE_CONNECT_CAMERA(PreConnectCameraPacket.class, PreConnectCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
-  CONNECT_CAMERA(ConnectCameraPacket.class, ConnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT),
-  PRE_DISCONNECT_CAMERA(PreDisconnectCameraPacket.class, PreDisconnectCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
-  DISCONNECT_CAMERA(DisconnectCameraPacket.class, DisconnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT)
+  SERVER_CREATE_CONNECT_CAMERA(ServerCreateCameraPacket.class, ServerCreateCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
+  CLIENT_CONNECT_CAMERA(ClientConnectCameraPacket.class, ClientConnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT),
+  SERVER_DISCONNECT_CAMERA(ServerDisconnectCameraPacket.class, ServerDisconnectCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
+  CLIENT_DISCONNECT_CAMERA(ClientDisconnectCameraPacket.class, ClientDisconnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT),
   ;
 
   public static final ResourceLocation CHANNEL_NAME = ViboTechMod.asResource("main");

@@ -1,6 +1,5 @@
 package com.luncert.vibotech.content.controlseat;
 
-import com.luncert.vibotech.compat.computercraft.ControlSeatPeripheral;
 import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.index.AllCapabilities;
 import net.minecraft.core.BlockPos;

@@ -1,29 +1,29 @@
-package com.luncert.vibotech.content.camera;
+package com.luncert.vibotech.content.camera.packet;
 
+import com.luncert.vibotech.content.camera.CameraData;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.slf4j.Logger;
 
-public class PreConnectCameraPacket extends SimplePacketBase {
+public class ServerCreateCameraPacket extends SimplePacketBase {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
   private final BlockPos pos;
 
-  public PreConnectCameraPacket(BlockPos pos) {
+  public ServerCreateCameraPacket(BlockPos pos) {
     this.pos = pos;
   }
 
-  public PreConnectCameraPacket(FriendlyByteBuf buf) {
+  public ServerCreateCameraPacket(FriendlyByteBuf buf) {
     this.pos = new BlockPos(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
   }
 
@@ -41,18 +41,8 @@ public class PreConnectCameraPacket extends SimplePacketBase {
       if (player == null)
         return;
       Level level = player.level();
-
-      List<CameraEntity> entities = level.getEntitiesOfClass(CameraEntity.class, new AABB(pos));
-      CameraEntity entity;
-      if (entities.isEmpty()) {
-        entity = CameraEntity.create(level);
-        entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        level.addFreshEntity(entity);
-      } else {
-        entity = entities.get(0);
-      }
-
-      AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ConnectCameraPacket(entity.getId()));
+      Entity entity = CameraData.getOrCreateCameraEntity(level, pos);
+      AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ClientConnectCameraPacket(entity.getId()));
     });
     return true;
   }

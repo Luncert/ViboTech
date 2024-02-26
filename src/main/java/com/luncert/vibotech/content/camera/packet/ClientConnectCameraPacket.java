@@ -1,5 +1,6 @@
-package com.luncert.vibotech.content.camera;
+package com.luncert.vibotech.content.camera.packet;
 
+import com.luncert.vibotech.content.camera.CameraData;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.client.Minecraft;
@@ -8,17 +9,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 import org.slf4j.Logger;
 
-public class ConnectCameraPacket extends SimplePacketBase {
+public class ClientConnectCameraPacket extends SimplePacketBase {
 
   private static final Logger LOGGER = LogUtils.getLogger();
 
   private final int cameraEntityId;
 
-  public ConnectCameraPacket(int cameraEntityId) {
+  public ClientConnectCameraPacket(int cameraEntityId) {
     this.cameraEntityId = cameraEntityId;
   }
 
-  public ConnectCameraPacket(FriendlyByteBuf buf) {
+  public ClientConnectCameraPacket(FriendlyByteBuf buf) {
     this.cameraEntityId = buf.readVarInt();
   }
 

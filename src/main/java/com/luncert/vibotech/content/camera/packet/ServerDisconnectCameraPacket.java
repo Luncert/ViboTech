@@ -1,4 +1,4 @@
-package com.luncert.vibotech.content.camera;
+package com.luncert.vibotech.content.camera.packet;
 
 import com.luncert.vibotech.index.AllPackets;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
@@ -7,12 +7,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
-public class PreDisconnectCameraPacket extends SimplePacketBase {
+public class ServerDisconnectCameraPacket extends SimplePacketBase {
 
-  public PreDisconnectCameraPacket() {
+  public ServerDisconnectCameraPacket() {
   }
 
-  public PreDisconnectCameraPacket(FriendlyByteBuf friendlyByteBuf) {
+  public ServerDisconnectCameraPacket(FriendlyByteBuf friendlyByteBuf) {
   }
 
   @Override
@@ -26,7 +26,7 @@ public class PreDisconnectCameraPacket extends SimplePacketBase {
       if (player == null)
         return;
 
-      AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new DisconnectCameraPacket());
+      AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ClientDisconnectCameraPacket());
     });
     return true;
   }
