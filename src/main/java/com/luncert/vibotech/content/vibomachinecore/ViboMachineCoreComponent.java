@@ -17,6 +17,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
@@ -40,6 +43,23 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     context.setPowerOn(power);
     context.setSpeed(speed);
   }
+
+  @Override
+  public Tag writeNBT() {
+    CompoundTag tag = new CompoundTag();
+    tag.putBoolean("power", power);
+    tag.putInt("speed", speed);
+    return tag;
+  }
+
+  @Override
+  public void readNBT(Level world, Tag tag) {
+    CompoundTag compoundTag = (CompoundTag) tag;
+    power = compoundTag.getBoolean("power");
+    speed = compoundTag.getInt("speed");
+  }
+
+  // api
 
   @LuaFunction
   public final void power(boolean on) {
