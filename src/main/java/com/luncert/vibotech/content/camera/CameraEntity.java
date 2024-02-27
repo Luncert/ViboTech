@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content.camera;
 
+import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -38,15 +39,18 @@ public class CameraEntity extends Entity {
     return builder.sized(0.25F, 0.35F);
   }
 
-  // @Override
-  // public void tick() {
-  //   if (level().isClientSide)
-  //     return;
-  //   boolean blockPresent = level().getBlockState(blockPosition()).getBlock() instanceof CameraBlock;
-  //   if (isVehicle() && blockPresent)
-  //     return;
-  //   this.discard();
-  // }
+  @Override
+  public void tick() {
+    if (level().isClientSide)
+      return;
+    if (getVehicle() instanceof ViboMachineContraptionEntity) {
+      return;
+    }
+    boolean blockPresent = level().getBlockState(blockPosition()).getBlock() instanceof CameraBlock;
+    if (isVehicle() && blockPresent)
+      return;
+    this.discard();
+  }
 
   @Override
   protected void defineSynchedData() {
