@@ -1,22 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern":
-  [" W ",
-    "WSW",
-    " C "],
+  [" S ",
+    "SAS",
+    " S "],
   "key": {
-    "W": {
-      "tag": "forge:plates/iron"
+    "A": {
+      "item": "createaddition:modular_accumulator"
     },
     "S": {
-      "item": "minecraft:compass"
-    },
-    "C": {
       "item": "create:andesite_casing"
     }
   },
   "result":{
-    "item": "vibotech:geo_scanner",
+    "item": "vibotech:portable_accumulator",
     "count": 1
   }
 }

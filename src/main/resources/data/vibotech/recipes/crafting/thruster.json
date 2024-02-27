@@ -1,22 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern":
-  [" T ",
-    " C ",
-    " S "],
+  ["TTT",
+    "BCB",
+    "B B"],
   "key": {
     "T": {
       "item": "create:sturdy_sheet"
     },
+    "B": {
+      "item": "create:shaft"
+    },
     "C": {
       "item": "create:precision_mechanism"
-    },
-    "S": {
-      "item": "create:andesite_casing"
     }
   },
   "result":{
-    "item": "vibotech:assemble_station",
+    "item": "vibotech:thruster",
     "count": 1
   }
 }

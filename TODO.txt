@@ -1,4 +1,6 @@
 - camera shake
+- turn camera entity with contraption
+- lerp
 
 - control seat block sit pose
 - camera overlay, animation

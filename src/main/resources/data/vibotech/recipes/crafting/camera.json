@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [" A ",
+    " B ",
+    "COC"],
+  "key": {
+    "A": {
+      "item": "minecraft:ender_eye"
+    },
+    "B": {
+      "item": "create:shaft"
+    },
+    "C": {
+      "tag": "forge:plates/iron"
+    },
+    "O": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "result":{
+    "item": "vibotech:camera",
+    "count": 1
+  }
+}

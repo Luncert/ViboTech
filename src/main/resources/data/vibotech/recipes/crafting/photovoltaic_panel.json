@@ -1,22 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern":
-  [" T ",
-    " C ",
+  ["   ",
+    " T ",
     " S "],
   "key": {
     "T": {
       "item": "create:sturdy_sheet"
     },
-    "C": {
-      "item": "create:precision_mechanism"
-    },
     "S": {
-      "item": "create:andesite_casing"
+      "item": "minecraft:daylight_detector"
     }
   },
   "result":{
-    "item": "vibotech:assemble_station",
+    "item": "vibotech:photovoltaic_panel",
     "count": 1
   }
 }

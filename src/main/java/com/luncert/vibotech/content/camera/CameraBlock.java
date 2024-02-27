@@ -44,7 +44,7 @@ public class CameraBlock extends Block implements IBE<CameraBlockEntity>, IWrenc
 
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
-    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
+    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
   }
 
   @Override

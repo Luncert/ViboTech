@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  ["A A",
+    "C C",
+    " O "],
+  "key": {
+    "A": {
+      "item": "create:shaft"
+    },
+    "C": {
+      "tag": "forge:plates/iron"
+    },
+    "O": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "result":{
+    "item": "vibotech:control_seat",
+    "count": 1
+  }
+}

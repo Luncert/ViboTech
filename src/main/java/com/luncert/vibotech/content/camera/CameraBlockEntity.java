@@ -69,13 +69,13 @@ public class CameraBlockEntity extends SmartBlockEntity {
   }
 
   public void connectFromServer(ServerPlayer player) {
-    Direction blockDirection = getBlockState().getValue(HORIZONTAL_FACING).getOpposite();
+    Direction blockDirection = getBlockState().getValue(HORIZONTAL_FACING);
     CameraEntity entity = CameraData.getOrCreateCameraEntity(level, worldPosition, blockDirection);
     AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ClientConnectCameraPacket(entity.getId()));
   }
 
   public void connectFromClient(Player player) {
-    Direction blockDirection = getBlockState().getValue(HORIZONTAL_FACING).getOpposite();
+    Direction blockDirection = getBlockState().getValue(HORIZONTAL_FACING);
     AllPackets.getChannel().sendToServer(new ServerCreateCameraPacket(worldPosition, blockDirection.toYRot()));
   }
 

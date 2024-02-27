@@ -1,15 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern":
-  [" W ",
-    "WSW",
-    "WWW"],
+  ["AOA",
+    "OCO",
+    "AOA"],
   "key": {
-    "W": {
-      "tag": "forge:plates/iron"
+    "A": {
+      "item": "minecraft:quartz_block"
     },
-    "S": {
-      "item": "create:andesite_funnel"
+    "C": {
+      "item": "create:precision_mechanism"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
     }
   },
   "result":{
