@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content.camera;
 
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -7,6 +8,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +18,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 public class CameraEntity extends Entity {
+
+  private static final EntityDataAccessor<Float> INITIAL_ORIENTATION =
+      SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.FLOAT);
 
   public CameraEntity(EntityType<?> pEntityType, Level pLevel) {
     super(pEntityType, pLevel);
@@ -23,6 +30,7 @@ public class CameraEntity extends Entity {
     CameraEntity entity = new CameraEntity(AllEntityTypes.CAMERA.get(), level);
     entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     entity.setYRot(orientation.toYRot());
+    entity.setInitialOrientation(orientation.toYRot());
     return entity;
   }
 
@@ -42,17 +50,26 @@ public class CameraEntity extends Entity {
 
   @Override
   protected void defineSynchedData() {
-
+    entityData.packDirty();
+    entityData.define(INITIAL_ORIENTATION, 0f);
   }
 
   @Override
-  protected void readAdditionalSaveData(CompoundTag pCompound) {
-
+  protected void readAdditionalSaveData(CompoundTag root) {
+    entityData.set(INITIAL_ORIENTATION, root.getFloat("initialOrientation"));
   }
 
   @Override
-  protected void addAdditionalSaveData(CompoundTag pCompound) {
+  protected void addAdditionalSaveData(CompoundTag root) {
+    root.putFloat("initialOrientation", entityData.get(INITIAL_ORIENTATION));
+  }
 
+  private void setInitialOrientation(float yRot) {
+    entityData.set(INITIAL_ORIENTATION, yRot);
+  }
+
+  private float getInitialOrientation() {
+    return entityData.get(INITIAL_ORIENTATION);
   }
 
   @Override
@@ -60,8 +77,9 @@ public class CameraEntity extends Entity {
     super.turn(pYRot * 0.2, pXRot * 0.2);
     this.setXRot(Mth.clamp(this.getXRot(), -45.0F, 45.0F));
     this.xRotO = Mth.clamp(this.xRotO, -45.0F, 45.0F);
-    this.setYRot(Mth.clamp(this.getYRot(), -45.0F, 45.0F));
-    this.yRotO = Mth.clamp(this.yRotO, -45.0F, 45.0F);
+    float initialOrientation = getInitialOrientation();
+    this.setYRot(Mth.clamp(this.getYRot(), initialOrientation - 45.0F, initialOrientation + 45.0F));
+    this.yRotO = Mth.clamp(this.yRotO, initialOrientation - 45.0F, initialOrientation + 45.0F);
   }
 
   public static class Render extends EntityRenderer<CameraEntity> {

@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content.camera;
 
-import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.content.camera.packet.ServerDisconnectCameraPacket;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
@@ -38,13 +38,13 @@ public class CameraBlock extends Block implements IBE<CameraBlockEntity>, IWrenc
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    builder.add(FACING);
+    builder.add(HORIZONTAL_FACING);
     super.createBlockStateDefinition(builder);
   }
 
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
-    return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
   }
 
   @Override
