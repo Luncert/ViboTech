@@ -1,15 +1,14 @@
 
 - remove camera entity after block break
-- fix camera entity orientation
 - control seat block sit pose
 
 - pick contraption with wrench
     - contraption entity emit interact event
 - create plasma particle under thruster block, lifetime -> max distance, bounds
 - simulate contraption shaking
-- camera: create fake player
 - MovementContext mixin getAnimationSpeed
 
+-// fix camera entity orientation
 -// prevent seat on camera entity (it will break camera function, occupied camera entity's seat)
 -// high speed lerp, 128
 -// player controller

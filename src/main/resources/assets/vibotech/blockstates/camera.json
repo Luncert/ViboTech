@@ -15,14 +15,6 @@
     "facing=east": {
       "model": "vibotech:block/camera",
       "y": 270
-    },
-    "facing=up": {
-      "model": "vibotech:block/camera",
-      "x": 90
-    },
-    "facing=down": {
-      "model": "vibotech:block/camera",
-      "x": 270
     }
   }
 }

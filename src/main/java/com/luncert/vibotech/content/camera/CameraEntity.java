@@ -4,6 +4,8 @@ import com.luncert.vibotech.index.AllEntityTypes;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -17,8 +19,11 @@ public class CameraEntity extends Entity {
     super(pEntityType, pLevel);
   }
 
-  public static CameraEntity create(Level level) {
-    return new CameraEntity(AllEntityTypes.CAMERA.get(), level);
+  public static CameraEntity create(Level level, BlockPos pos, Direction orientation) {
+    CameraEntity entity = new CameraEntity(AllEntityTypes.CAMERA.get(), level);
+    entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+    entity.setYRot(orientation.toYRot());
+    return entity;
   }
 
   public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {

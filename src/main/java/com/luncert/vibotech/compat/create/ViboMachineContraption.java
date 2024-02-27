@@ -1,6 +1,8 @@
 package com.luncert.vibotech.compat.create;
 
 import static com.luncert.vibotech.index.AllContraptionTypes.VIBO_MACHINE_CONTRAPTION;
+import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+import static net.minecraft.world.level.block.DirectionalBlock.FACING;
 
 import com.luncert.vibotech.common.TreeNode;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
@@ -273,7 +275,8 @@ public class ViboMachineContraption extends Contraption {
         moveControlSeat(world, pos);
       }
       if (state.getBlock() instanceof CameraBlock) {
-        moveCamera(world, pos);
+        Direction blockDirection = state.getValue(FACING).getOpposite();
+        moveCamera(world, pos, blockDirection);
       }
     }
 
@@ -294,12 +297,12 @@ public class ViboMachineContraption extends Contraption {
     }
   }
 
-  private void moveCamera(Level world, BlockPos pos) {
+  private void moveCamera(Level world, BlockPos pos, Direction blockDirection) {
     BlockPos local = this.toLocalPos(pos);
     getSeats().add(local);
     // cameras.add(local);
 
-    CameraEntity camera = CameraData.getOrCreateCameraEntity(world, pos);
+    CameraEntity camera = CameraData.getOrCreateCameraEntity(world, pos, blockDirection);
     // let camera entity rides contraption entity
     getInitialPassengers().put(local, camera);
   }

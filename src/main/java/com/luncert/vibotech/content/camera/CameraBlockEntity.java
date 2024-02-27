@@ -1,8 +1,9 @@
 package com.luncert.vibotech.content.camera;
 
+import static net.minecraft.world.level.block.DirectionalBlock.FACING;
+
 import com.luncert.vibotech.compat.computercraft.Peripherals;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
-import com.luncert.vibotech.compat.vibotech.ViboComponentType;
 import com.luncert.vibotech.content.camera.packet.ClientConnectCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ClientDisconnectCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ServerCreateCameraPacket;
@@ -68,12 +69,14 @@ public class CameraBlockEntity extends SmartBlockEntity {
   }
 
   public void connectFromServer(ServerPlayer player) {
-    CameraEntity entity = CameraData.getOrCreateCameraEntity(level, worldPosition);
+    Direction blockDirection = getBlockState().getValue(FACING).getOpposite();
+    CameraEntity entity = CameraData.getOrCreateCameraEntity(level, worldPosition, blockDirection);
     AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ClientConnectCameraPacket(entity.getId()));
   }
 
   public void connectFromClient(Player player) {
-    AllPackets.getChannel().sendToServer(new ServerCreateCameraPacket(worldPosition));
+    Direction blockDirection = getBlockState().getValue(FACING).getOpposite();
+    AllPackets.getChannel().sendToServer(new ServerCreateCameraPacket(worldPosition, blockDirection.toYRot()));
   }
 
   public void disconnectFromServer(ServerPlayer player) {
