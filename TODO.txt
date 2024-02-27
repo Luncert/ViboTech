@@ -1,3 +1,5 @@
+- camera shake
+- accumulator empty nbt
 
 - control seat block sit pose
 - camera overlay, animation

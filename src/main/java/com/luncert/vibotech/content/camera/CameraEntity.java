@@ -17,6 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class CameraEntity extends Entity {
 
@@ -29,7 +30,8 @@ public class CameraEntity extends Entity {
 
   public static CameraEntity create(Level level, BlockPos pos, Direction orientation) {
     CameraEntity entity = new CameraEntity(AllEntityTypes.CAMERA.get(), level);
-    entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+    Vec3 p = new Vec3(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
+    entity.setPos(p);
     entity.setYRot(orientation.toYRot());
     entity.setInitialOrientation(orientation.toYRot());
     return entity;
