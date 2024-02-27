@@ -1,8 +1,6 @@
 
-- prevent seat on camera entity (it will break camera function, occupied camera entity's seat)
 - remove camera entity after block break
 - fix camera entity orientation
-- high speed lerp, 128
 - control seat block sit pose
 
 - pick contraption with wrench
@@ -12,6 +10,8 @@
 - camera: create fake player
 - MovementContext mixin getAnimationSpeed
 
+-// prevent seat on camera entity (it will break camera function, occupied camera entity's seat)
+-// high speed lerp, 128
 -// player controller
 -// photovoltaic panel
 -// create new fluid steam

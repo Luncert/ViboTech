@@ -1,5 +1,6 @@
 package com.luncert.vibotech.compat.create;
 
+import com.luncert.vibotech.content.camera.CameraEntity;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
@@ -8,9 +9,12 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.content.contraptions.sync.ContraptionSeatMappingPacket;
 import com.simibubi.create.foundation.utility.AngleHelper;
+import java.util.Map;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
@@ -146,5 +150,23 @@ public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
     contraption.getSeatMapping().put(passenger.getUUID(), seatIndex);
     AllPackets.getChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> this),
         new ContraptionSeatMappingPacket(getId(), contraption.getSeatMapping()));
+  }
+
+  @Override
+  public boolean handlePlayerInteraction(Player player, BlockPos localPos, Direction side, InteractionHand interactionHand) {
+    int indexOfSeat = contraption.getSeats().indexOf(localPos);
+    if (indexOfSeat > -1) {
+      for (Map.Entry<UUID, Integer> entry : contraption.getSeatMapping().entrySet()) {
+        if (entry.getValue() != indexOfSeat)
+          continue;
+        for (Entity entity : getPassengers()) {
+          if (!entry.getKey().equals(entity.getUUID()))
+            continue;
+          if (entity instanceof CameraEntity)
+            return false;
+        }
+      }
+    }
+    return super.handlePlayerInteraction(player, localPos, side, interactionHand);
   }
 }
