@@ -362,7 +362,7 @@ public class ViboMachineEntity extends Entity {
 
   private Vec3 updateMotion(double absDistance, EntityMovementData movement) {
     float speed;
-    if (getYRot() != getTargetYRot()) {
+    if (isRotating()) {
       // set speed to 16 while rotating
       speed = getMovementSpeed(16);
     } else {
@@ -385,6 +385,11 @@ public class ViboMachineEntity extends Entity {
     }
     actionCoolDown = 11;
     isMoving = false;
+  }
+
+  private boolean isRotating() {
+    float v = Math.abs(getYRot() - getTargetYRot());
+    return v != 360 && v != 0;
   }
 
   public float getMovementSpeed() {
