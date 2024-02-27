@@ -10,28 +10,28 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class AssembleStationItem extends BlockItem {
+public class AssembleStationItem extends Item {
 
   // private static final Logger LOGGER = LogUtils.getLogger();
   private final boolean bindViboMachine;
 
   public static AssembleStationItem empty(Properties properties) {
-    return new AssembleStationItem(AllBlocks.ASSEMBLE_STATION.get(), properties, false);
+    return new AssembleStationItem(properties, false);
   }
 
   public static AssembleStationItem active(Properties properties) {
-    return new AssembleStationItem(AllBlocks.ASSEMBLE_STATION.get(), properties, true);
+    return new AssembleStationItem(properties, true);
   }
 
-  public AssembleStationItem(AssembleStationBlock block, Properties properties, boolean bindViboMachine) {
-    super(block, properties);
+  public AssembleStationItem(Properties properties, boolean bindViboMachine) {
+    super(properties);
     this.bindViboMachine = bindViboMachine;
   }
 
