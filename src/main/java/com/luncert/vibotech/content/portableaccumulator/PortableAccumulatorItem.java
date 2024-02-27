@@ -28,7 +28,9 @@ public class PortableAccumulatorItem extends BlockItem {
 
   public ItemStack create(PortableAccumulatorBlockEntity portableAccumulator) {
     ItemStack result = new ItemStack(this);
-    portableAccumulator.energyStorage.write(result.getOrCreateTag());
+    if (portableAccumulator.energyStorage.getEnergyStored() > 0) {
+      portableAccumulator.energyStorage.write(result.getOrCreateTag());
+    }
     return result;
   }
 

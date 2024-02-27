@@ -1,5 +1,4 @@
 - camera shake
-- accumulator empty nbt
 
 - control seat block sit pose
 - camera overlay, animation
@@ -9,6 +8,7 @@
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
 
+-// accumulator empty nbt
 -// remove camera entity after block break
 -// fix camera entity orientation
 -// prevent seat on camera entity (it will break camera function, occupied camera entity's seat)
