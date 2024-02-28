@@ -1,5 +1,6 @@
 - camera shake
 - power nbt
+- assemble accumulator block lost energy
 
 - control seat block sit pose
 - camera overlay, animation
@@ -9,6 +10,7 @@
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
 
+-// shift place accumulator block replace above block
 -// turn camera entity with contraption
 -// accumulator empty nbt
 -// remove camera entity after block break

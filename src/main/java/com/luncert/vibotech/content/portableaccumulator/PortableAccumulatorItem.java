@@ -1,22 +1,19 @@
 package com.luncert.vibotech.content.portableaccumulator;
 
-import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class PortableAccumulatorItem extends BlockItem {
+
 
   public PortableAccumulatorItem(Block block, Properties pProperties) {
     super(block, pProperties);
@@ -36,7 +33,7 @@ public class PortableAccumulatorItem extends BlockItem {
 
   @Override
   public @NotNull InteractionResult useOn(UseOnContext context) {
-    if (tryPlacePortableAccumulator(context)) {
+    if (tryPlacePortableAccumulator(new BlockPlaceContext(context))) {
       context.getLevel()
           .playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1, 1);
       return InteractionResult.SUCCESS;
@@ -45,18 +42,21 @@ public class PortableAccumulatorItem extends BlockItem {
     return super.useOn(context);
   }
 
-  public boolean tryPlacePortableAccumulator(UseOnContext context) {
-    BlockPos pos = context.getClickedPos().above();
-    Level world = context.getLevel();
-    Player player = context.getPlayer();
+  public boolean tryPlacePortableAccumulator(BlockPlaceContext context) {
+    var newState = AllBlocks.PORTABLE_ACCUMULATOR.getDefaultState();
+    if (!this.placeBlock(context, newState)) {
+      return false;
+    }
+
+    var pos = context.getClickedPos();
+    var world = context.getLevel();
+    var player = context.getPlayer();
     if (player == null)
       return false;
 
-    BlockState newState = AllBlocks.PORTABLE_ACCUMULATOR.getDefaultState();
-    world.setBlockAndUpdate(pos, newState);
     ItemStack itemStack = context.getItemInHand();
 
-    if (!player.isCreative()) {
+    if (!player.getAbilities().instabuild) {
       itemStack.shrink(1);
     }
 
