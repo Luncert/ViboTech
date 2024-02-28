@@ -3,13 +3,22 @@ package com.luncert.vibotech.content.thruster;
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentTickContext;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
+import com.luncert.vibotech.compat.vibotech.ViboContraptionAccessor;
 import net.minecraft.util.Mth;
 
 public class ThrusterComponent extends BaseViboComponent {
 
+  private PlasmaCurrentSource plasmaCurrentSource;
+
   @Override
   public ViboComponentType getComponentType() {
     return ViboComponentType.THRUSTER;
+  }
+
+  @Override
+  public void init(ViboContraptionAccessor accessor, String name) {
+    super.init(accessor, name);
+    plasmaCurrentSource = new PlasmaCurrentSource(accessor.world, this::getWorldPos);
   }
 
   @Override
@@ -30,6 +39,11 @@ public class ThrusterComponent extends BaseViboComponent {
           });
         }
       });
+    }
+
+    // TODO: create particle only if power on
+    if (accessor.world.isClientSide) {
+      plasmaCurrentSource.tick();
     }
   }
 }
