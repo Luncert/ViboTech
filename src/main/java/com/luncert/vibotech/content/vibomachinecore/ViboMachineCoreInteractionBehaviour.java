@@ -1,5 +1,8 @@
 package com.luncert.vibotech.content.vibomachinecore;
 
+import static com.luncert.vibotech.index.AllItems.ASSEMBLED_ASSEMBLE_STATION;
+import static com.luncert.vibotech.index.AllItems.ASSEMBLE_STATION;
+
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
 import com.luncert.vibotech.content.assemblestation.AssembleStationItem;
 import com.luncert.vibotech.index.AllItems;
@@ -21,9 +24,9 @@ public class ViboMachineCoreInteractionBehaviour extends MovingInteractionBehavi
     // bind assemble station
     if (contraptionEntity.getVehicle() instanceof ViboMachineEntity) {
       Inventory inventory = player.getInventory();
-      AssembleStationItem assembleStationItem = AllItems.ASSEMBLE_STATION.get();
-      if (inventory.getSelected().is(assembleStationItem)) {
-        ItemStack taggedItemStack = assembleStationItem.create((ViboMachineContraptionEntity) contraptionEntity);
+      if (inventory.getSelected().is(ASSEMBLE_STATION.get())) {
+        ItemStack taggedItemStack = ASSEMBLED_ASSEMBLE_STATION.get()
+            .create((ViboMachineContraptionEntity) contraptionEntity);
         if (taggedItemStack.isEmpty()) {
           return false;
         }

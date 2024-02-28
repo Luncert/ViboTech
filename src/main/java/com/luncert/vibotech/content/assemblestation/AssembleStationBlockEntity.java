@@ -50,6 +50,10 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
   }
 
   public void assemble(EContraptionMovementMode mode) throws ViboMachineAssemblyException {
+    if (viboMachineEntity != null) {
+      throw new ViboMachineAssemblyException("connected to assembled vibo machine");
+    }
+
     // check above block
     BlockState blockState = level.getBlockState(worldPosition.above());
 
@@ -70,8 +74,10 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
       viboMachineEntity.dissemble();
       viboMachineEntity = null;
       viboMachineCoreEntityId = null;
+      assembled = false;
+    } else {
+      throw new ViboMachineAssemblyException("vibo machine not found");
     }
-    assembled = false;
   }
 
   public Map<ViboComponentType, List<IViboComponent>> getComponents() {
