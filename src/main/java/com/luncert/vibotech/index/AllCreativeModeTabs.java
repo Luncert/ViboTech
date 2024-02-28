@@ -5,7 +5,6 @@ import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.foundation.utility.Components;
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
@@ -38,7 +37,7 @@ public class AllCreativeModeTabs {
       () -> CreativeModeTab.builder()
           .title(Components.translatable("itemGroup.vibotech.base"))
           .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-          .icon(AllBlocks.COGWHEEL::asStack)
+          .icon(AllBlocks.VIBO_MACHINE_CORE::asStack)
           .displayItems(new RegistrateDisplayItemsGenerator())
           .build());
 
