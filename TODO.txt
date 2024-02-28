@@ -10,6 +10,7 @@
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
 
+-// prevent multiple binding on vibo machine
 -// shift place accumulator block replace above block
 -// turn camera entity with contraption
 -// accumulator empty nbt

@@ -161,6 +161,9 @@ public class AssembleStationPeripheral implements IPeripheral {
     private ILuaFunction generate(IViboComponent c, Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         return arguments -> {
+            if (!assembleStationBlockEntity.isAssembled()) {
+                throw new LuaException("vibo contraption not found");
+            }
             Object[] args = parseArguments(arguments, parameterTypes);
             try {
                 Object result = method.invoke(c, args);

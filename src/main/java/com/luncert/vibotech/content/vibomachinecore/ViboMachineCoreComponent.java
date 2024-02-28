@@ -70,7 +70,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
 
   @LuaFunction
   public final boolean hasPower() {
-    return accessor.viboMachineEntity.getPower();
+    return accessor.viboMachineEntity.hasPower();
   }
 
   @LuaFunction
