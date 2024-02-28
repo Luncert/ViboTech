@@ -11,10 +11,12 @@ import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlock;
 import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorBlock;
+import com.luncert.vibotech.content.portableaccumulator.PortableAccumulatorMovement;
 import com.luncert.vibotech.content.thruster.ThrusterBlock;
 import com.luncert.vibotech.content.controlseat.ControlSeatBlock;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreBlock;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineCoreInteractionBehaviour;
+import com.simibubi.create.AllMovementBehaviours;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -115,6 +117,7 @@ public class AllBlocks {
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
           .properties(BlockBehaviour.Properties::noOcclusion)
+          .onRegister(AllMovementBehaviours.movementBehaviour(new PortableAccumulatorMovement()))
           .transform(pickaxeOnly())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()

@@ -17,22 +17,22 @@ public class FluidAccessorComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public int getTanks() {
+  public final int getTanks() {
     return getFluidAccessor().map(IFluidHandler::getTanks).orElse(0);
   }
 
   @LuaFunction
-  public FluidStack getFluidInTank(int i) {
+  public final FluidStack getFluidInTank(int i) {
     return getFluidAccessor().map(fluidHandler -> fluidHandler.getFluidInTank(i)).orElse(FluidStack.EMPTY);
   }
 
   @LuaFunction
-  public int getTankCapacity(int i) {
+  public final int getTankCapacity(int i) {
     return getFluidAccessor().map(fluidHandler -> fluidHandler.getTankCapacity(i)).orElse(0);
   }
 
   @LuaFunction
-  public int getCapacity(String fluidId) throws LuaException {
+  public final int getCapacity(String fluidId) throws LuaException {
     Fluid targetFluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidId));
     if (targetFluid == null) {
       throw new LuaException("Invalid argument");
@@ -53,7 +53,7 @@ public class FluidAccessorComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public int getAmount(String fluidId) throws LuaException {
+  public final int getAmount(String fluidId) throws LuaException {
     Fluid targetFluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidId));
     if (targetFluid == null) {
       throw new LuaException("Invalid argument");

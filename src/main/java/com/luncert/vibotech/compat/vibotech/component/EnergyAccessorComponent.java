@@ -13,22 +13,28 @@ public class EnergyAccessorComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public int getEnergy() {
+  public final int getEnergy() {
     return getEnergyAccessor().map(IEnergyStorage::getEnergyStored).orElse(0);
   }
 
   @LuaFunction
-  public int getCapacity() {
+  public final int getCapacity() {
     return getEnergyAccessor().map(IEnergyStorage::getMaxEnergyStored).orElse(0);
   }
 
   @LuaFunction
-  public boolean canExtract() {
+  public final boolean canExtract() {
     return getEnergyAccessor().map(IEnergyStorage::canExtract).orElse(false);
   }
 
   @LuaFunction
-  public boolean canReceive() {
+  public final boolean canReceive() {
     return getEnergyAccessor().map(IEnergyStorage::canReceive).orElse(false);
+  }
+
+  @LuaFunction
+  public final float getPercent() {
+    return getEnergyAccessor().map(energy ->
+        energy.getEnergyStored() / (float) energy.getMaxEnergyStored()).orElse(0f);
   }
 }

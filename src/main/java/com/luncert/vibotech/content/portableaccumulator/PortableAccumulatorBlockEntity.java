@@ -88,11 +88,13 @@ public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements 
 
   @Override
   protected void write(CompoundTag tag, boolean clientPacket) {
-    energyStorage.write(tag);
+    tag.put("EnergyContent", energyStorage.write(new CompoundTag()));
   }
 
   @Override
   protected void read(CompoundTag tag, boolean clientPacket) {
-    energyStorage.read(tag);
+    if (tag.contains("EnergyContent")) {
+      this.energyStorage.read(tag.getCompound("EnergyContent"));
+    }
   }
 }

@@ -18,17 +18,17 @@ public class StorageAccessorComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public int getSlots() {
+  public final int getSlots() {
     return getStorageAccessor().map(IItemHandler::getSlots).orElse(0);
   }
 
   @LuaFunction
-  public int getSlotLimit(int i) {
+  public final int getSlotLimit(int i) {
     return getStorageAccessor().map(itemHandler -> itemHandler.getSlotLimit(i)).orElse(0);
   }
 
   @LuaFunction
-  public ItemStack getItemStackInSlot(int i) {
+  public final ItemStack getItemStackInSlot(int i) {
     return getStorageAccessor().map(itemHandler -> itemHandler.getStackInSlot(i)).orElse(ItemStack.EMPTY);
   }
 
@@ -39,7 +39,7 @@ public class StorageAccessorComponent extends BaseViboComponent {
    * @throws LuaException if itemId is invalid
    */
   @LuaFunction
-  public int getCapacity(String itemId) throws LuaException {
+  public final int getCapacity(String itemId) throws LuaException {
     Item targetItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
     if (targetItem == null) {
       throw new LuaException("Invalid argument");
@@ -66,7 +66,7 @@ public class StorageAccessorComponent extends BaseViboComponent {
    * @throws LuaException if itemId is invalid
    */
   @LuaFunction
-  public int getCount(String itemId) throws LuaException {
+  public final int getCount(String itemId) throws LuaException {
     Item targetItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
     if (targetItem == null) {
       throw new LuaException("Invalid argument");
@@ -82,5 +82,19 @@ public class StorageAccessorComponent extends BaseViboComponent {
       }
       return count;
     }).orElse(0);
+  }
+
+  @LuaFunction
+  public final float getPercent() {
+    return getStorageAccessor().map(itemHandler -> {
+      int count = 0;
+      int capacity = 0;
+      for (int i = 0, limit = itemHandler.getSlots(); i < limit; i++) {
+        ItemStack stack = itemHandler.getStackInSlot(i);
+        count += stack.getCount();
+        capacity += stack.getMaxStackSize();
+      }
+      return (float) count / capacity;
+    }).orElse(0f);
   }
 }
