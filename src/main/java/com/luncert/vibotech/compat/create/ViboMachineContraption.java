@@ -348,6 +348,15 @@ public class ViboMachineContraption extends Contraption {
 
     NBTHelper.writeEnum(tag, "RotationMode", rotationMode);
 
+    if (!world.isClientSide) {
+      writeViboNBT(tag);
+    }
+
+    //LOGGER.info("write {}", tag);
+    return tag;
+  }
+
+  private void writeViboNBT(CompoundTag tag) {
     // write context
     tag.put("context", context.writeNBT());
 
@@ -379,17 +388,22 @@ public class ViboMachineContraption extends Contraption {
 
     tag.put("components", componentList);
     tag.put("componentInfoMappings", componentInfoList);
-
-    return tag;
   }
 
   @Override
   public void readNBT(Level world, CompoundTag nbt, boolean spawnData) {
+    //LOGGER.info("read {}", nbt);
+
     super.readNBT(world, nbt, spawnData);
-    // System.out.println("read - " + nbt);
 
     rotationMode = NBTHelper.readEnum(nbt, "RotationMode", EContraptionMovementMode.class);
 
+    if (!world.isClientSide) {
+      readViboNBT(nbt);
+    }
+  }
+
+  private void readViboNBT(CompoundTag nbt) {
     // read context
     context.readNBT(nbt.getCompound("context"));
 
@@ -408,9 +422,9 @@ public class ViboMachineContraption extends Contraption {
         for (int n = v.size(); n <= componentId; n++) {
           v.add(null);
         }
+
         IViboComponent component = ViboComponentType.createComponent(componentType);
         component.readNBT(world, componentNbt.get("component"));
-
         v.set(componentId, component);
         return v;
       });

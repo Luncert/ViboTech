@@ -32,7 +32,7 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
 
   private static final int MAX_SPEED = 256;
   private boolean power = false;
-  private int speed = 0;
+  private int speed = 16;
   private int executionId;
 
   @Override
@@ -51,11 +51,13 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     CompoundTag tag = new CompoundTag();
     tag.putBoolean("power", power);
     tag.putInt("speed", speed);
+    LOGGER.info("xx {}", tag);
     return tag;
   }
 
   @Override
   public void readNBT(Level world, Tag tag) {
+    LOGGER.info("yy {}", tag);
     CompoundTag compoundTag = (CompoundTag) tag;
     power = compoundTag.getBoolean("power");
     speed = compoundTag.getInt("speed");

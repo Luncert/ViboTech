@@ -1,5 +1,4 @@
 - camera shake
-- power nbt
 - disable peripheral after dissemble
 
 - control seat block sit pose
@@ -10,6 +9,7 @@
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
 
+-// power nbt
 -// prevent multiple binding on vibo machine
 -// shift place accumulator block replace above block
 -// turn camera entity with contraption
