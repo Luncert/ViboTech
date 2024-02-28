@@ -1,8 +1,8 @@
 package com.luncert.vibotech.content.camera;
 
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
-import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -18,9 +18,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.slf4j.Logger;
 
 public class CameraEntity extends Entity {
 
+  private static final Logger LOGGER = LogUtils.getLogger();
+
+  private static final EntityDataAccessor<Float> INITIAL_VEHICLE_ORIENTATION =
+      SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.FLOAT);
   private static final EntityDataAccessor<Float> INITIAL_ORIENTATION =
       SynchedEntityData.defineId(CameraEntity.class, EntityDataSerializers.FLOAT);
 
@@ -58,6 +63,7 @@ public class CameraEntity extends Entity {
   protected void defineSynchedData() {
     entityData.packDirty();
     entityData.define(INITIAL_ORIENTATION, 0f);
+    entityData.define(INITIAL_VEHICLE_ORIENTATION, 0f);
   }
 
   @Override
@@ -70,6 +76,14 @@ public class CameraEntity extends Entity {
     root.putFloat("initialOrientation", entityData.get(INITIAL_ORIENTATION));
   }
 
+  private void setInitialVehicleOrientation(float yRot) {
+    entityData.set(INITIAL_VEHICLE_ORIENTATION, yRot);
+  }
+
+  private float getInitialVehicleOrientation() {
+    return entityData.get(INITIAL_VEHICLE_ORIENTATION);
+  }
+
   private void setInitialOrientation(float yRot) {
     entityData.set(INITIAL_ORIENTATION, yRot);
   }
@@ -79,11 +93,20 @@ public class CameraEntity extends Entity {
   }
 
   @Override
+  public boolean startRiding(Entity vehicle, boolean pForce) {
+    setInitialVehicleOrientation(vehicle.getYRot());
+    return super.startRiding(vehicle, pForce);
+  }
+
+  @Override
   public void turn(double pYRot, double pXRot) {
     super.turn(pYRot * 0.2, pXRot * 0.2);
     this.setXRot(Mth.clamp(this.getXRot(), -45.0F, 45.0F));
     this.xRotO = Mth.clamp(this.xRotO, -45.0F, 45.0F);
-    float initialOrientation = getInitialOrientation();
+    float initialOrientation = getVehicle() instanceof ViboMachineContraptionEntity e
+        ? e.getVehicle().getYRot() - getInitialVehicleOrientation() + getInitialOrientation() : getInitialOrientation();
+    // LOGGER.info("i {} {} {} {}", initialOrientation, getInitialOrientation(), getInitialVehicleOrientation(),
+    //     getVehicle() instanceof ViboMachineContraptionEntity e ? e.getVehicle().getYRot() : -1);
     this.setYRot(Mth.clamp(this.getYRot(), initialOrientation - 45.0F, initialOrientation + 45.0F));
     this.yRotO = Mth.clamp(this.yRotO, initialOrientation - 45.0F, initialOrientation + 45.0F);
   }

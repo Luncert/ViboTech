@@ -276,7 +276,7 @@ public class ViboMachineContraption extends Contraption {
         moveControlSeat(world, pos);
       }
       if (state.getBlock() instanceof CameraBlock) {
-        Direction blockDirection = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+        Direction blockDirection = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         moveCamera(world, pos, blockDirection);
       }
     }
