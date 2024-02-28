@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -69,7 +68,7 @@ public final class ViboContraptionAccessor {
         return Optional.empty();
     }
 
-    public BlockPos getComponentPos(String name) {
+    public BlockPos getComponentWorldPos(String name) {
         StructureTemplate.StructureBlockInfo blockInfo = contraption.getComponentBlockInfo(name);
         if (blockInfo == null) {
             throw new IllegalArgumentException("block info missing for " + name);

@@ -58,6 +58,6 @@ public abstract class BaseViboComponent implements IViboComponent {
     }
 
     protected BlockPos getWorldPos() {
-        return accessor.getComponentPos(name);
+        return accessor.getComponentWorldPos(name);
     }
 }
