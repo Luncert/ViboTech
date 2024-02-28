@@ -45,8 +45,6 @@ public class ViboMachineEntity extends Entity {
 
   private static final Logger LOGGER = LogUtils.getLogger();
   private static final double MIN_MOVE_LENGTH = 0.001;
-  private static final EntityDataAccessor<Boolean> CONNECTED_TO_STATION =
-      SynchedEntityData.defineId(ViboMachineEntity.class, EntityDataSerializers.BOOLEAN);
   private static final EntityDataAccessor<Boolean> POWER =
       SynchedEntityData.defineId(ViboMachineEntity.class, EntityDataSerializers.BOOLEAN);
   private static final EntityDataAccessor<Integer> SPEED =
@@ -193,23 +191,19 @@ public class ViboMachineEntity extends Entity {
     return entityBuilder.sized(0.1f, 0.1f);
   }
 
-  public void bindAssembleStation(AssembleStationBlockEntity assembleStationBlockEntity) {
+  public boolean bindAssembleStation(AssembleStationBlockEntity assembleStationBlockEntity) {
+    if (this.assembleStationBlockEntity == assembleStationBlockEntity) {
+      return true;
+    }
+    if (this.assembleStationBlockEntity != null && !this.assembleStationBlockEntity.isRemoved()) {
+      return false;
+    }
     this.assembleStationBlockEntity = assembleStationBlockEntity;
-    setConnectedToStation(true);
+    return true;
   }
 
   public Optional<AssembleStationBlockEntity> getAssembleStationBlockEntity() {
-    updateConnectedToStationStatus();
     return Optional.ofNullable(assembleStationBlockEntity);
-  }
-
-  private void updateConnectedToStationStatus() {
-    if (!level().isClientSide) {
-      if (assembleStationBlockEntity.isRemoved()) {
-        assembleStationBlockEntity = null;
-        setConnectedToStation(false);
-      }
-    }
   }
 
   public Optional<ViboMachineContraption> getContraption() {
@@ -413,15 +407,6 @@ public class ViboMachineEntity extends Entity {
     return speed / 512f * 1.5f;
   }
 
-  public void setConnectedToStation(boolean v) {
-    entityData.set(CONNECTED_TO_STATION, v);
-  }
-
-  public boolean isConnectedToStation() {
-    updateConnectedToStationStatus();
-    return entityData.get(CONNECTED_TO_STATION);
-  }
-
   public void setPower(boolean power) {
     entityData.set(POWER, power);
   }
@@ -460,7 +445,6 @@ public class ViboMachineEntity extends Entity {
   protected void defineSynchedData() {
     // entityData.clearDirty();
     entityData.packDirty();
-    entityData.define(CONNECTED_TO_STATION, false);
     entityData.define(POWER, false);
     entityData.define(SPEED, 16);
     entityData.define(TARGET_Y_ROT, 0f);
@@ -472,7 +456,6 @@ public class ViboMachineEntity extends Entity {
     if (root.isEmpty())
       return;
 
-    entityData.set(CONNECTED_TO_STATION, root.getBoolean("connectedToStation"));
     entityData.set(POWER, root.getBoolean("power"));
     entityData.set(SPEED, root.getInt("speed"));
     entityData.set(TARGET_Y_ROT, root.getFloat("targetYRot"));

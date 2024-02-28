@@ -1,19 +1,17 @@
 package com.luncert.vibotech.content.assemblestation;
 
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllBlocks;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,14 +42,14 @@ public class AssembleStationItem extends Item {
   }
 
   public ItemStack create(ViboMachineContraptionEntity contraptionEntity) {
-    ItemStack result = new ItemStack(this);
-    Entity vehicle = contraptionEntity.getVehicle();
-    if (vehicle != null) {
+    if (contraptionEntity.getVehicle() instanceof ViboMachineEntity viboMachineEntity) {
+      ItemStack result = new ItemStack(this);
       CompoundTag compound = result.getOrCreateTag();
-      compound.putString("vibo_machine_reference", vehicle.getUUID().toString());
+      compound.putString("vibo_machine_reference", viboMachineEntity.getUUID().toString());
       compound.putBoolean("assembled", true);
+      return result;
     }
-    return result;
+    return ItemStack.EMPTY;
   }
 
   @Override
@@ -61,7 +59,7 @@ public class AssembleStationItem extends Item {
 
   @Override
   public @NotNull InteractionResult useOn(UseOnContext context) {
-    if (tryPlaceAssembleStation(context)) {
+    if (tryPlaceAssembleStation(new BlockPlaceContext(context))) {
       context.getLevel()
           .playSound(null, context.getClickedPos(), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1, 1);
       return InteractionResult.SUCCESS;
@@ -70,21 +68,24 @@ public class AssembleStationItem extends Item {
     return super.useOn(context);
   }
 
-  public boolean tryPlaceAssembleStation(UseOnContext context) {
-    BlockPos pos = context.getClickedPos().above();
-    Level world = context.getLevel();
-    Player player = context.getPlayer();
+  public boolean tryPlaceAssembleStation(BlockPlaceContext context) {
+    var player = context.getPlayer();
     if (player == null)
       return false;
 
-    BlockState newState = AllBlocks.ASSEMBLE_STATION.getDefaultState();
-    world.setBlockAndUpdate(pos, newState);
+    var newState = AllBlocks.ASSEMBLE_STATION.getDefaultState();
+    if (!this.placeBlock(context, newState)) {
+      return false;
+    }
+
     ItemStack itemStack = context.getItemInHand();
 
     if (!player.isCreative()) {
       itemStack.shrink(1);
     }
 
+    var pos = context.getClickedPos();
+    var world = context.getLevel();
     if (itemStack.getTag() != null && itemStack.getTag().contains("vibo_machine_reference")
         && world.getBlockEntity(pos) instanceof AssembleStationBlockEntity assembleStationBlockEntity) {
       assembleStationBlockEntity.read(itemStack.getTag());
@@ -92,5 +93,9 @@ public class AssembleStationItem extends Item {
 
     AdvancementBehaviour.setPlacedBy(world, pos, player);
     return true;
+  }
+
+  protected boolean placeBlock(BlockPlaceContext pContext, BlockState pState) {
+    return pContext.getLevel().setBlock(pContext.getClickedPos(), pState, 11);
   }
 }

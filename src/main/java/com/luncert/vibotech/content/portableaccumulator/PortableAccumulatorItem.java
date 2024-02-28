@@ -43,16 +43,14 @@ public class PortableAccumulatorItem extends BlockItem {
   }
 
   public boolean tryPlacePortableAccumulator(BlockPlaceContext context) {
+    var player = context.getPlayer();
+    if (player == null)
+      return false;
+
     var newState = AllBlocks.PORTABLE_ACCUMULATOR.getDefaultState();
     if (!this.placeBlock(context, newState)) {
       return false;
     }
-
-    var pos = context.getClickedPos();
-    var world = context.getLevel();
-    var player = context.getPlayer();
-    if (player == null)
-      return false;
 
     ItemStack itemStack = context.getItemInHand();
 
@@ -60,6 +58,8 @@ public class PortableAccumulatorItem extends BlockItem {
       itemStack.shrink(1);
     }
 
+    var pos = context.getClickedPos();
+    var world = context.getLevel();
     if (itemStack.getTag() != null
         && world.getBlockEntity(pos) instanceof PortableAccumulatorBlockEntity portableAccumulator) {
       portableAccumulator.energyStorage.read(itemStack.getTag());

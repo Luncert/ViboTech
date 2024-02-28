@@ -113,8 +113,14 @@ public class AssembleStationBlockEntity extends SmartBlockEntity {
 
     if (level instanceof ServerLevel world && viboMachineEntity == null && viboMachineCoreEntityId != null) {
       if (world.getEntity(viboMachineCoreEntityId) instanceof ViboMachineEntity entity) {
-        viboMachineEntity = entity;
-        entity.bindAssembleStation(this);
+        // check if target contraption has already bound to other station
+        if (entity.bindAssembleStation(this)) {
+          viboMachineEntity = entity;
+          assembled = true;
+        } else {
+          // TODO: notify user
+          viboMachineCoreEntityId = null;
+        }
       }
     }
 
