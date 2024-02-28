@@ -149,21 +149,23 @@ public class ViboMachineContraption extends Contraption {
   public void initComponents(Level level, ViboMachineEntity viboMachineEntity) {
     if (!level.isClientSide && accessor == null) {
       this.viboMachine = viboMachineEntity;
-      components.put(ViboComponentType.CORE, List.of(new ViboMachineCoreComponent()));
-      components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
-      components.put(ViboComponentType.STORAGE_ACCESSOR, List.of(new StorageAccessorComponent()));
-      components.put(ViboComponentType.FLUID_ACCESSOR, List.of(new FluidAccessorComponent()));
-      components.put(ViboComponentType.FINALIZE, List.of(new FinalizeComponent()));
-
       accessor = new ViboContraptionAccessor((ServerLevel) level, viboMachineEntity, this);
+
+      if (!components.containsKey(ViboComponentType.CORE)) {
+        components.put(ViboComponentType.CORE, List.of(new ViboMachineCoreComponent()));
+        components.put(ViboComponentType.ENERGY_ACCESSOR, List.of(new EnergyAccessorComponent()));
+        components.put(ViboComponentType.STORAGE_ACCESSOR, List.of(new StorageAccessorComponent()));
+        components.put(ViboComponentType.FLUID_ACCESSOR, List.of(new FluidAccessorComponent()));
+        components.put(ViboComponentType.FINALIZE, List.of(new FinalizeComponent()));
+      }
 
       Map<ViboComponentType, TreeNode<ViboComponentType>> roots = new HashMap<>();
       Map<ViboComponentType, TreeNode<ViboComponentType>> nodes = new HashMap<>();
+      // call init && resolve tick orders
       for (Map.Entry<ViboComponentType, List<IViboComponent>> entry : components.entrySet()) {
         ViboComponentType key = entry.getKey();
         List<IViboComponent> components = entry.getValue();
 
-        // call init
         for (int i = 0; i < components.size(); i++) {
           IViboComponent c = components.get(i);
           String name = c.getComponentType().isSingleton()

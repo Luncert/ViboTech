@@ -51,13 +51,11 @@ public class ViboMachineCoreComponent extends BaseViboComponent {
     CompoundTag tag = new CompoundTag();
     tag.putBoolean("power", power);
     tag.putInt("speed", speed);
-    LOGGER.info("xx {}", tag);
     return tag;
   }
 
   @Override
   public void readNBT(Level world, Tag tag) {
-    LOGGER.info("yy {}", tag);
     CompoundTag compoundTag = (CompoundTag) tag;
     power = compoundTag.getBoolean("power");
     speed = compoundTag.getInt("speed");
