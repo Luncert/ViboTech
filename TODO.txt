@@ -1,6 +1,5 @@
 - camera shake
-- disable peripheral after dissemble
-
+- vacuum pump
 - control seat block sit pose
 - camera overlay, animation
 - pick contraption with wrench
@@ -9,7 +8,8 @@
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
 
-- power nbt
+-// disable peripheral after dissemble
+-// power nbt
 -// prevent multiple binding on vibo machine
 -// shift place accumulator block replace above block
 -// turn camera entity with contraption
@@ -26,7 +26,4 @@
 -// portable accumulator
 -// split control block and thruster block
 
-New Blocks:
-- turret
-- vacuum pump
-- seat
+[21:04:15] [Render thread/WARN] [minecraft/LevelChunk]: Block entity vibotech:vibo_machine_core @ BlockPos{x=-5, y=-59, z=4} state Block{vibotech:vibo_machine_core}[facing=north] invalid for ticking:
