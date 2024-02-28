@@ -13,6 +13,7 @@ import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IObserveTileEntity {
 
-  protected InternalEnergyStorage energyStorage = this.createEnergyStorage();
+  protected InternalEnergyStorage energyStorage = createEnergyStorage();
   protected LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> this.energyStorage);
 
   public PortableAccumulatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -83,5 +84,15 @@ public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements 
     // triggered by observe packet, see createaddition
     AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
         new PortableAccumulatorEnergyPacket(this.worldPosition, 0, energyStorage.getEnergyStored()));
+  }
+
+  @Override
+  protected void write(CompoundTag tag, boolean clientPacket) {
+    energyStorage.write(tag);
+  }
+
+  @Override
+  protected void read(CompoundTag tag, boolean clientPacket) {
+    energyStorage.read(tag);
   }
 }
