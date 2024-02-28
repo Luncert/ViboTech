@@ -199,11 +199,17 @@ public class ViboMachineEntity extends Entity {
   }
 
   public Optional<AssembleStationBlockEntity> getAssembleStationBlockEntity() {
-    if (assembleStationBlockEntity.isRemoved()) {
-      assembleStationBlockEntity = null;
-      setConnectedToStation(false);
-    }
+    updateConnectedToStationStatus();
     return Optional.ofNullable(assembleStationBlockEntity);
+  }
+
+  private void updateConnectedToStationStatus() {
+    if (!level().isClientSide) {
+      if (assembleStationBlockEntity.isRemoved()) {
+        assembleStationBlockEntity = null;
+        setConnectedToStation(false);
+      }
+    }
   }
 
   public Optional<ViboMachineContraption> getContraption() {
@@ -412,10 +418,7 @@ public class ViboMachineEntity extends Entity {
   }
 
   public boolean isConnectedToStation() {
-    if (assembleStationBlockEntity.isRemoved()) {
-      assembleStationBlockEntity = null;
-      setConnectedToStation(false);
-    }
+    updateConnectedToStationStatus();
     return entityData.get(CONNECTED_TO_STATION);
   }
 
