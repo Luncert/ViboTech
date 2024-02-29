@@ -2,6 +2,7 @@ package com.luncert.vibotech.content.portableaccumulator;
 
 import com.luncert.vibotech.Config;
 import com.luncert.vibotech.index.AllPackets;
+import com.mojang.logging.LogUtils;
 import com.mrh0.createaddition.energy.InternalEnergyStorage;
 import com.mrh0.createaddition.network.IObserveTileEntity;
 import com.mrh0.createaddition.network.ObservePacket;
@@ -25,8 +26,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IObserveTileEntity {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   protected InternalEnergyStorage energyStorage = createEnergyStorage();
   protected LazyOptional<IEnergyStorage> energyCap = LazyOptional.of(() -> this.energyStorage);
@@ -89,12 +93,14 @@ public class PortableAccumulatorBlockEntity extends SmartBlockEntity implements 
   @Override
   protected void write(CompoundTag tag, boolean clientPacket) {
     tag.put("EnergyContent", energyStorage.write(new CompoundTag()));
+    // used by PortableEnergyManager
+    tag.putInt("EnergyCapacity", getCapacity());
   }
 
   @Override
   protected void read(CompoundTag tag, boolean clientPacket) {
     if (tag.contains("EnergyContent")) {
-      this.energyStorage.read(tag.getCompound("EnergyContent"));
+      energyStorage.read(tag.getCompound("EnergyContent"));
     }
   }
 }

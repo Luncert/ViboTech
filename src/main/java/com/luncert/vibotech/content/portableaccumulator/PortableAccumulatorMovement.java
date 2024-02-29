@@ -1,10 +1,14 @@
 package com.luncert.vibotech.content.portableaccumulator;
 
+import com.mojang.logging.LogUtils;
 import com.mrh0.createaddition.blocks.portable_energy_interface.PortableEnergyManager;
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
+import org.slf4j.Logger;
 
 public class PortableAccumulatorMovement implements MovementBehaviour {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   public static final int TICK_DELAY = 20;
 

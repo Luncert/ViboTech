@@ -25,6 +25,7 @@ public class ThrusterComponent extends BaseViboComponent {
   public void tickComponent(ViboComponentTickContext context) {
     if (context.isPowerOn()) {
       int affectedBlockAmount = Math.max(16, accessor.contraption.getBlocks().size());
+      // TODO: if moving
       int cost = affectedBlockAmount * Mth.clamp(context.getSpeed() / 16, 1, 10);
       getEnergyAccessor().ifPresent(energyStorage -> {
         if (energyStorage.extractEnergy(cost, true) == cost) {
