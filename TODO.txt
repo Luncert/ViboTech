@@ -1,5 +1,4 @@
 - camera shake
-- vacuum pump
 - control seat block sit pose
 - camera animation
 - pick contraption with wrench
