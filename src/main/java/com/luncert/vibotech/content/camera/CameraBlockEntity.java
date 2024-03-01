@@ -11,16 +11,14 @@ import com.luncert.vibotech.content.camera.packet.ServerDisconnectCameraPacket;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -30,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-public class CameraBlockEntity extends SmartBlockEntity {
+public class CameraBlockEntity extends BlockEntity {
 
   private static final Logger LOGGER = LogUtils.getLogger();
   private final IPeripheral peripheral = Peripherals.createCameraPeripheral(this);
@@ -38,10 +36,6 @@ public class CameraBlockEntity extends SmartBlockEntity {
 
   public CameraBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
-  }
-
-  @Override
-  public void addBehaviours(List<BlockEntityBehaviour> list) {
   }
 
   @Override

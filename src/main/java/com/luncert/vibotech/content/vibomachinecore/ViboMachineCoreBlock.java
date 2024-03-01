@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content.vibomachinecore;
 
-import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;

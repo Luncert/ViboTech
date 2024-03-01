@@ -140,7 +140,7 @@ public class ViboMachineContraption extends Contraption {
       return false;
 
     addBlock(pos, Pair.of(new StructureBlockInfo(
-        pos, AllBlocks.VIBO_MACHINE_CORE.getDefaultState(), null), null));
+        pos, level.getBlockState(pos), null), null));
 
     initComponents(level, viboMachine);
     return true;
@@ -229,15 +229,14 @@ public class ViboMachineContraption extends Contraption {
     }
 
     // records component blocks
-    BlockPos localPos = pos.subtract(anchor);
-
     pair.getValue().getCapability(AllCapabilities.CAPABILITY_VIBO_COMPONENT).ifPresent(c ->
         components.compute(c.getComponentType(), (k, v) -> {
           if (v == null) {
             v = new LinkedList<>();
           }
 
-          componentBlockInfoMap.put(c.getComponentType().getName() + "-" + v.size(), blocks.get(localPos));
+          componentBlockInfoMap.put(c.getComponentType().getName() + "-" + v.size(),
+              blocks.get(pos.subtract(anchor)));
 
           v.add(c);
           return v;
