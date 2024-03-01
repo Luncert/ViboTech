@@ -2,7 +2,6 @@ package com.luncert.vibotech.content.controlseat;
 
 import com.luncert.vibotech.compat.vibotech.BaseViboComponent;
 import com.luncert.vibotech.compat.vibotech.ViboComponentType;
-import com.luncert.vibotech.index.AllKeys;
 import com.mojang.blaze3d.platform.InputConstants;
 import dan200.computercraft.api.lua.LuaFunction;
 import java.util.Collection;
@@ -25,7 +24,7 @@ public class ControlSeatComponent extends BaseViboComponent {
 
   @LuaFunction
   public boolean isKeyPressed(String name) {
-    return AllKeys.isActuallyPressed(InputConstants.getKey(name));
+    return receivedInputs.contains(InputConstants.getKey(name));
   }
 
   @LuaFunction

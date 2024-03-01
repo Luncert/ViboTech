@@ -11,7 +11,7 @@ import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllKeys;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.simibubi.create.content.contraptions.Contraption;
+import com.mojang.logging.LogUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,10 +19,12 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.antlr.v4.runtime.misc.Triple;
+import org.slf4j.Logger;
 
 public class ControlSeatClientHandler {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   public static int PACKET_RATE = 5;
 
@@ -41,8 +43,10 @@ public class ControlSeatClientHandler {
       return;
     }
     if (player.getVehicle() instanceof ControlSeatEntity) {
+      LOGGER.info("x1");
       detectKeys();
     } else if (player.getVehicle() instanceof ViboMachineContraptionEntity contraptionEntity) {
+      LOGGER.info("x2");
       ViboMachineContraption contraption = (ViboMachineContraption) contraptionEntity.getContraption();
       BlockPos seatPos = contraption.getSeatOf(player.getUUID());
       contraption.getBlocks().computeIfPresent(seatPos, (key, blockInfo) -> {
@@ -51,6 +55,9 @@ public class ControlSeatClientHandler {
         }
         return blockInfo;
       });
+    } else {
+      AllPackets.getChannel().sendToServer(new ControlSeatInputPacket(currentlyPressed, false));
+      currentlyPressed.clear();
     }
   }
 

@@ -1,3 +1,7 @@
+
+- prevent render player hand
+- turn camera
+
 - camera shake
 - control seat block sit pose
 - camera animation
@@ -8,6 +12,8 @@
 - MovementContext mixin getAnimationSpeed
 - allow client side ticking on components
 
+-// change overlay layer
+-// control input condition not working
 -// camera overlay
 -// disable peripheral after dissemble
 -// power nbt

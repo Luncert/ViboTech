@@ -2,6 +2,7 @@ package com.luncert.vibotech.content.camera;
 
 import java.util.List;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +30,9 @@ public class CameraData {
   }
 
   public static void pushCameraEntity(Entity currentCameraEntity) {
-    orignalCameraEntity = currentCameraEntity;
+    if (currentCameraEntity instanceof LocalPlayer) {
+      orignalCameraEntity = currentCameraEntity;
+    }
   }
 
   public static void restoreCamera() {

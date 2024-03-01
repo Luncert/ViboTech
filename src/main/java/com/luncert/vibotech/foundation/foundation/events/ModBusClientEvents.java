@@ -17,6 +17,6 @@ public class ModBusClientEvents {
 
   @SubscribeEvent
   public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-    event.registerBelow(VanillaGuiOverlay.SPYGLASS.id(), "camera_overlay", AllOverlays.CAMERA);
+    event.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "camera_overlay", AllOverlays.CAMERA);
   }
 }
