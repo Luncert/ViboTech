@@ -6,6 +6,7 @@
 - create plasma particle under thruster block, lifetime -> max distance, bounds
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
+- allow client side ticking on components
 
 -// camera overlay
 -// disable peripheral after dissemble
