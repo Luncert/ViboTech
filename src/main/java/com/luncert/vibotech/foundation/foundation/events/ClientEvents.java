@@ -2,6 +2,7 @@ package com.luncert.vibotech.foundation.foundation.events;
 
 import static com.jozufozu.flywheel.backend.Backend.isGameActive;
 
+import com.luncert.vibotech.ViboTechMod;
 import com.luncert.vibotech.content.camera.CameraClientHandler;
 import com.luncert.vibotech.content.controlseat.ControlSeatClientHandler;
 import net.minecraft.client.Minecraft;
@@ -11,7 +12,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ViboTechMod.ID)
 public class ClientEvents {
 
   @SubscribeEvent
