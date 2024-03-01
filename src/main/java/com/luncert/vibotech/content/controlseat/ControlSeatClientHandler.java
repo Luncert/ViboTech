@@ -33,7 +33,7 @@ public class ControlSeatClientHandler {
     Minecraft mc = Minecraft.getInstance();
     LocalPlayer player = mc.player;
 
-    if (player == null || !(player.getVehicle() instanceof ControlSeatEntity) && !(player.getVehicle() instanceof ViboMachineContraptionEntity)) {
+    if (player == null || !(player.getVehicle() instanceof ControlSeatEntity) || !(player.getVehicle() instanceof ViboMachineContraptionEntity)) {
       return;
     }
 
