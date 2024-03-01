@@ -1,13 +1,14 @@
 - camera shake
 - vacuum pump
 - control seat block sit pose
-- camera overlay, animation
+- camera animation
 - pick contraption with wrench
     - contraption entity emit interact event
 - create plasma particle under thruster block, lifetime -> max distance, bounds
 - simulate contraption shaking
 - MovementContext mixin getAnimationSpeed
 
+-// camera overlay
 -// disable peripheral after dissemble
 -// power nbt
 -// prevent multiple binding on vibo machine
