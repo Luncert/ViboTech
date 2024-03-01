@@ -5,16 +5,21 @@ import static com.mojang.blaze3d.platform.InputConstants.Type;
 import static com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM;
 import static com.mojang.blaze3d.platform.InputConstants.Type.MOUSE;
 
+import com.luncert.vibotech.compat.create.ViboMachineContraption;
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
+import com.luncert.vibotech.index.AllBlocks;
 import com.luncert.vibotech.index.AllKeys;
 import com.luncert.vibotech.index.AllPackets;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.simibubi.create.content.contraptions.Contraption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.antlr.v4.runtime.misc.Triple;
 
 public class ControlSeatClientHandler {
@@ -32,11 +37,24 @@ public class ControlSeatClientHandler {
 
     Minecraft mc = Minecraft.getInstance();
     LocalPlayer player = mc.player;
-
-    if (player == null || !(player.getVehicle() instanceof ControlSeatEntity) || !(player.getVehicle() instanceof ViboMachineContraptionEntity)) {
+    if (player == null) {
       return;
     }
+    if (player.getVehicle() instanceof ControlSeatEntity) {
+      detectKeys();
+    } else if (player.getVehicle() instanceof ViboMachineContraptionEntity contraptionEntity) {
+      ViboMachineContraption contraption = (ViboMachineContraption) contraptionEntity.getContraption();
+      BlockPos seatPos = contraption.getSeatOf(player.getUUID());
+      contraption.getBlocks().computeIfPresent(seatPos, (key, blockInfo) -> {
+        if (blockInfo.state().is(AllBlocks.CONTROL_SEAT.get())) {
+          detectKeys();
+        }
+        return blockInfo;
+      });
+    }
+  }
 
+  private static void detectKeys() {
     Collection<Key> pressedKeys = new HashSet<>(getInputs());
     Collection<Key> newKeys = new HashSet<>(pressedKeys);
     Collection<Key> releasedKeys = currentlyPressed;
@@ -59,9 +77,6 @@ public class ControlSeatClientHandler {
     }
 
     currentlyPressed = pressedKeys;
-    // controls.forEach((kb) -> {
-    //   kb.setDown(false);
-    // });
   }
 
   private static List<Key> getInputs() {

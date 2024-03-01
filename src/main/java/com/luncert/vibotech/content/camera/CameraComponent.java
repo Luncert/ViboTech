@@ -31,9 +31,9 @@ public class CameraComponent extends BaseViboComponent {
   public void connect(String playerName) throws LuaException {
     ServerPlayer player = getPlayerByName(playerName)
         .orElseThrow(() -> new LuaException("invalid player name"));
-    getCameraEntity().ifPresent(entity -> {
-      AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player), new ClientConnectCameraPacket(entity.getId()));
-    });
+    getCameraEntity().ifPresent(entity ->
+        AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> player),
+            new ClientConnectCameraPacket(entity.getId())));
     // Minecraft mc = Minecraft.getInstance();
     // mc.setCameraEntity();
     // try (NativeImage image = Screenshot.takeScreenshot(mc.getMainRenderTarget())) {
