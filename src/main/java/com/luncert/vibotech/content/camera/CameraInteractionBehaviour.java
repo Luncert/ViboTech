@@ -4,14 +4,18 @@ import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.H
 
 import com.luncert.vibotech.content.camera.packet.ServerCreateCameraPacket;
 import com.luncert.vibotech.index.AllPackets;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import org.slf4j.Logger;
 
 public class CameraInteractionBehaviour extends MovingInteractionBehaviour {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   @Override
   public boolean handlePlayerInteraction(Player player, InteractionHand activeHand, BlockPos localPos, AbstractContraptionEntity contraptionEntity) {
