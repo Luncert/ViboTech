@@ -1,6 +1,7 @@
 package com.luncert.vibotech.content.camera;
 
 import com.luncert.vibotech.compat.create.ViboMachineContraptionEntity;
+import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -93,9 +94,11 @@ public class CameraEntity extends Entity {
   }
 
   @Override
-  public boolean startRiding(Entity vehicle, boolean pForce) {
-    setInitialVehicleOrientation(vehicle.getYRot());
-    return super.startRiding(vehicle, pForce);
+  public boolean startRiding(Entity contraptionEntity, boolean pForce) {
+    if (contraptionEntity.getVehicle() instanceof ViboMachineEntity e) {
+      setInitialVehicleOrientation(e.getYRot());
+    }
+    return super.startRiding(contraptionEntity, pForce);
   }
 
   @Override
@@ -103,8 +106,9 @@ public class CameraEntity extends Entity {
     super.turn(pYRot * 0.2, pXRot * 0.2);
     this.setXRot(Mth.clamp(this.getXRot(), -45.0F, 45.0F));
     this.xRotO = Mth.clamp(this.xRotO, -45.0F, 45.0F);
-    float initialOrientation = getVehicle() instanceof ViboMachineContraptionEntity e
-        ? e.getVehicle().getYRot() - getInitialVehicleOrientation() + getInitialOrientation() : getInitialOrientation();
+    float initialOrientation = getVehicle() instanceof ViboMachineContraptionEntity contraptionEntity
+        && contraptionEntity.getVehicle() instanceof ViboMachineEntity e
+        ? e.getYRot() - getInitialVehicleOrientation() + getInitialOrientation() : getInitialOrientation();
     // LOGGER.info("i {} {} {} {}", initialOrientation, getInitialOrientation(), getInitialVehicleOrientation(),
     //     getVehicle() instanceof ViboMachineContraptionEntity e ? e.getVehicle().getYRot() : -1);
     this.setYRot(Mth.clamp(this.getYRot(), initialOrientation - 45.0F, initialOrientation + 45.0F));
