@@ -28,7 +28,7 @@ public class CameraComponent extends BaseViboComponent {
   }
 
   @LuaFunction
-  public void connect(String playerName) throws LuaException {
+  public final void connect(String playerName) throws LuaException {
     ServerPlayer player = getPlayerByName(playerName)
         .orElseThrow(() -> new LuaException("invalid player name"));
     getCameraEntity().ifPresent(entity ->
