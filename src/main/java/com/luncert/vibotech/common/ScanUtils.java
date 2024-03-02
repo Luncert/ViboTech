@@ -14,7 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ScanUtils {
 
-  public static Pair<Vec3, Vec3> calcShapeForAdjacentBlocks(Level world, BlockPos base) {
+  public static Pair<BlockPos, BlockPos> calcShapeForAdjacentBlocks(Level world, BlockPos base) {
     // TODO compare tag not block
     Block targetBlock = world.getBlockState(base).getBlock();
 
@@ -42,7 +42,7 @@ public class ScanUtils {
       }
     }
 
-    return Pair.of(new Vec3(ax, ay, az), new Vec3(bx, by, bz));
+    return Pair.of(new BlockPos(ax, ay, az).subtract(base), new BlockPos(bx, by, bz).subtract(base));
   }
 
   private static void listAllRelativePos(Collection<BlockPos> collection, BlockPos pos) {

@@ -31,7 +31,7 @@ public class GeoScannerComponent extends BaseViboComponent {
 
     BlockPos center = accessor.viboMachineEntity.blockPosition();
 
-    LocalVariable<Pair<Vec3, Vec3>> ref = new LocalVariable<>();
+    LocalVariable<Pair<BlockPos, BlockPos>> ref = new LocalVariable<>();
 
     ScanUtils.traverseBlocks(accessor.world, center, 8, (state, pos) -> {
       if (target.test(state)) {
@@ -45,17 +45,17 @@ public class GeoScannerComponent extends BaseViboComponent {
       return MethodResult.of(false);
     }
 
-    Pair<Vec3, Vec3> locator = ref.get();
-    Vec3 a = locator.getLeft();
-    Vec3 b = locator.getRight();
+    Pair<BlockPos, BlockPos> locator = ref.get();
+    BlockPos a = locator.getLeft();
+    BlockPos b = locator.getRight();
     return MethodResult.of(
         ImmutableMap.of(
-            "x1", a.x,
-            "y1", a.y,
-            "z1", a.z,
-            "x2", b.x,
-            "y2", b.y,
-            "z2", b.z
+            "x1", a.getX(),
+            "y1", a.getY(),
+            "z1", a.getZ(),
+            "x2", b.getX(),
+            "y2", b.getY(),
+            "z2", b.getZ()
         ));
   }
 }
