@@ -1,6 +1,6 @@
 package com.luncert.vibotech.content.geoscanner;
 
-import static net.minecraft.world.level.block.HopperBlock.FACING;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
@@ -29,12 +29,12 @@ public class GeoScannerBlock extends Block implements IBE<GeoScannerBlockEntity>
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    builder.add(FACING);
+    builder.add(HORIZONTAL_FACING);
     super.createBlockStateDefinition(builder);
   }
 
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
-    return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
   }
 }
