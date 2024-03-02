@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemInHandRenderer.class)
 public class ItemInHandRendererMixin {
 
-  @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
+  @Inject(method = "renderHandsWithItems(FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/player/LocalPlayer;I)V", at = @At("HEAD"), cancellable = true)
   private void preventRenderHandsWithItems(float pPartialTicks, PoseStack pPoseStack,
                                            MultiBufferSource.BufferSource pBuffer,
                                            LocalPlayer pPlayerEntity,
