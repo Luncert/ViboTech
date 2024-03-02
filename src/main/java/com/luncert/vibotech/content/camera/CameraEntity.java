@@ -104,15 +104,15 @@ public class CameraEntity extends Entity {
   @Override
   public void turn(double pYRot, double pXRot) {
     super.turn(pYRot * 0.2, pXRot * 0.2);
-    this.setXRot(Mth.clamp(this.getXRot(), -45.0F, 45.0F));
-    this.xRotO = Mth.clamp(this.xRotO, -45.0F, 45.0F);
-    float initialOrientation = getVehicle() instanceof ViboMachineContraptionEntity contraptionEntity
-        && contraptionEntity.getVehicle() instanceof ViboMachineEntity e
-        ? e.getYRot() - getInitialVehicleOrientation() + getInitialOrientation() : getInitialOrientation();
-    // LOGGER.info("i {} {} {} {}", initialOrientation, getInitialOrientation(), getInitialVehicleOrientation(),
-    //     getVehicle() instanceof ViboMachineContraptionEntity e ? e.getVehicle().getYRot() : -1);
-    this.setYRot(Mth.clamp(this.getYRot(), initialOrientation - 45.0F, initialOrientation + 45.0F));
-    this.yRotO = Mth.clamp(this.yRotO, initialOrientation - 45.0F, initialOrientation + 45.0F);
+    // this.setXRot(Mth.clamp(this.getXRot(), -45.0F, 45.0F));
+    // this.xRotO = Mth.clamp(this.xRotO, -45.0F, 45.0F);
+    // float initialOrientation = getVehicle() instanceof ViboMachineContraptionEntity contraptionEntity
+    //     && contraptionEntity.getVehicle() instanceof ViboMachineEntity e
+    //     ? e.getYRot() - getInitialVehicleOrientation() + getInitialOrientation() : getInitialOrientation();
+    // // LOGGER.info("i {} {} {} {}", initialOrientation, getInitialOrientation(), getInitialVehicleOrientation(),
+    // //     getVehicle() instanceof ViboMachineContraptionEntity e ? e.getVehicle().getYRot() : -1);
+    // this.setYRot(Mth.clamp(this.getYRot(), initialOrientation - 45.0F, initialOrientation + 45.0F));
+    // this.yRotO = Mth.clamp(this.yRotO, initialOrientation - 45.0F, initialOrientation + 45.0F);
   }
 
   public static class Render extends EntityRenderer<CameraEntity> {
