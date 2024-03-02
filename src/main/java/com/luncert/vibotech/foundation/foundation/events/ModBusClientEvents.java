@@ -5,7 +5,6 @@ import com.luncert.vibotech.index.AllOverlays;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ public class ModBusClientEvents {
 
   @SubscribeEvent
   public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-    event.registerAbove(VanillaGuiOverlay.EXPERIENCE_BAR.id(), "camera_overlay", AllOverlays.CAMERA);
+    // VanillaGuiOverlay
+    event.registerAboveAll("camera_overlay", AllOverlays.CAMERA);
   }
 }
