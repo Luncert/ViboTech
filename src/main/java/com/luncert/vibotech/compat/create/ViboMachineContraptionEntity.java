@@ -1,6 +1,9 @@
 package com.luncert.vibotech.compat.create;
 
+import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+
 import com.luncert.vibotech.content.camera.CameraEntity;
+import com.luncert.vibotech.content.camera.packet.ServerCreateCameraPacket;
 import com.luncert.vibotech.content.vibomachinecore.ViboMachineEntity;
 import com.luncert.vibotech.index.AllEntityTypes;
 import com.mojang.logging.LogUtils;
@@ -162,8 +165,12 @@ public class ViboMachineContraptionEntity extends OrientedContraptionEntity {
         for (Entity entity : getPassengers()) {
           if (!entry.getKey().equals(entity.getUUID()))
             continue;
-          if (entity instanceof CameraEntity)
+          if (entity instanceof CameraEntity cameraEntity) {
+            Direction blockDirection = contraption.getBlocks().get(localPos).state().getValue(HORIZONTAL_FACING);
+            com.luncert.vibotech.index.AllPackets.getChannel().sendToServer(new ServerCreateCameraPacket(
+                contraption.entity.getVehicle().blockPosition().offset(localPos), blockDirection.toYRot()));
             return false;
+          }
         }
       }
     }

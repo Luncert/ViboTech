@@ -7,7 +7,6 @@ import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content.camera.CameraBlock;
-import com.luncert.vibotech.content.camera.CameraInteractionBehaviour;
 import com.luncert.vibotech.content.gastank.GasTankBlock;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlock;
 import com.luncert.vibotech.content.photovoltaic.PhotovoltaicPanelBlock;
@@ -74,7 +73,7 @@ public class AllBlocks {
   public static final BlockEntry<CameraBlock> CAMERA =
       REGISTRATE.block("camera", CameraBlock::new)
           .initialProperties(SharedProperties::stone)
-          .onRegister(interactionBehaviour(new CameraInteractionBehaviour()))
+          // .onRegister(interactionBehaviour(new CameraInteractionBehaviour()))
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
           .properties(BlockBehaviour.Properties::noOcclusion)
