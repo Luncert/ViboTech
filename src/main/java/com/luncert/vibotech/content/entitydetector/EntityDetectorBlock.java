@@ -2,23 +2,22 @@ package com.luncert.vibotech.content.entitydetector;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.POWERED;
 
+import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllShapes;
-import java.util.List;
+import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
-public class EntityDetectorBlock extends Block {
+public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBlockEntity> {
 
   public static final VoxelShape SHAPE = AllShapes
       .shape(0, 0, 0, 16, 1, 16)
@@ -49,6 +48,16 @@ public class EntityDetectorBlock extends Block {
   }
 
   @Override
+  public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
+    return true;
+  }
+
+  @Override
+  public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    IBE.onRemove(pState, pLevel, pPos, pNewState);
+  }
+
+  @Override
   public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
     return SHAPE;
   }
@@ -59,28 +68,12 @@ public class EntityDetectorBlock extends Block {
   }
 
   @Override
-  public void tick(BlockState pState, ServerLevel level, BlockPos pos, RandomSource pRandom) {
-    checkPressed(level, pos);
+  public Class<EntityDetectorBlockEntity> getBlockEntityClass() {
+    return EntityDetectorBlockEntity.class;
   }
 
-
-  private void checkPressed(Level level, BlockPos pos) {
-    boolean foundEntity = false;
-    List<? extends Entity> list = level.getEntities(null, new AABB(pos));
-    if (!list.isEmpty()) {
-      for (Entity entity : list) {
-        if (!entity.isIgnoringBlockTriggers()) {
-          foundEntity = true;
-          break;
-        }
-      }
-    }
-
-    BlockState blockstate = level.getBlockState(pos);
-    boolean poweredLastTime = blockstate.getValue(POWERED);
-    if (foundEntity != poweredLastTime) {
-      level.setBlockAndUpdate(pos, blockstate.setValue(POWERED, foundEntity));
-      level.updateNeighborsAt(pos, this);
-    }
+  @Override
+  public BlockEntityType<? extends EntityDetectorBlockEntity> getBlockEntityType() {
+    return AllBlockEntityTypes.ENTITY_DETECTOR.get();
   }
 }
