@@ -4,7 +4,6 @@ import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.content.camera.CameraBlockEntity;
-import com.luncert.vibotech.content.entitydetector.EntityDetectorBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntityRenderer;
 import com.luncert.vibotech.content.geoscanner.GeoScannerBlockEntity;
@@ -63,11 +62,6 @@ public class AllBlockEntityTypes {
   public static final BlockEntityEntry<ControlSeatBlockEntity> CONTROL_SEAT = REGISTRATE
       .blockEntity("control_seat", ControlSeatBlockEntity::new)
       .validBlocks(AllBlocks.CONTROL_SEAT)
-      .register();
-
-  public static final BlockEntityEntry<EntityDetectorBlockEntity> ENTITY_DETECTOR = REGISTRATE
-      .blockEntity("entity_detector", EntityDetectorBlockEntity::new)
-      .validBlocks(AllBlocks.ENTITY_DETECTOR)
       .register();
 
   public static void register() {}
