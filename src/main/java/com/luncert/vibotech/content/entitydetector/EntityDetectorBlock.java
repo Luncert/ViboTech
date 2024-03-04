@@ -38,13 +38,18 @@ public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBloc
   }
 
   @Override
-  public boolean isSignalSource(BlockState state) {
-    return state.getValue(POWERED);
+  public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    return SHAPE;
   }
 
   @Override
-  public int getSignal(BlockState blockState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
-    return isSignalSource(blockState) ? 15 : 0;
+  public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    return COLLISION;
+  }
+
+  @Override
+  public boolean isSignalSource(BlockState state) {
+    return state.getValue(POWERED);
   }
 
   @Override
@@ -53,18 +58,18 @@ public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBloc
   }
 
   @Override
+  public int getSignal(BlockState blockState, BlockGetter pLevel, BlockPos pPos, Direction direction) {
+    return isSignalSource(blockState) && !Direction.UP.equals(direction) ? 15 : 0;
+  }
+
+  @Override
+  public int getDirectSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction direction) {
+    return getSignal(blockState, level, pos, direction);
+  }
+
+  @Override
   public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
     IBE.onRemove(pState, pLevel, pPos, pNewState);
-  }
-
-  @Override
-  public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-    return SHAPE;
-  }
-
-  @Override
-  public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-    return COLLISION;
   }
 
   @Override
