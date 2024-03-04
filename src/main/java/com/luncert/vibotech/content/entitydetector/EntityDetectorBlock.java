@@ -2,22 +2,19 @@ package com.luncert.vibotech.content.entitydetector;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.POWERED;
 
+import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllShapes;
-import java.util.List;
+import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class EntityDetectorBlock extends Block {
+public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBlockEntity> {
 
   public static final VoxelShape SHAPE = AllShapes
       .shape(0, 0, 0, 16, 1, 16)
@@ -49,31 +46,12 @@ public class EntityDetectorBlock extends Block {
   }
 
   @Override
-  public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource prandom) {
-    super.tick(state, level, pos, prandom);
-
-    checkPressed(level, pos);
+  public Class<EntityDetectorBlockEntity> getBlockEntityClass() {
+    return EntityDetectorBlockEntity.class;
   }
 
-
-  private void checkPressed(Level pLevel, BlockPos pPos) {
-    BlockState blockstate = pLevel.getBlockState(pPos);
-    boolean foundEntity = false;
-    List<? extends Entity> list = pLevel.getEntities(null, new AABB(pPos));
-    if (!list.isEmpty()) {
-      for (Entity entity : list) {
-        if (!entity.isIgnoringBlockTriggers()) {
-          foundEntity = true;
-          break;
-        }
-      }
-    }
-
-    blockstate = blockstate.setValue(POWERED, foundEntity);
-    pLevel.setBlock(pPos, blockstate, 3);
-
-    if (foundEntity) {
-      pLevel.scheduleTick(new BlockPos(pPos), this, 10);
-    }
+  @Override
+  public BlockEntityType<? extends EntityDetectorBlockEntity> getBlockEntityType() {
+    return AllBlockEntityTypes.ENTITY_DETECTOR.get();
   }
 }
