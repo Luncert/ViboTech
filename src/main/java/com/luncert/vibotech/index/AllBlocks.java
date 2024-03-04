@@ -159,7 +159,7 @@ public class AllBlocks {
               .requiresCorrectToolForDrops())
           .transform(pickaxeOnly())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
-          .blockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(), prov.models()
+          .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
               .getExistingFile(ctx.getId()), 0))
           .simpleItem()
           .register();
