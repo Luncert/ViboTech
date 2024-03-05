@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "vibotech:block/air_compressor",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "vibotech:block/air_compressor",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "vibotech:block/air_compressor",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "vibotech:block/air_compressor",
+      "y": 270
+    }
+  }
+}

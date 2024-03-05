@@ -5,6 +5,7 @@ import static com.simibubi.create.AllInteractionBehaviours.interactionBehaviour;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
+import com.luncert.vibotech.content.aircompressor.AirCompressorBlock;
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlock;
 import com.luncert.vibotech.content.camera.CameraBlock;
 import com.luncert.vibotech.content.entitydetector.EntityDetectorBlock;
@@ -157,6 +158,19 @@ public class AllBlocks {
           .initialProperties(SharedProperties::stone)
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
+          .transform(pickaxeOnly())
+          .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
+          .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
+              .getExistingFile(ctx.getId()), 0))
+          .simpleItem()
+          .register();
+
+  public static final BlockEntry<AirCompressorBlock> AIR_COMPRESSOR =
+      REGISTRATE.block("air_compressor", AirCompressorBlock::new)
+          .initialProperties(SharedProperties::stone)
+          .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+              .requiresCorrectToolForDrops())
+          .properties(BlockBehaviour.Properties::noOcclusion)
           .transform(pickaxeOnly())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
