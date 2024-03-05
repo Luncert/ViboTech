@@ -1,16 +1,18 @@
 package com.luncert.vibotech.content.aircompressor;
 
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
-
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-public class AirCompressorBlock extends Block implements IBE<AirCompressorBlockEntity> {
+public class AirCompressorBlock extends HorizontalKineticBlock implements IBE<AirCompressorBlockEntity> {
 
   public AirCompressorBlock(Properties pProperties) {
     super(pProperties);
@@ -28,12 +30,24 @@ public class AirCompressorBlock extends Block implements IBE<AirCompressorBlockE
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    builder.add(HORIZONTAL_FACING);
     super.createBlockStateDefinition(builder);
   }
 
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
-    return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
+    Direction preferredSide = getPreferredHorizontalFacing(context);
+    if (preferredSide != null)
+      return defaultBlockState().setValue(HORIZONTAL_FACING, preferredSide);
+    return super.getStateForPlacement(context);
+  }
+
+  @Override
+  public Direction.Axis getRotationAxis(BlockState blockState) {
+    return blockState.getValue(HORIZONTAL_FACING).getAxis();
+  }
+
+  @Override
+  public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+    return face == state.getValue(HORIZONTAL_FACING);
   }
 }

@@ -3,6 +3,8 @@ package com.luncert.vibotech.index;
 import static com.luncert.vibotech.ViboTechMod.REGISTRATE;
 
 import com.luncert.vibotech.content.aircompressor.AirCompressorBlockEntity;
+import com.luncert.vibotech.content.aircompressor.AirCompressorInstance;
+import com.luncert.vibotech.content.aircompressor.AirCompressorRenderer;
 import com.luncert.vibotech.content.assemblestation.AssembleStationBlockEntity;
 import com.luncert.vibotech.content.camera.CameraBlockEntity;
 import com.luncert.vibotech.content.gastank.GasTankBlockEntity;
@@ -67,7 +69,9 @@ public class AllBlockEntityTypes {
 
   public static final BlockEntityEntry<AirCompressorBlockEntity> AIR_COMPRESSOR = REGISTRATE
       .blockEntity("air_compressor", AirCompressorBlockEntity::new)
+      .instance(() -> AirCompressorInstance::new)
       .validBlocks(AllBlocks.AIR_COMPRESSOR)
+      .renderer(() -> AirCompressorRenderer::new)
       .register();
 
   public static void register() {}
