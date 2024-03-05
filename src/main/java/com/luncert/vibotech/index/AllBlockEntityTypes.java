@@ -23,9 +23,7 @@ public class AllBlockEntityTypes {
 
   public static final BlockEntityEntry<AssembleStationBlockEntity> ASSEMBLE_STATION = REGISTRATE
       .blockEntity("assemble_station", AssembleStationBlockEntity::new)
-      // .instance(() -> SchematicannonInstance::new)
       .validBlocks(AllBlocks.ASSEMBLE_STATION)
-      // .renderer(() -> SchematicannonRenderer::new)
       .register();
 
   public static final BlockEntityEntry<ViboMachineCoreBlockEntity> VIBO_MACHINE_CORE = REGISTRATE
