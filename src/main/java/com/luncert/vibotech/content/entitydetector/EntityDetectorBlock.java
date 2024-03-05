@@ -1,5 +1,6 @@
 package com.luncert.vibotech.content.entitydetector;
 
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.POWERED;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
@@ -7,6 +8,7 @@ import com.luncert.vibotech.index.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -20,11 +22,17 @@ import org.jetbrains.annotations.Nullable;
 public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBlockEntity> {
 
   public static final VoxelShape SHAPE = AllShapes
-      .shape(0, 0, 0, 16, 1, 16)
+      .shape(0, 0, 0, 16, 16, 16)
       .build();
 
-  public static final VoxelShape COLLISION = AllShapes
-      .shape(0, 0, 0, 0, 0, 0)
+  public static final VoxelShape Z_AXIS_COLLISION = AllShapes
+      .shape(0, 0, 0, 1, 16, 16)
+      .add(15, 0, 0, 16, 16, 16)
+      .build();
+
+  public static final VoxelShape X_AXIS_COLLISION = AllShapes
+      .shape(0, 0, 0, 16, 16, 1)
+      .add(0, 0, 15, 16, 16, 16)
       .build();
 
   public EntityDetectorBlock(Properties properties) {
@@ -34,7 +42,12 @@ public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBloc
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    super.createBlockStateDefinition(builder.add(POWERED));
+    super.createBlockStateDefinition(builder.add(POWERED, FACING));
+  }
+
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
   }
 
   @Override
@@ -44,7 +57,8 @@ public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBloc
 
   @Override
   public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-    return COLLISION;
+    boolean xAxis = pState.getValue(FACING).getAxis().equals(Direction.Axis.X);
+    return xAxis ? X_AXIS_COLLISION : Z_AXIS_COLLISION;
   }
 
   @Override

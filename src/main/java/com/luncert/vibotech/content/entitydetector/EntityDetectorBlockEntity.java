@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 public class EntityDetectorBlockEntity extends SmartBlockEntity {
 
   private static final Logger LOGGER = LogUtils.getLogger();
+  private static final double UNIT = (double) 1 / 16 * 4;
 
   public EntityDetectorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
@@ -35,20 +36,16 @@ public class EntityDetectorBlockEntity extends SmartBlockEntity {
 
 
   private void checkPressed(Level level, BlockPos pos) {
-    boolean foundEntity = false;
-    List<? extends Entity> list = level.getEntities(null, new AABB(pos));
-    if (!list.isEmpty()) {
-      for (Entity entity : list) {
-        if (!entity.isIgnoringBlockTriggers()) {
-          foundEntity = true;
-          break;
-        }
-      }
-    }
+    // var box = new AABB(new Vec3(pos.getX(), pos.getY(), pos.getZ() + UNIT),
+    //     new Vec3(pos.getX(), pos.getY() + 1, pos.getZ() + 1 - UNIT));
+    var box = new AABB(pos);
+    List<? extends Entity> list = level.getEntities(null, box);
+    boolean foundEntity = !list.isEmpty();
 
     BlockState blockstate = level.getBlockState(pos);
     boolean poweredLastTime = blockstate.getValue(POWERED);
     if (foundEntity != poweredLastTime) {
+      // LOGGER.info("unit {}", foundEntity);
       // level.setBlockAndUpdate(pos, blockstate.setValue(POWERED, foundEntity));
       level.setBlock(pos, blockstate.setValue(POWERED, foundEntity), EntityDetectorBlock.UPDATE_ALL);
 

@@ -1,7 +1,20 @@
 {
   "variants": {
-    "": {
-      "model": "vibotech:block/entity_detector"
+    "facing=north": {
+      "model": "vibotech:block/entity_detector",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "vibotech:block/entity_detector",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "vibotech:block/entity_detector",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "vibotech:block/entity_detector",
+      "y": 270
     }
   }
 }
