@@ -1,6 +1,21 @@
-
-- prevent render player hand
-- turn camera
+- flow aid block:
+  - has kinetic power input on the top
+  - has pressured air input on the bottom
+  - has a pressured air (fluid) container
+  - can rotate the pipe with rotate input
+  - if no air input provided, it collects air from the world. When air container is full and it received redstone signal, it will releases all air collected to push entities in front of it
+  - if it received pressured air, it can release powerful airflow
+  - it can be heat like steam engine to release more powerful airflow
+  - accelerate items over speed limit (320m/s), you need high compressed air (1Mpa) and heat flow aid block to the highest level
+- air compressor:
+  - collects air from world and compress the air to upmost 1Mpa (depends on rotate speed)
+  - 0.1Mpa can make air flow, 1Mpa can ?
+  - if the rotate speed is over 200, the compressor will generate massive heat, it accumulates heat and explode when heat to 100%
+    - the heat affects efficiency too, it increases the cooldown and reduces the max pressure.
+    - to cool the compressor, you can use fan or fan will water.
+    - 6 fan only reduce the heat up to 36% at most (6% per fan).
+    - 6 fan with water can reduce the heat up to 78% at most (13% per fan).
+- compressed air can be used as fuel of vibo machine
 
 - camera shake
 - control seat block sit pose
@@ -12,6 +27,8 @@
 - MovementContext mixin getAnimationSpeed
 - allow client side ticking on components
 
+-// prevent render player hand
+-// turn camera
 -// change overlay layer
 -// control input condition not working
 -// camera overlay
