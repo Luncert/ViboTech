@@ -15,6 +15,7 @@
     - to cool the compressor, you can use fan or fan will water.
     - 6 fan only reduce the heat up to 36% at most (6% per fan).
     - 6 fan with water can reduce the heat up to 78% at most (13% per fan).
+- compressed air can be used as fuel of vibo machine
 
 - camera shake
 - control seat block sit pose
