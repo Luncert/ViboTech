@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [" A ",
+    "OBO",
+    " C "],
+  "key": {
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "O": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "B": {
+      "item": "minecraft:slime_block"
+    },
+    "C": {
+      "item": "minecraft:observer"
+    }
+  },
+  "result":{
+    "item": "vibotech:entity_detector",
+    "count": 1
+  }
+}

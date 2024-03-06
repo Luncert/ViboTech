@@ -7,6 +7,7 @@
     "vibotech:portable_accumulator",
     "vibotech:photovoltaic_panel",
     "vibotech:control_seat",
-    "vibotech:camera"
+    "vibotech:camera",
+    "vibotech:entity_detector"
   ]
 }

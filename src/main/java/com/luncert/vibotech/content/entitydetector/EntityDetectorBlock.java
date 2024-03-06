@@ -5,6 +5,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllShapes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +20,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBlockEntity> {
+public class EntityDetectorBlock extends Block implements IBE<EntityDetectorBlockEntity>, IWrenchable {
 
   public static final VoxelShape SHAPE = AllShapes
       .shape(0, 0, 0, 16, 16, 16)
