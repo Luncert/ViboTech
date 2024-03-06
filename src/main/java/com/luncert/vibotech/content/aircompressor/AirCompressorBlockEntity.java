@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +106,15 @@ public class AirCompressorBlockEntity extends KineticBlockEntity {
           .ifPresent(handler -> airHandlerMap.computeIfAbsent(handler, k -> new ArrayList<>()).add(side));
     }
     airHandlerMap.forEach(IAirHandlerMachine::setConnectedFaces);
+  }
+
+  // called clientside when a PacketUpdatePressureBlock is received
+  // this ensures the BE can tick this air handler for air leak sound and particle purposes
+  public void initializeHullAirHandlerClient(Direction dir, IAirHandlerMachine handler) {
+    airHandlerMap.clear();
+    List<Direction> l = Collections.singletonList(dir);
+    airHandlerMap.put(handler, l);
+    handler.setConnectedFaces(l);
   }
 
   @Nonnull

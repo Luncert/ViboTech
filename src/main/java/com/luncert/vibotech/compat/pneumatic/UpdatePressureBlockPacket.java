@@ -17,6 +17,7 @@
 
 package com.luncert.vibotech.compat.pneumatic;
 
+import com.luncert.vibotech.content.aircompressor.AirCompressorBlockEntity;
 import com.luncert.vibotech.index.AllCapabilities;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
@@ -71,7 +72,7 @@ public class UpdatePressureBlockPacket extends LocationIntPacket {
                 blockEntity.getCapability(AllCapabilities.AIR_HANDLER_MACHINE_CAPABILITY, handlerDir).ifPresent(handler -> {
                     handler.setSideLeaking(leakDir);
                     handler.addAir(currentAir - handler.getAir());
-                    if (handlerDir != null && blockEntity instanceof AbstractAirHandlingBlockEntity be) {
+                    if (handlerDir != null && blockEntity instanceof AirCompressorBlockEntity be) {
                         be.initializeHullAirHandlerClient(handlerDir, handler);
                     }
                 });

@@ -43,7 +43,6 @@ public class MachineAirHandler extends BasicAirHandler implements IAirHandlerMac
 
     public static final int AIR_LEAK_FACTOR = 40;//mL/bar/tick determines how much air being released.
 
-
     private final PressureTier tier;
     private final BitSet connectedFaces = new BitSet(6);
     private Direction leakDir = null;
