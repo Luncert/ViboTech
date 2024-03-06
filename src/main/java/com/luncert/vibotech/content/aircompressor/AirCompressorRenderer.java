@@ -30,7 +30,6 @@ public class AirCompressorRenderer extends KineticBlockEntityRenderer<AirCompres
   @Override
   protected void renderSafe(AirCompressorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
     if (Backend.canUseInstancing(be.getLevel())) return;
-    LOGGER.info("xxx");
 
     Direction direction = be.getBlockState().getValue(HORIZONTAL_FACING);
     VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());

@@ -92,10 +92,10 @@ public interface IAirHandlerMachine extends IAirHandler {
   /**
    * Get a list of all air handlers connected to this one.
    *
-   * @param ownerTE the owning block entity
+   * @param blockEntity the owning block entity
    * @return a list of all connected air handlers
    */
-  List<IAirHandlerMachine.Connection> getConnectedAirHandlers(BlockEntity ownerTE);
+  List<IAirHandlerMachine.Connection> getConnectedAirHandlers(BlockEntity blockEntity);
 
   /**
    * Set the connected faces of this air handler. This should be called on the first server tick, and when

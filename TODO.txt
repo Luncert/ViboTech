@@ -10,9 +10,9 @@
 - air compressor:
   - collects air from world and compress the air to upmost 1Mpa (depends on rotate speed)
   - 0.1Mpa can make air flow, 1Mpa can ?
-  - if the rotate speed is over 200, the compressor will generate massive heat, it accumulates heat and explode when heat to 100%
-    - the heat affects efficiency too, it increases the cooldown and reduces the max pressure.
-    - to cool the compressor, you can use fan or fan will water.
+  -// if the rotate speed is over 200, the compressor will generate massive heat, it accumulates heat and explode when heat to 100%
+    -// the heat affects efficiency too, it increases the cooldown and reduces the max pressure.
+    -// to cool the compressor, you can use fan or fan will water.
     - 6 fan only reduce the heat up to 36% at most (6% per fan).
     - 6 fan with water can reduce the heat up to 78% at most (13% per fan).
 - compressed air can be used as fuel of vibo machine

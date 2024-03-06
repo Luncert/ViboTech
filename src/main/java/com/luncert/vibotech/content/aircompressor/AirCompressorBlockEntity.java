@@ -6,9 +6,9 @@ import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.H
 import com.luncert.vibotech.compat.pneumatic.IAirHandlerMachine;
 import com.luncert.vibotech.compat.pneumatic.MachineAirHandler;
 import com.luncert.vibotech.compat.pneumatic.PressureTier;
-import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -19,14 +19,15 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
 
 public class AirCompressorBlockEntity extends KineticBlockEntity {
+
+  private static final int AIR_PRODUCTION = 10; // mL per pick
 
   public static final int VOLUME_AIR_COMPRESSOR = 5000;
 
@@ -117,43 +118,60 @@ public class AirCompressorBlockEntity extends KineticBlockEntity {
   }
 
   public boolean canConnectPneumatic(Direction side) {
-    return getBlockState().getValue(HORIZONTAL_FACING) == side;
+    return getOutputSide() == side;
   }
 
-  class CompressAirBehaviour extends FluidTransportBehaviour {
+  class CompressAirBehaviour extends BlockEntityBehaviour {
+
+    public static final BehaviourType<CompressAirBehaviour> TYPE = new BehaviourType<>();
+
+    private float airBuffer;
+    private float airPerTick;
+    private float heat;
 
     public CompressAirBehaviour(SmartBlockEntity be) {
       super(be);
     }
 
     @Override
+    public BehaviourType<?> getType() {
+      return TYPE;
+    }
+
+    @Override
     public void tick() {
       super.tick();
-      //for (Entry<Direction, PipeConnection> entry : interfaces.entrySet()) {
-      //  boolean pull = isPullingOnSide(isFront(entry.getKey()));
-      //  Couple<Float> pressure = entry.getValue().getPressure();
-      //  pressure.set(pull, Math.abs(getSpeed()));
-      //  pressure.set(!pull, 0f);
-      //}
+
+      float speed = ((KineticBlockEntity) blockEntity).getSpeed();
+
+      // update heat
+      float targetHeat = (float) Math.sqrt(10000 - Math.pow(speed - 10, 2));
+      targetHeat = Math.min(targetHeat, getHeatLimit());
+      heat = Mth.lerp(0.1f, heat, targetHeat);
+
+      // update air production
+      airPerTick = AIR_PRODUCTION * ((float) Math.sqrt(65025 - Math.pow(speed - 255, 2))) / 10 * getHeatEfficiency();
+      airBuffer += airPerTick;
+
+      if (airBuffer >= 1f) {
+        int toAdd = (int) airBuffer;
+        airHandler.addAir(toAdd);
+        airBuffer -= toAdd;
+      }
+
+      airHandler.setSideLeaking(airHandler.getConnectedAirHandlers(blockEntity).isEmpty()
+          ? getOutputSide() : null);
     }
 
-    @Override
-    public boolean canPullFluidFrom(FluidStack fluid, BlockState state, Direction direction) {
-      return getOutputSide().equals(direction);
+    private float getHeatEfficiency() {
+      return 1 - heat / 100;
     }
 
-    @Override
-    public boolean canHaveFlowToward(BlockState state, Direction direction) {
-      return isSideAccessible(direction);
-    }
-
-    @Override
-    public AttachmentTypes getRenderedRimAttachment(BlockAndTintGetter world, BlockPos pos, BlockState state,
-                                                    Direction direction) {
-      AttachmentTypes attachment = super.getRenderedRimAttachment(world, pos, state, direction);
-      if (attachment == AttachmentTypes.RIM)
-        return AttachmentTypes.NONE;
-      return attachment;
+    private float getHeatLimit() {
+      // TODO: determine cooler
+      // 6 fan only reduce the heat up to 36% at most (6% per fan).
+      // 6 fan with water can reduce the heat up to 78% at most (13% per fan).
+      return 100;
     }
   }
 }

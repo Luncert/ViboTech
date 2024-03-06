@@ -275,8 +275,8 @@ public class MachineAirHandler extends BasicAirHandler implements IAirHandlerMac
     }
 
     @Override
-    public List<Connection> getConnectedAirHandlers(BlockEntity ownerTE) {
-        return getConnectedAirHandlers(ownerTE, false);
+    public List<Connection> getConnectedAirHandlers(BlockEntity blockEntity) {
+        return getConnectedAirHandlers(blockEntity, false);
     }
 
     private void onAirDispersion(BlockEntity ownerTE, Direction dir, int airDispersed) {
