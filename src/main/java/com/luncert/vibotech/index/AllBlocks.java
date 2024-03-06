@@ -159,6 +159,7 @@ public class AllBlocks {
           .properties(p -> p.mapColor(MapColor.COLOR_GRAY)
               .requiresCorrectToolForDrops())
           .properties(BlockBehaviour.Properties::noOcclusion)
+          .addLayer(() -> RenderType::translucent)
           .transform(pickaxeOnly())
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), prov.models()
