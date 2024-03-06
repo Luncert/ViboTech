@@ -1,5 +1,6 @@
 package com.luncert.vibotech.index;
 
+import com.luncert.vibotech.compat.pneumatic.IAirHandlerMachine;
 import com.luncert.vibotech.compat.vibotech.IViboComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -9,6 +10,9 @@ import org.jetbrains.annotations.NotNull;
 public class AllCapabilities {
 
     public static final Capability<IViboComponent> CAPABILITY_VIBO_COMPONENT = CapabilityManager.get(new CapabilityToken<>() {
+    });
+
+    public static final Capability<IAirHandlerMachine> AIR_HANDLER_MACHINE_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
     });
 
     public static boolean isViboComponent(@NotNull Capability<?> cap) {
