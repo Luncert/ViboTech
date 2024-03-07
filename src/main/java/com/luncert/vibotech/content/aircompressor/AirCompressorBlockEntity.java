@@ -9,6 +9,7 @@ import com.luncert.vibotech.compat.pneumatic.IAirHandlerMachine;
 import com.luncert.vibotech.compat.pneumatic.MachineAirHandler;
 import com.luncert.vibotech.compat.pneumatic.PressureTier;
 import com.luncert.vibotech.index.AllPackets;
+import com.mojang.logging.LogUtils;
 import com.mrh0.createaddition.network.IObserveTileEntity;
 import com.mrh0.createaddition.network.ObservePacket;
 import com.mrh0.createaddition.util.Util;
@@ -36,8 +37,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.PacketDistributor;
+import org.slf4j.Logger;
 
 public class AirCompressorBlockEntity extends KineticBlockEntity implements IHaveGoggleInformation, IObserveTileEntity {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   private static final int AIR_PRODUCTION = 10; // mL per pick
 
@@ -151,8 +155,8 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
         .append(Component.translatable("vibotech.tooltip.air.volume").withStyle(ChatFormatting.GRAY)));
     tooltip.add(Component.literal("    ")
         .append(Component.literal(" "))
-        .append(Util.format(AirHandlerPacket.clientVolume))
-        .append("mL")
+        .append(Util.format(AirHandlerPacket.clientAir) + "L/" + Util.format(AirHandlerPacket.clientVolume / 1000))
+        .append("L")
         .withStyle(ChatFormatting.AQUA));
     tooltip.add(Component.literal("    ")
         .append(Component.translatable("vibotech.tooltip.air.pressure").withStyle(ChatFormatting.GRAY)));
@@ -161,6 +165,13 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
         .append(Utils.format(AirHandlerPacket.clientPressure))
         .append("Bar")
         .withStyle(ChatFormatting.AQUA));
+    tooltip.add(Component.literal("    ")
+        .append(Component.translatable("vibotech.tooltip.air.heat").withStyle(ChatFormatting.GRAY)));
+    tooltip.add(Component.literal("    ")
+        .append(Component.literal(" "))
+        .append(Utils.format(AirHandlerPacket.clientHeat))
+        .append("%")
+        .withStyle(ChatFormatting.AQUA));
     return true;
   }
 
@@ -168,7 +179,8 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
   public void onObserved(ServerPlayer serverPlayer, ObservePacket observePacket) {
     // triggered by observe packet, see createaddition
     AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
-        new AirHandlerPacket(airHandler.getPressure(), airHandler.getVolume()));
+        new AirHandlerPacket(airHandler.getPressure(), airHandler.getVolume(), airHandler.getAir(),
+            getBehaviour(CompressAirBehaviour.TYPE).heat));
   }
 
   class CompressAirBehaviour extends BlockEntityBehaviour {
@@ -192,31 +204,34 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
     public void tick() {
       super.tick();
 
-      float speed = ((KineticBlockEntity) blockEntity).getSpeed();
-
-      // update heat
-      float targetHeat = (float) Math.sqrt(10000 - Math.pow(speed - 10, 2));
-      targetHeat = Math.min(targetHeat, getHeatLimit());
-      heat = Mth.lerp(0.1f, heat, targetHeat);
-
-      // update air production
-      airPerTick = AIR_PRODUCTION * ((float) Math.sqrt(65025 - Math.pow(speed - 255, 2))) / 10 * getHeatEfficiency();
-      airBuffer += airPerTick;
-
-      if (airBuffer >= 1f) {
-        int toAdd = (int) airBuffer;
-        airHandler.addAir(toAdd);
-        airBuffer -= toAdd;
-      }
-
-      airHandler.setSideLeaking(airHandler.getConnectedAirHandlers(blockEntity).isEmpty()
-          ? getOutputSide() : null);
-
       airHandler.tick(blockEntity);
+
+      if (!level.isClientSide) {
+        final float speed = ((KineticBlockEntity) blockEntity).getSpeed();
+        float factoryOfSpeed = (float) Math.sqrt(65025 - Math.pow(speed - 256, 2));
+
+        // update heat
+        float targetHeat = Mth.clamp(factoryOfSpeed / 256 * 100, 0, 100);
+        targetHeat = Math.min(targetHeat, getHeatLimit());
+        heat = Mth.lerp(0.1f, heat, targetHeat);
+
+        // update air production
+        airPerTick = AIR_PRODUCTION * factoryOfSpeed / 10 * getHeatEfficiency();
+        airBuffer += airPerTick;
+
+        if (airBuffer >= 1f) {
+          int toAdd = (int) airBuffer;
+          airHandler.addAir(toAdd);
+          airBuffer -= toAdd;
+        }
+
+        airHandler.setSideLeaking(airHandler.getConnectedAirHandlers(blockEntity).isEmpty()
+            ? getOutputSide() : null);
+      }
     }
 
     private float getHeatEfficiency() {
-      return 1 - heat / 100;
+      return 1 - heat / 200;
     }
 
     private float getHeatLimit() {

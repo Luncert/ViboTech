@@ -216,6 +216,7 @@ public class AllBlocks {
           .tag(AllTags.AllBlockTags.SAFE_NBT.tag)
           .blockstate(pipe())
           .onRegister(CreateRegistrate.blockModel(() -> PipeAttachmentModel::new))
+          .transform(BlockStressDefaults.setImpact(4.0))
           .item()
           .transform(customItemModel())
           .register();

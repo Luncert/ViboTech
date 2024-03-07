@@ -117,6 +117,6 @@ public class Utils {
         } else {
             s = "" + n;
         }
-        return s.substring(6);
+        return s.substring(0, Math.min(s.length(), 6));
     }
 }

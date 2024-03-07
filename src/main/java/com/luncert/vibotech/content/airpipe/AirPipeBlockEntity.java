@@ -93,15 +93,15 @@ public class AirPipeBlockEntity extends SmartBlockEntity
 
   @Override
   public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-    ObservePacket.send(this.worldPosition, 0);
+    ObservePacket.send(worldPosition, 0);
     tooltip.add(Component.literal("    ")
         .append(Component.translatable("vibotech.tooltip.air.info").withStyle(ChatFormatting.WHITE)));
     tooltip.add(Component.literal("    ")
         .append(Component.translatable("vibotech.tooltip.air.volume").withStyle(ChatFormatting.GRAY)));
     tooltip.add(Component.literal("    ")
         .append(Component.literal(" "))
-        .append(Util.format(AirHandlerPacket.clientVolume))
-        .append("mL")
+        .append(Util.format(AirHandlerPacket.clientAir) + "/" + Util.format(AirHandlerPacket.clientVolume / 1000))
+        .append("L")
         .withStyle(ChatFormatting.AQUA));
     tooltip.add(Component.literal("    ")
         .append(Component.translatable("vibotech.tooltip.air.pressure").withStyle(ChatFormatting.GRAY)));
@@ -110,6 +110,13 @@ public class AirPipeBlockEntity extends SmartBlockEntity
         .append(Utils.format(AirHandlerPacket.clientPressure))
         .append("Bar")
         .withStyle(ChatFormatting.AQUA));
+    tooltip.add(Component.literal("    ")
+        .append(Component.translatable("vibotech.tooltip.air.heat").withStyle(ChatFormatting.GRAY)));
+    tooltip.add(Component.literal("    ")
+        .append(Component.literal(" "))
+        .append(Utils.format(AirHandlerPacket.clientHeat))
+        .append("%")
+        .withStyle(ChatFormatting.AQUA));
     return true;
   }
 
@@ -117,7 +124,7 @@ public class AirPipeBlockEntity extends SmartBlockEntity
   public void onObserved(ServerPlayer serverPlayer, ObservePacket observePacket) {
     // triggered by observe packet, see createaddition
     AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
-        new AirHandlerPacket(airHandler.getPressure(), airHandler.getVolume()));
+        new AirHandlerPacket(airHandler.getPressure(), airHandler.getVolume(), airHandler.getAir(), 0));
   }
 
   private boolean canHaveBracket(BlockState state) {
