@@ -3,13 +3,20 @@ package com.luncert.vibotech.content.airpipe;
 import static com.luncert.vibotech.content.airpipe.AirPipeBlock.isAirPipe;
 import static com.luncert.vibotech.index.AllCapabilities.AIR_HANDLER_MACHINE_CAPABILITY;
 
+import com.luncert.vibotech.common.Utils;
+import com.luncert.vibotech.compat.pneumatic.AirHandlerPacket;
 import com.luncert.vibotech.compat.pneumatic.IAirHandlerMachine;
 import com.luncert.vibotech.compat.pneumatic.MachineAirHandler;
 import com.luncert.vibotech.compat.pneumatic.PressureTier;
+import com.luncert.vibotech.index.AllPackets;
 import com.mojang.logging.LogUtils;
+import com.mrh0.createaddition.network.IObserveTileEntity;
+import com.mrh0.createaddition.network.ObservePacket;
+import com.mrh0.createaddition.util.Util;
 import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -18,16 +25,21 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.network.PacketDistributor;
 import org.slf4j.Logger;
 
-public class AirPipeBlockEntity extends SmartBlockEntity implements ITransformableBlockEntity {
+public class AirPipeBlockEntity extends SmartBlockEntity
+    implements ITransformableBlockEntity, IHaveGoggleInformation, IObserveTileEntity {
 
   public static final int VOLUME_AIR_COMPRESSOR = 1000;
 
@@ -77,6 +89,35 @@ public class AirPipeBlockEntity extends SmartBlockEntity implements ITransformab
     } else {
       return super.getCapability(cap, side);
     }
+  }
+
+  @Override
+  public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+    ObservePacket.send(this.worldPosition, 0);
+    tooltip.add(Component.literal("    ")
+        .append(Component.translatable("vibotech.tooltip.air.info").withStyle(ChatFormatting.WHITE)));
+    tooltip.add(Component.literal("    ")
+        .append(Component.translatable("vibotech.tooltip.air.volume").withStyle(ChatFormatting.GRAY)));
+    tooltip.add(Component.literal("    ")
+        .append(Component.literal(" "))
+        .append(Util.format(AirHandlerPacket.clientVolume))
+        .append("mL")
+        .withStyle(ChatFormatting.AQUA));
+    tooltip.add(Component.literal("    ")
+        .append(Component.translatable("vibotech.tooltip.air.pressure").withStyle(ChatFormatting.GRAY)));
+    tooltip.add(Component.literal("    ")
+        .append(Component.literal(" "))
+        .append(Utils.format(AirHandlerPacket.clientPressure))
+        .append("Bar")
+        .withStyle(ChatFormatting.AQUA));
+    return true;
+  }
+
+  @Override
+  public void onObserved(ServerPlayer serverPlayer, ObservePacket observePacket) {
+    // triggered by observe packet, see createaddition
+    AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
+        new AirHandlerPacket(airHandler.getPressure(), airHandler.getVolume()));
   }
 
   private boolean canHaveBracket(BlockState state) {

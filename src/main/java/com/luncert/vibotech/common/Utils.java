@@ -101,4 +101,22 @@ public class Utils {
         }
         return rootCause;
     }
+
+    public static String format(double n) {
+        double v;
+        String s;
+        if (n >= 1000000000) {
+            v = (double)Math.round((double)n / 1.0E8);
+            s = v / 10.0 + "G";
+        } else if (n >= 1000000) {
+            v = (double)Math.round((double)n / 100000.0);
+            s = v / 10.0 + "M";
+        } else if (n >= 1000) {
+            v = (double)Math.round((double)n / 100.0);
+            s = v / 10.0 + "K";
+        } else {
+            s = "" + n;
+        }
+        return s.substring(6);
+    }
 }
