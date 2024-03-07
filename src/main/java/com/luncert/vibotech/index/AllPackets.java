@@ -1,6 +1,8 @@
 package com.luncert.vibotech.index;
 
 import com.luncert.vibotech.ViboTechMod;
+import com.luncert.vibotech.compat.pneumatic.AirHandlerPacket;
+import com.luncert.vibotech.compat.pneumatic.UpdatePressureBlockPacket;
 import com.luncert.vibotech.content.camera.packet.ServerCreateCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ClientDisconnectCameraPacket;
 import com.luncert.vibotech.content.camera.packet.ClientConnectCameraPacket;
@@ -25,6 +27,8 @@ public enum AllPackets {
 
   CONTROL_SEAT_INPUT(ControlSeatInputPacket.class, ControlSeatInputPacket::new, NetworkDirection.PLAY_TO_SERVER),
   PORTABLE_ACCUMULATOR_ENERGY(PortableAccumulatorEnergyPacket.class, PortableAccumulatorEnergyPacket::new, NetworkDirection.PLAY_TO_CLIENT),
+  AIR_HANDLER(AirHandlerPacket.class, AirHandlerPacket::new, NetworkDirection.PLAY_TO_CLIENT),
+  UPDATE_PRESSURE(UpdatePressureBlockPacket.class, UpdatePressureBlockPacket::new, NetworkDirection.PLAY_TO_CLIENT),
   SERVER_CREATE_CONNECT_CAMERA(ServerCreateCameraPacket.class, ServerCreateCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),
   CLIENT_CONNECT_CAMERA(ClientConnectCameraPacket.class, ClientConnectCameraPacket::new, NetworkDirection.PLAY_TO_CLIENT),
   SERVER_DISCONNECT_CAMERA(ServerDisconnectCameraPacket.class, ServerDisconnectCameraPacket::new, NetworkDirection.PLAY_TO_SERVER),

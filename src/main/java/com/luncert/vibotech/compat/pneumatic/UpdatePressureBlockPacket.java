@@ -19,8 +19,9 @@ package com.luncert.vibotech.compat.pneumatic;
 
 import com.luncert.vibotech.content.aircompressor.AirCompressorBlockEntity;
 import com.luncert.vibotech.index.AllCapabilities;
-import java.util.function.Supplier;
+import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -33,23 +34,23 @@ import net.minecraftforge.network.NetworkEvent;
  * - For air grate modules, when the pressure changes enough to modify the range
  * - For machine air handlers which are currently leaking
  */
-public class UpdatePressureBlockPacket extends LocationIntPacket {
+public class UpdatePressureBlockPacket extends SimplePacketBase {
     private static final byte NO_DIRECTION = 127;
 
+    private final BlockPos pos;
     private final Direction leakDir;
     private final Direction handlerDir;
     private final int currentAir;
 
     public UpdatePressureBlockPacket(BlockEntity te, Direction handlerDir, Direction leakDir, int currentAir) {
-        super(te.getBlockPos());
-
+        this.pos = te.getBlockPos();
         this.handlerDir = handlerDir;
         this.leakDir = leakDir;
         this.currentAir = currentAir;
     }
 
     public UpdatePressureBlockPacket(FriendlyByteBuf buffer) {
-        super(buffer);
+        this.pos = buffer.readBlockPos();
         this.currentAir = buffer.readInt();
         byte idx = buffer.readByte();
         this.handlerDir = idx >= 0 && idx < 6 ? Direction.from3DDataValue(idx) : null;
@@ -58,15 +59,16 @@ public class UpdatePressureBlockPacket extends LocationIntPacket {
     }
 
     @Override
-    public void toBytes(FriendlyByteBuf buf) {
-        super.toBytes(buf);
+    public void write(FriendlyByteBuf buf) {
+        buf.writeBlockPos(pos);
         buf.writeInt(currentAir);
         buf.writeByte(handlerDir == null ? NO_DIRECTION : handlerDir.get3DDataValue());
         buf.writeByte(leakDir == null ? NO_DIRECTION : leakDir.get3DDataValue());
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
+    @Override
+    public boolean handle(NetworkEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
             BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(pos);
             if (blockEntity != null) {
                 blockEntity.getCapability(AllCapabilities.AIR_HANDLER_MACHINE_CAPABILITY, handlerDir).ifPresent(handler -> {
@@ -78,6 +80,6 @@ public class UpdatePressureBlockPacket extends LocationIntPacket {
                 });
             }
         });
-        ctx.get().setPacketHandled(true);
+        return true;
     }
 }
