@@ -1,7 +1,11 @@
 package com.luncert.vibotech.content.airpipe;
 
 import static com.luncert.vibotech.content.airpipe.AirPipeBlock.isAirPipe;
+import static com.luncert.vibotech.index.AllCapabilities.AIR_HANDLER_MACHINE_CAPABILITY;
 
+import com.luncert.vibotech.compat.pneumatic.IAirHandlerMachine;
+import com.luncert.vibotech.compat.pneumatic.MachineAirHandler;
+import com.luncert.vibotech.compat.pneumatic.PressureTier;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
@@ -9,17 +13,30 @@ import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehavi
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import org.slf4j.Logger;
 
 public class AirPipeBlockEntity extends SmartBlockEntity implements ITransformableBlockEntity {
 
+  public static final int VOLUME_AIR_COMPRESSOR = 1000;
+
   private static final Logger LOGGER = LogUtils.getLogger();
+
+  protected final IAirHandlerMachine airHandler =
+      new MachineAirHandler(PressureTier.TIER_ONE, VOLUME_AIR_COMPRESSOR);
+  private LazyOptional<IAirHandlerMachine> airHandlerCap = LazyOptional.of(() -> airHandler);
+  private final Map<IAirHandlerMachine, List<Direction>> airHandlerMap = new IdentityHashMap<>();
 
   public AirPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
@@ -39,6 +56,29 @@ public class AirPipeBlockEntity extends SmartBlockEntity implements ITransformab
     }
   }
 
+  @Override
+  public void invalidateCaps() {
+    this.airHandlerCap.invalidate();
+    this.airHandlerCap = LazyOptional.empty();
+    super.invalidateCaps();
+  }
+
+  @Override
+  public void reviveCaps() {
+    super.reviveCaps();
+    this.airHandlerCap = LazyOptional.of(() -> airHandler);
+  }
+
+  @Nonnull
+  @Override
+  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    if (cap == AIR_HANDLER_MACHINE_CAPABILITY) {
+      return airHandlerCap.cast();
+    } else {
+      return super.getCapability(cap, side);
+    }
+  }
+
   private boolean canHaveBracket(BlockState state) {
     return true;
   }
@@ -49,6 +89,11 @@ public class AirPipeBlockEntity extends SmartBlockEntity implements ITransformab
 
     public TransportAirBehaviour(SmartBlockEntity be) {
       super(be);
+    }
+
+    @Override
+    public void tick() {
+      airHandler.tick(blockEntity);
     }
 
     @Override

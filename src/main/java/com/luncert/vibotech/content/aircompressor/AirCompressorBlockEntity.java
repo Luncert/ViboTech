@@ -171,6 +171,8 @@ public class AirCompressorBlockEntity extends KineticBlockEntity {
 
       airHandler.setSideLeaking(airHandler.getConnectedAirHandlers(blockEntity).isEmpty()
           ? getOutputSide() : null);
+
+      airHandler.tick(blockEntity);
     }
 
     private float getHeatEfficiency() {
