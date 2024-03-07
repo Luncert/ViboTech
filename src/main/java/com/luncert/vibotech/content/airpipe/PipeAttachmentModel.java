@@ -1,10 +1,10 @@
 package com.luncert.vibotech.content.airpipe;
 
 import com.luncert.vibotech.content.airpipe.AirPipeBlockEntity.TransportAirBehaviour;
+import com.luncert.vibotech.content.airpipe.AirPipeBlockEntity.TransportAirBehaviour.AttachmentTypes;
+import com.luncert.vibotech.index.AllPartialModels;
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
-import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.model.BakedModelWrapperWithData;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -43,7 +43,6 @@ public class PipeAttachmentModel extends BakedModelWrapperWithData {
     TransportAirBehaviour transport = BlockEntityBehaviour.get(world, pos, TransportAirBehaviour.TYPE);
     BracketedBlockEntityBehaviour bracket = BlockEntityBehaviour.get(world, pos, BracketedBlockEntityBehaviour.TYPE);
 
-    LOGGER.info("asd {}", transport);
     if (transport != null) {
       for (Direction d : Iterate.directions) {
         data.putAttachment(d, transport.getRenderedRimAttachment(world, pos, state, d));
@@ -53,7 +52,7 @@ public class PipeAttachmentModel extends BakedModelWrapperWithData {
       data.putBracket(bracket.getBracket());
     }
 
-    // data.setEncased(AirPipeBlock.shouldDrawCasing(world, pos, state));
+    data.setEncased(AirPipeBlock.shouldDrawCasing(world, pos, state));
     return builder.with(PIPE_PROPERTY, data);
   }
 
@@ -92,9 +91,10 @@ public class PipeAttachmentModel extends BakedModelWrapperWithData {
             .getQuads(state, side, rand, data, renderType));
       }
     }
-    // if (pipeData.isEncased())
-    //   quads.addAll(AllPartialModels.FLUID_PIPE_CASING.get()
-    //       .getQuads(state, side, rand, data, renderType));
+    if (pipeData.isEncased()) {
+      quads.addAll(AllPartialModels.FLUID_PIPE_CASING.get()
+          .getQuads(state, side, rand, data, renderType));
+    }
   }
 
   private static class PipeModelData {

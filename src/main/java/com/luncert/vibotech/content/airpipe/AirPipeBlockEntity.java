@@ -6,7 +6,6 @@ import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
-import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -81,6 +80,33 @@ public class AirPipeBlockEntity extends SmartBlockEntity implements ITransformab
         return AttachmentTypes.CONNECTION;
 
       return attachment;
+    }
+
+    public enum AttachmentTypes {
+      NONE,
+      CONNECTION(ComponentPartials.CONNECTION),
+      RIM(ComponentPartials.RIM_CONNECTOR, ComponentPartials.RIM),
+      PARTIAL_RIM(ComponentPartials.RIM),
+      DRAIN(ComponentPartials.RIM_CONNECTOR, ComponentPartials.DRAIN),
+      PARTIAL_DRAIN(ComponentPartials.DRAIN);
+
+      public final ComponentPartials[] partials;
+
+      AttachmentTypes(ComponentPartials... partials) {
+        this.partials = partials;
+      }
+
+      public AttachmentTypes withoutConnector() {
+        if (this == AttachmentTypes.RIM)
+          return AttachmentTypes.PARTIAL_RIM;
+        if (this == AttachmentTypes.DRAIN)
+          return AttachmentTypes.PARTIAL_DRAIN;
+        return this;
+      }
+
+      public enum ComponentPartials {
+        CONNECTION, RIM_CONNECTOR, RIM, DRAIN;
+      }
     }
   }
 }
