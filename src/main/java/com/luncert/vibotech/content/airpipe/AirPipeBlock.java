@@ -1,7 +1,5 @@
 package com.luncert.vibotech.content.airpipe;
 
-import static com.simibubi.create.content.fluids.pipes.FluidPipeBlock.isPipe;
-
 import com.luncert.vibotech.content.airpipe.AirPipeBlockEntity.TransportAirBehaviour;
 import com.luncert.vibotech.index.AllBlockEntityTypes;
 import com.luncert.vibotech.index.AllCapabilities;
@@ -58,7 +56,7 @@ public class AirPipeBlock extends PipeBlock implements SimpleWaterloggedBlock, I
 
   public AirPipeBlock(Properties pProperties) {
     super(0.25F, pProperties);
-    registerDefaultState((BlockState)super.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
+    registerDefaultState((BlockState) super.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
   }
 
   @Override
@@ -183,15 +181,14 @@ public class AirPipeBlock extends PipeBlock implements SimpleWaterloggedBlock, I
 
   public static boolean canConnectTo(BlockAndTintGetter world, BlockPos neighbourPos, BlockState neighbour,
                                      Direction direction) {
-    var neighbourBe = world.getBlockEntity(neighbourPos);
-    if (neighbourBe != null && neighbourBe.getCapability(AllCapabilities.AIR_HANDLER_MACHINE_CAPABILITY, direction.getOpposite()).isPresent()) {
+    if (AllCapabilities.isAirHandlerMachine(world.getBlockEntity(neighbourPos), direction.getOpposite())) {
       return true;
     }
     // TODO:
     TransportAirBehaviour transport = BlockEntityBehaviour.get(world, neighbourPos, TransportAirBehaviour.TYPE);
     BracketedBlockEntityBehaviour bracket =
         BlockEntityBehaviour.get(world, neighbourPos, BracketedBlockEntityBehaviour.TYPE);
-    if (isPipe(neighbour))
+    if (isAirPipe(neighbour))
       return bracket == null || !bracket.isBracketPresent()
           || FluidPropagator.getStraightPipeAxis(neighbour) == direction.getAxis();
     if (transport == null)
@@ -205,7 +202,7 @@ public class AirPipeBlock extends PipeBlock implements SimpleWaterloggedBlock, I
     // no encasing:
     // if (facingState.getBlock() instanceof EncasedPipeBlock)
     //   return true;
-    if (!isPipe(facingState))
+    if (!isAirPipe(facingState))
       return true;
     if (!canConnectTo(world, offsetPos, facingState, direction))
       return true;
@@ -243,11 +240,10 @@ public class AirPipeBlock extends PipeBlock implements SimpleWaterloggedBlock, I
 
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
-    FluidState FluidState = context.getLevel()
-        .getFluidState(context.getClickedPos());
+    var inWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
     return updateBlockState(defaultBlockState(), context.getNearestLookingDirection(), null, context.getLevel(),
-        context.getClickedPos()).setValue(BlockStateProperties.WATERLOGGED,
-        FluidState.getType() == Fluids.WATER);
+        context.getClickedPos())
+        .setValue(BlockStateProperties.WATERLOGGED, inWater);
   }
 
   @Override
