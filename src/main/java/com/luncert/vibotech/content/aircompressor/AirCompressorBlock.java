@@ -1,6 +1,7 @@
 package com.luncert.vibotech.content.aircompressor;
 
 import com.luncert.vibotech.index.AllBlockEntityTypes;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
@@ -11,8 +12,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.slf4j.Logger;
 
 public class AirCompressorBlock extends HorizontalKineticBlock implements IBE<AirCompressorBlockEntity> {
+
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   public AirCompressorBlock(Properties pProperties) {
     super(pProperties);
@@ -49,5 +53,10 @@ public class AirCompressorBlock extends HorizontalKineticBlock implements IBE<Ai
   @Override
   public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
     return face == state.getValue(HORIZONTAL_FACING);
+  }
+
+  @Override
+  public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+    super.onNeighborChange(state, level, pos, neighbor);
   }
 }

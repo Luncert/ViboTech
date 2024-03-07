@@ -13,6 +13,7 @@ import com.mojang.logging.LogUtils;
 import com.mrh0.createaddition.network.IObserveTileEntity;
 import com.mrh0.createaddition.network.ObservePacket;
 import com.mrh0.createaddition.util.Util;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -34,6 +35,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.PacketDistributor;
@@ -46,6 +48,22 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
   private static final int AIR_PRODUCTION = 10; // mL per pick
 
   public static final int VOLUME_AIR_COMPRESSOR = 5000;
+
+  private static final int COOL_DOWN_AFFECT_DURATION = 10;
+
+  private static final Direction[] AVAILABLE_COOLER_DIRECTION = new Direction[]{
+      Direction.UP, Direction.DOWN, Direction.WEST, Direction.EAST
+  };
+
+  // private final int[] coolerDurations = new int[Direction.values().length];
+  // private final IFanProcessingHandler fanProcessingHandler = new IFanProcessingHandler() {
+  //   @Override
+  //   public void tick(Direction airCurrentDirection, Direction airFlowDirection) {
+  //     if (airCurrentDirection != airFlowDirection) {
+  //       coolerDurations[airCurrentDirection.ordinal()] = COOL_DOWN_AFFECT_DURATION;
+  //     }
+  //   }
+  // };
 
   protected final IAirHandlerMachine airHandler =
       new MachineAirHandler(PressureTier.TIER_ONE, VOLUME_AIR_COMPRESSOR);
@@ -190,6 +208,7 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
     private float airBuffer;
     private float airPerTick;
     private float heat;
+    private int coolerCount;
 
     public CompressAirBehaviour(SmartBlockEntity be) {
       super(be);
@@ -206,14 +225,16 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
 
       airHandler.tick(blockEntity);
 
+      tickCooler();
+
       if (!level.isClientSide) {
-        final float speed = ((KineticBlockEntity) blockEntity).getSpeed();
+        final float speed = Math.abs(getSpeed());
         float factoryOfSpeed = (float) Math.sqrt(65025 - Math.pow(speed - 256, 2));
 
         // update heat
-        float targetHeat = Mth.clamp(factoryOfSpeed / 256 * 100, 0, 100);
-        targetHeat = Math.min(targetHeat, getHeatLimit());
-        heat = Mth.lerp(0.1f, heat, targetHeat);
+        float heatLimit = getHeatLimit();
+        float targetHeat = Mth.clamp(factoryOfSpeed / 256 * heatLimit, 0, heatLimit);
+        heat = Mth.lerp(0.1f - coolerCount * 0.02f, heat, targetHeat);
 
         // update air production
         airPerTick = AIR_PRODUCTION * factoryOfSpeed / 10 * getHeatEfficiency();
@@ -224,21 +245,37 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
           airHandler.addAir(toAdd);
           airBuffer -= toAdd;
         }
-
         airHandler.setSideLeaking(airHandler.getConnectedAirHandlers(blockEntity).isEmpty()
             ? getOutputSide() : null);
       }
     }
 
+    private void tickCooler() {
+      coolerCount = 0;
+
+      for (Direction direction : AVAILABLE_COOLER_DIRECTION) {
+        var relativePos = worldPosition.relative(direction);
+        var relativeState = level.getBlockState(relativePos);
+
+        if (AllBlocks.ENCASED_FAN.has(relativeState)
+            && level.getBlockEntity(relativePos) instanceof KineticBlockEntity be) {
+          var facing = relativeState.getValue(BlockStateProperties.FACING);
+          var speed = convertToDirection(be.getSpeed(), facing);
+          if (speed < 0) {
+            coolerCount++;
+          }
+        }
+      }
+    }
+
     private float getHeatEfficiency() {
+      // 6 fan only reduce the heat up to 36% at most (6% per fan).
+      // 6 fan with water can reduce the heat up to 78% at most (13% per fan).
       return 1 - heat / 200;
     }
 
     private float getHeatLimit() {
-      // TODO: determine cooler
-      // 6 fan only reduce the heat up to 36% at most (6% per fan).
-      // 6 fan with water can reduce the heat up to 78% at most (13% per fan).
-      return 100;
+      return 100 - coolerCount * 6;
     }
   }
 }
