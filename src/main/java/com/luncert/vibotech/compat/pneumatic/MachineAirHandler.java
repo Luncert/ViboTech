@@ -20,6 +20,7 @@ package com.luncert.vibotech.compat.pneumatic;
 import com.luncert.vibotech.common.CapabilityUtils;
 import com.luncert.vibotech.index.AllCapabilities;
 import com.luncert.vibotech.index.AllPackets;
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.particle.AirParticleData;
 import it.unimi.dsi.fastutil.floats.FloatPredicate;
 import java.util.ArrayList;
@@ -34,12 +35,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.PacketDistributor;
+import org.slf4j.Logger;
 
 /**
  * A ticking air handler owned by a block entity, which disperses air to those neighbouring air handlers
  * which have lower pressure than it does.
  */
 public class MachineAirHandler extends BasicAirHandler implements IAirHandlerMachine {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final int AIR_LEAK_FACTOR = 40;//mL/bar/tick determines how much air being released.
 
@@ -102,6 +106,7 @@ public class MachineAirHandler extends BasicAirHandler implements IAirHandlerMac
     public void tick(BlockEntity be) {
         Level world = Objects.requireNonNull(be.getLevel());
         Direction actualLeakDir = leakDir;
+        LOGGER.info("xx {} {}", getAir(), actualLeakDir);
         if (!world.isClientSide) {
             // server
             disperseAir(be);

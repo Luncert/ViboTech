@@ -47,9 +47,7 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
 
   private static final int AIR_PRODUCTION = 10; // mL per pick
 
-  public static final int VOLUME_AIR_COMPRESSOR = 5000;
-
-  private static final int COOL_DOWN_AFFECT_DURATION = 10;
+  public static final int VOLUME_AIR_COMPRESSOR = 1000;
 
   private static final Direction[] AVAILABLE_COOLER_DIRECTION = new Direction[]{
       Direction.UP, Direction.DOWN, Direction.WEST, Direction.EAST
@@ -117,14 +115,6 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
     initializeHullAirHandlers();
   }
 
-  //@Override
-  //public void tickCommonPre() {
-  //  super.tickCommonPre();
-  //
-  //  // note: needs to tick client-side too (for handling leak particles & sounds)
-  //  airHandlerMap.keySet().forEach(handler -> handler.tick(this));
-  //}
-
   @Override
   public void remove() {
     airHandlerMap.forEach((handler, sides) -> {
@@ -173,14 +163,14 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
         .append(Component.translatable("vibotech.tooltip.air.volume").withStyle(ChatFormatting.GRAY)));
     tooltip.add(Component.literal("    ")
         .append(Component.literal(" "))
-        .append(Util.format(AirHandlerPacket.clientAir) + "L/" + Util.format(AirHandlerPacket.clientVolume / 1000))
+        .append(Util.format(AirHandlerPacket.clientAir / 1000) + "L/" + Util.format(AirHandlerPacket.clientVolume / 1000))
         .append("L")
         .withStyle(ChatFormatting.AQUA));
     tooltip.add(Component.literal("    ")
         .append(Component.translatable("vibotech.tooltip.air.pressure").withStyle(ChatFormatting.GRAY)));
     tooltip.add(Component.literal("    ")
         .append(Component.literal(" "))
-        .append(Utils.format(AirHandlerPacket.clientPressure))
+        .append(Utils.format(AirHandlerPacket.clientPressure) + "Bar/" + PressureTier.TIER_ONE.getCriticalPressure())
         .append("Bar")
         .withStyle(ChatFormatting.AQUA));
     tooltip.add(Component.literal("    ")
@@ -199,6 +189,14 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
     AllPackets.getChannel().send(PacketDistributor.PLAYER.with(() -> serverPlayer),
         new AirHandlerPacket(airHandler.getPressure(), airHandler.getVolume(), airHandler.getAir(),
             getBehaviour(CompressAirBehaviour.TYPE).heat));
+  }
+
+  @Override
+  public void tick() {
+    // note: needs to tick client-side too (for handling leak particles & sounds)
+    airHandlerMap.keySet().forEach(handler -> handler.tick(this));
+
+    super.tick();
   }
 
   class CompressAirBehaviour extends BlockEntityBehaviour {
@@ -275,7 +273,7 @@ public class AirCompressorBlockEntity extends KineticBlockEntity implements IHav
     }
 
     private float getHeatLimit() {
-      return 100 - coolerCount * 6;
+      return 100 - coolerCount * 12;
     }
   }
 }
